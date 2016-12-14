@@ -3,6 +3,8 @@ short_title: Cartoon Battle
 baseurl: ""
 url: "https://cartoon-battle.github.io"
 
+google_analytics_key: 'UA-89005212-1'
+
 markdown: kramdown
 permalink: :title
 
