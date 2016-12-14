@@ -1,4 +1,7 @@
-## Adventure islands
+---
+title: Adventure islands
+weight: 2
+---
 
 ## What’s farming?
 

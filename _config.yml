@@ -1,0 +1,15 @@
+title: Animation Throwdown Knowledge Base
+short_title: Cartoon Battle
+baseurl: ""
+url: "https://cartoon-battle.github.io"
+
+markdown: kramdown
+permalink: :title
+
+defaults:
+  -
+    scope:
+      path: ""
+    values:
+      layout: "default"
+

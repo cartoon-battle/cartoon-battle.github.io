@@ -1,4 +1,7 @@
-# Deck building (and research)
+---
+title: Deck building (and research)
+weight: 1
+---
 
 ## How many cards should my deck have?
 
@@ -7,6 +10,16 @@ Keep it as small as possible. Adding more different cards will just fragment the
 ## How many precombo cards should I have in my deck
 
 Not too much. Combos add a lot of options to your play, so don’t limit them artificially. Having **not more than 5** is a good number.
+
+## What are the best skills?
+
+ * **Crazed** — builds up until you have an unstoppable 50+ attack monster. Look at this [70 attack Wingnut Leela](https://www.reddit.com/r/AnimationThrowdown/comments/5f07gx/how_about_that_70_attack/) by [/u/Stitchisme](https://www.reddit.com/user/Stitchisme)
+ * **Punch** — additional attack
+ * **Cripple** — best way to mitigate attack and even disable opponents abilities (Leech, Crazed)
+
+Source: [discussion started by /u/milkshaakes on reddit](https://www.reddit.com/r/AnimationThrowdown/comments/577yre/what_do_you_think_are_the_best_skills_so_far/)
+
+There are specific usages for each skill, so keep various options in your deck. For example Cheer will enable the attack of a card crippled to zero, so it can activate it’s abilities (like Leech, Crazed, Gas, Bomb, etc)
 
 ## I discovered Paddlin’ Peggy. Should I even bother with other cards in my deck?
 
@@ -32,9 +45,18 @@ After all, the game is about collecting cards. It would be boring with only two 
 
 As your deck evolves it will have more and more epics replacing rare (and common) cards. Eventually you will only want blue and purple cards. There are however some green cards without a better alternative:
 
- * Cars: use Red Ford Truck or Stan’s SUV. *Dunno, just guessing, feedback on the best rare car card welcome!*
+ * *Cars*: use Food Truck or Stan’s SUV
+ * *Drugs*: Crack and Toad Licking
  * Slurm
+ * *Gamer*: Burgerboss
  * Pro Pain (*needs feedback: as far as I remember there are some usages for this common card)
+
+There also some great Rare character cards (try to quad-fuse them):
+
+ * Bill
+ * Teddy
+ * Quagmire
+ * Gene
 
 ## Should I fuse these cards?
 
@@ -65,3 +87,7 @@ Obviously combos for cards that are both in your deck. Then for cards that arent
 ## Is it worth spending Gems to finish the research faster?
 
 No. 
+
+## How many Giggity will I lose if I recycle a lvl X card?
+
+Look it up in the [/u/milkshaakes spreadsheet](https://docs.google.com/spreadsheets/d/1HSguYSuQeQQjMoJiodyjKbHSzwujvkv3P3DzKxTFTyI/pubhtml#)
