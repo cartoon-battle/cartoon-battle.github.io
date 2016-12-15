@@ -161,6 +161,11 @@ header {
 	background-color: $content-background-color;
 	color: $content-color;
 
+	p, li, dd, blockquote {
+		line-height: 1.6;
+		font-size: 1.2em;
+	}
+
 	h3::before {
 		content: "";
 		@extend hr;
