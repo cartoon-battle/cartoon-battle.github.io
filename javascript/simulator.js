@@ -204,7 +204,7 @@
 
             heroes.length && "<h1>" + medianRefValue + "</h1>"
                 + "<p>most common numer of refreshes needed (<code>" + medianRefCount + "</code> times)"
-                + (maxReefValue && ", and 95th percentile not more than <code>" + maxRefValue + "</code></p>"§ || "") || "",
+                + (maxRefValue && ", and 95th percentile not more than <code>" + maxRefValue + "</code></p>" || "") || "",
 
 
             "<h1>" + epicDrops + "</h1>",
