@@ -140,15 +140,31 @@
         var medianRefCount = 0;
         var medianRefValue = 0;
         var maxRefValue = 0;
+        var percentiles = [];
 
         for (var value in refreshesStats) {
             if (refreshesStats.hasOwnProperty(value)) {
-                maxRefValue = Math.max(maxRefValue, value);
+                percentiles.push({
+                    "count": refreshesStats[value],
+                    "value": value
+                });
 
                 if (refreshesStats[value] > medianRefCount) {
                     medianRefCount = refreshesStats[value];
                     medianRefValue = value;
                 }
+            }
+        }
+
+        percentiles = percentiles.sort(function (a, b) {
+            return a.value - b.value;
+        });
+
+        for (var sum = 0, p, i = 0; p = percentiles[i]; i++) {
+            sum += p.count;
+
+            if (sum <= battles * 0.95) {
+                maxRefValue = p.value;
             }
         }
 
@@ -165,7 +181,7 @@
             // summary text:
             '<p class="alert alert-info">',
             "Playing Arena level <code>" + arenaLevel + "</code> for <code>" + days + "</code> days ",
-            "(<code>" + battles + "</code> battles including refills). ",
+            "(<code>" + battles + "</code> battles including refills) <br>",
             "Battle reward is <code>" + arenaGold + "</code> gold<br>",
 
 
@@ -187,8 +203,8 @@
 
 
             heroes.length && "<h1>" + medianRefValue + "</h1>"
-                + "<p>most common numer of refreshes needed (<code>" + medianRefCount + "</code> times), "
-                + "and never more than <code>" + maxRefValue + "</code></p>" || "",
+                + "<p>most common numer of refreshes needed (<code>" + medianRefCount + "</code> times)"
+                + (maxReefValue && ", and 95th percentile not more than <code>" + maxRefValue + "</code></p>"§ || "") || "",
 
 
             "<h1>" + epicDrops + "</h1>",
