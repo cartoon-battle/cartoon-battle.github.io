@@ -161,9 +161,13 @@ header {
 	background-color: $content-background-color;
 	color: $content-color;
 
-	p, li, dd, blockquote {
+	p, li, blockquote {
 		line-height: 1.6;
 		font-size: 1.2em;
+	}
+
+	li > p, li > blockquote, blockquote > p, blockquote > li {
+		font-size: 1em;
 	}
 
 	h3::before {
