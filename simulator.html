@@ -31,9 +31,9 @@ weight: 10
 			{% endfor %}</select>
 		</div>
 
-		<label for="ads_bonus" class="col-sm-6 control-label">Active ads bonus:</label>
+		<label for="video_bonus" class="col-sm-6 control-label">Active ads bonus:</label>
 	    <div class="col-sm-6">
-			<select id="ads_bonus" class="form-control">{% for item in site.data.values.ads_bonus %}
+			<select id="video_bonus" class="form-control">{% for item in site.data.values.ads_bonus %}
 				{% assign level = item[0] %}
 				{% assign label = item[1] %}
 				<option {% if site.data.values.defaults.ads_level == label %}selected=selected {% endif %}
@@ -112,7 +112,7 @@ weight: 10
 		}
 
 		form.onsubmit = function (e) {
-			var adsBonus = parseFloat(form.ads_bonus.value);
+			var adsBonus = parseFloat(form.video_bonus.value);
 			var guildBonus = parseFloat(form.guild_level.value);
 			var arenaGold = parseInt(form.arena_level.value) * (adsBonus + guildBonus);
 			var arenaLevel = form.arena_level.selectedOptions[0].innerText;
