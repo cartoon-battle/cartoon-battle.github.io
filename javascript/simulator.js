@@ -192,10 +192,18 @@
 
 
             "<h1>" + epicDrops + "</h1>",
-            "<p>epic cards collected in the adventure, along with <code>" + dustDrops + "</code> Giggity</p>",
+            "<p>epic cards collected in the adventure, along with <code>" + dustDrops + "</code> Giggity. ",
+            "You need <code>244</code> to max out a once-fused epic. This gives you ",
+            (dustDrops / 244 >= 3) && "<strong>a shit-ton of great new cards</strong> in your deck" || "",
+            (Math.floor(dustDrops / 244) === 2) && "<strong>two new fused epics</strong>" || "",
+            (Math.floor(dustDrops / 244) === 1) && "<strong>one new addition</strong> to your deck" || "",
+            (dustDrops / 244 < 1) && "a lot of useless epics you can recycle (for another <code>" + (epicDrops * 25) + "</code> Giggity)" || "",
+
 
             "<h1>" + displayCoins(balance) + "</h1>",
-            "<p>expected coin balance<p>"
+            "<p>expected coin balance ",
+
+            (heroes.length && balance < 5000) && " — you need to play some arena battles without the refreshes to avoid going bankrupt" || ""
         ].join("\n");
 
         return false;
