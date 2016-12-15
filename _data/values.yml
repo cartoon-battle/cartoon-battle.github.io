@@ -57,8 +57,7 @@ arena_gold_per_energy:
     400: 13
     450: 14
     500: 15
-# //  * ($guildBonus + $adsBonus);
-    
+
 crates:
     '0.05':
         gold: 2000

@@ -19,6 +19,10 @@ weight: 10
 			data-adventure-gold-per-energy="{{ site.data.values.adventure_gold_per_energy }}"
 			data-adventure-energy-per-island="{{ site.data.values.adventure_energy_per_island }}"
 >
+	<p>
+		Fill out the form below to see how many coins, tokens, Giggity and epic drops can you expect after a week of play.
+	</p>
+
 	<div class="row"><div class="col-md-6">
 	<div class="form-group">
 		<label for="arena_level" class="col-sm-6 control-label">Arena Level:</label>
@@ -84,181 +88,75 @@ weight: 10
 
 	<div id=result class="container-fluid"></div>
 
-	<script type="text/javascript">(function (form, result) {
-		var income = parseInt(form.dataset['income']);
-		var arenaTime = parseInt(form.dataset['arenaTime']);
-		var adventureTime = parseInt(form.dataset['adventureTime']);
-		var refreshCost = parseInt(form.dataset['refreshCost']);
-		var tokenRate = parseFloat(form.dataset['tokenRate']);
-		var adventureDropRate = parseFloat(form.dataset['adventureDropRate']);
-		var adventureGoldPerEnergy = parseInt(form.dataset['adventureGoldPerEnergy']);
-		var adventureEnergyPerIsland = parseInt(form.dataset['adventureEnergyPerIsland']);
+	<h3>The source of the data:</h3>
 
-		var crates = [].slice.apply(form.getElementsByTagName('cb-crate')).map(function (crate) {
-			return {
-				p: parseFloat(crate.attributes['p'].value),
-				gold: parseInt(crate.attributes['gold'].value),
-				adventure: parseInt(crate.attributes['adventure'].value),
-				arena: parseInt(crate.attributes['arena'].value),
-			}
-		});
+	<dl class="dl-horizontal">
+		<dt>
+			Arena coin rewards
+		</dt>
+		<dd>
+			From the XML files, API and experience
+		</dd>
 
-		function displayCoins(v) {
-			return v.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1&nbsp;");
-		}
+		<dt>
+			Adventure rewards
+		</dt>
+		<dd>
+			XML files, experience
+		</dd>
 
-		function chance(rate) {
-			return rate >= Math.random();
-		}
+		<dt>
+			Guild coin bonus
+		</dt>
+		<dd>
+			It’s in the API response as well as shown on the guild tab
+		</dd>
 
-		form.onsubmit = function (e) {
-			var adsBonus = parseFloat(form.video_bonus.value);
-			var guildBonus = parseFloat(form.guild_level.value);
-			var arenaGold = parseInt(form.arena_level.value) * (adsBonus + guildBonus);
-			var arenaLevel = form.arena_level.selectedOptions[0].innerText;
-			var islandGold = adventureGoldPerEnergy * adventureEnergyPerIsland * adsBonus;
-			var winRate = parseFloat(form.win_rate.value);
+		<dt>
+			Epic drop rates
+		</dt>
+		<dd>
+			The drop rates are in the XML files and in the API. It’s not specified what is the chance of each
+			of the nine cards to drop, so I assumed it’s equal for all (1 in 9)
+		</dd>
 
-			var heroesAll = [].slice.apply(form.querySelectorAll('[name="heroes[]"]'));
-			var heroes = heroesAll
-				.map(function (c) { return c.checked && c.value; })
-				.filter(function (s) { return !!s; });
+		<dt>
+			Ad Crates contents
+		</dt>
 
-			var days = 7;
-			var minutes = days * 24 * 60;
+		<dd>
+			It is unclear, but the API contains definitions of each possible ad crate type (from 500 gold to 2k gold)
+			along with a <code>p</code> value in increasing order (from <code>2%</code> to <code>100%</code>). This is
+			treated as an incremental probability for each type of crate. I.e. if the rarest doesn’t get selected, the next
+			one may be, up to the most common crate with probability of 100%.
+		</dd>
 
-			var battles = Math.floor(minutes / arenaTime);
-			var adventureEnergy = Math.floor(minutes / adventureTime);
+		<dt>
+			Token drop rate
+		</dt>
 
-			var balance = 0;
-			var arenaWon = 0;
-			var refreshesStats = {};
-	
-			var status = "";
+		<dd>
+			There is no mention about the token drop rate in the XML files nor in the API.
+			It was assumed about <code>0.75</code> points per won battle (the actual drop
+			rate is lower, but it’s not uncommon to receive 2, 5 or more tokens in one drop).
+			This value is based on a stats of few players from about 5k arena battles.
+			This may vary, so take it with a grain of salt.
+		</dd>
 
-			status += '<p class="alert alert-info">'
-				+ "Playing Arena level <code>" + arenaLevel + "</code> for <code>" + days + "</code> days "
-				+ "(<code>" + battles + "</code> battles plus refils). "
-				+ "Battle reward is <code>" + arenaGold + "</code> gold<br>";
+		<dt>
+			Calculations
+		</dt>
+		<dd>
+			You can look at the values in the
+			<a href="https://github.com/cartoon-battle/cartoon-battle.github.io/blob/master/_data/values.yml">
+				<code>values.yaml</code> file
+			</a>
+			and the calculations are done using
+			<a href="https://github.com/cartoon-battle/cartoon-battle.github.io/blob/master/javascript/simulator.js">
+				javascript located in <code>simulator.js</code>
+			</a>
+		</dd>
+	</dl>
 
-			if (heroes.length) {
-				status += "Refreshing for <code>" + refreshCost + "</code> coins until ";
-				if (1 !== heroes.length) { 
-					status += "one of "
-				} 
-
-				status += "<code>" + heroes.join(", ") + "</code> is picked<br>";
-			}
-
-			status += "Farming islands 1-5 for <code>" + islandGold + "</code> gold each</p>";
-
-			for (var i = 1; i <= days * 3; i++) {
-				var random = Math.random();
-				for (var c, j = 0; c = crates[j]; j++) {
-					if (c.p >= random) {
-						battles += c.arena;
-						adventureEnergy += c.adventure;
-						balance += c.gold;
-
-						break;
-					}
-				}
-			}
-	
-			for (var nbRefreshes, i = 1; i <= battles; i++) {
-				nbRefreshes = 0;
-				while (heroes.length && false === chance(heroes.length / heroesAll.length)) {
-					// refresh
-					balance -= refreshCost;
-					nbRefreshes++;
-				}
-			
-				refreshesStats[nbRefreshes] = 1 + (refreshesStats[nbRefreshes] || 0);
-		
-				balance += arenaGold * (chance(winRate) ? Math.sign(++arenaWon) : 0.1);
-			}
-	
-			// adventure
-			var dustDrops = 0;
-			var epicDrops = 0;
-			for (var i = 0; i <= Math.floor(adventureEnergy / adventureEnergyPerIsland); i++) {
-				balance += islandGold;
-		
-				if (chance(adventureDropRate * adsBonus)) {
-					switch (Math.floor(Math.random()*9) + 1) {
-						// commons
-						case 1: case 2:
-							dustDrops += 1;
-							break;
-						// common Giggity and Rares
-						case 3: case 4: case 5:
-							dustDrops += 5;
-							break;
-						// Rare Giggity
-						case 6:
-							dustDrops += 25;
-							break;
-
-						// Epics
-						case 7: case 8:
-							epicDrops += 1;
-							break;
-					
-						// Epic dust!
-						case 9:
-							dustDrops += 50;
-							break;
-					}
-				}
-			}
-	
-
-			status += "<hr>";
-	
-			var medianRefCount = 0;
-			var medianRefValue = 0;
-			var maxRefValue = 0;
-
-			for (var value in refreshesStats) {
-				if (refreshesStats.hasOwnProperty(value)) {
-					maxRefValue = Math.max(maxRefValue, value);
-				}
-
-				if (refreshesStats[value] > medianRefCount) {
-					medianRefCount = refreshesStats[value];
-					medianRefValue = value;
-				}
-			}
-
-			var wonPercent = Math.round(arenaWon / battles * 100);
-			var tokens = Math.floor(arenaWon * tokenRate * adsBonus * (Math.random() * 0.2 + 0.9));
-			var tokenTargets = Math.round(tokens / (heroes.length || heroesAll.length));
-
-			status += '<div class="jumbotron">'
-				+ "<h1>" + arenaWon + "</h1> <p> battles won (<code>" + wonPercent + "%</code>)</p>"
-				+ "<h1>" + tokens + "</h1> <p>tokens collected";
-
-			if (1 !== heroes.length) {
-				status += " (average <code>" + tokenTargets + "</code> per hero)";
-			}
-
-			if (heroes.length) {
-				status += "<h1>" + medianRefValue + "</h1>" 
-					+ "<p>most common numer of refreshes needed (<code>" + medianRefCount + "</code> times), "
-					+ "and never more than <code>" + maxRefValue + "</code></p>";
-			}
-
-			status += "<h1>" + epicDrops + "</h1>" 
-				+ "<p>epic cards collected in the adventure, along with <code>" + dustDrops + "</code> Giggity</p>";
-
-			status += "<h1>" + displayCoins(balance) + "</h1>"
-				+ "<p>expected coin balance<p>";
-	
-			result.innerHTML = status;
-
-			return false;
-		}
-
-	})(document.forms[0], document.getElementById('result'));
-	</script>
+	<script type="text/javascript" src="/javascript/simulator.js"></script>
 </form>
