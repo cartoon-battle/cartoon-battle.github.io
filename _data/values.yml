@@ -6,7 +6,7 @@ defaults:
     days: 7
     win_rate: '0.9'
 
-heroes:  [Brian, Stewie, Louise, Bender, Steve, Bob, Tina, Dale, Peter, Bobby, Roger, Leela, Stan, Fry, Hank]
+heroes:  [Brian, Stewie, Louise, Steve, Bender, Dale, Bob, Roger, Leela, Bobby, Peter, Tina, Stan, Fry, Hank]
 
 daily_income: -500
 arena_time: 90
