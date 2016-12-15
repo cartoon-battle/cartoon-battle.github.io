@@ -1,0 +1,78 @@
+defaults:
+    guild_level: "45-50"
+    ads_level: 3
+    arena_level: 14
+    heroes: [Bobby]
+    days: 7
+    win_rate: '0.9'
+
+heroes:  [Brian, Stewie, Louise, Bender, Steve, Bob, Tina, Dale, Peter, Bobby, Roger, Leela, Stan, Fry, Hank]
+
+daily_income: -500
+arena_time: 90
+adventure_time: 10
+refresh_cost: 100
+token_rate: 0.75
+adventure_drop_rate: 0.1
+adventure_gold_per_energy: 50
+adventure_energy_per_island: 3
+
+win_rates: 
+    '0.5': fifty-fifty
+    '0.8': most of them
+    '0.9': 9 out of 10
+    '1.0': playing on auto
+
+guild_bonus:
+    '0': "0-4"
+    '0.05': "5-9"
+    '0.10': "10-14"
+    '0.15': "15-19"
+    '0.20': "20-24"
+    '0.25': "25-29"
+    '0.30': "30-34"
+    '0.35': "35-39"
+    '0.40': "40-44"
+    '0.50': "45-50"    
+
+ads_bonus:
+    1: 0
+    1.1: 1
+    1.2: 2
+    1.5: 3
+
+arena_gold_per_energy:
+    250: 1
+    260: 2
+    275: 3
+    285: 4
+    300: 5
+    310: 6
+    325: 7
+    335: 8
+    350: 9
+    360: 10
+    375: 11
+    385: 12
+    400: 13
+    450: 14
+    500: 15
+# //  * ($guildBonus + $adsBonus);
+    
+crates:
+    '0.05':
+        gold: 2000
+        adventure: 10
+        arena: 10
+    '0.2':
+        gold: 1500
+        adventure: 10
+        arena: 10
+    '0.5':
+        gold: 1000
+        adventure: 5
+        arena: 5
+    '1':
+        gold: 500
+        adventure: 5
+        arena: 0

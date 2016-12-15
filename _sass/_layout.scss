@@ -169,13 +169,13 @@ header {
 }
 
 .content,
-.page-header {
+.page-title {
 	max-width: $content-max-width;
 	padding: 0 ($space + 5) $space;
 	margin: $space auto 0 auto;
 }
 
-.page-header {
+.page-title {
 	h2,
 	h3 {
 		margin: 0;
