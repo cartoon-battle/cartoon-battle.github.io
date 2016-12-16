@@ -145,13 +145,17 @@ weight: 8
             window.onpopstate = function () {
                 deck.innerHTML = '';
                 window.location.search.substr(1).split(/&/).forEach(function (item) {
+                    if (!item) {
+                        return;
+                    }
+
                     add({
                         "slug": item.split(/=/)[0],
                         "comment": decodeURIComponent(item.split(/=/)[1] || "")
                     });
-
-                    update();
                 });
+
+                update();
             };
             window.onpopstate();
         </script>
