@@ -1,0 +1,161 @@
+---
+title: Share your deck
+weight: 8
+---
+
+<h2>This page uses Javascript to create & share your deck</h2>
+
+<style>
+    #deck {
+        overflow-x: auto;
+        white-space: nowrap;
+    }
+    #deck .item {
+        display: inline-block;
+        float: none;
+    }
+</style>
+
+<div id="result" style="display:none">
+
+<div class="panel panel-default">
+    <div class="panel-body" id="deck" style="">
+    </div>
+    <div class="panel-footer">
+        <div class="input-group">
+            <span class="input-group-addon" id="basic-addon1">Share this URL:</span>
+            <input readonly value="http://foo.bar" class="form-control">
+        </div>
+    </div>
+</div>
+</div>
+
+
+<div id=setup>
+    <form class="form-inline" data-image-cdn="{{ site.images_cdn }}">
+        <fieldset class="form-group">
+            <select class="form-control">
+                <option selected disabled>choose a card
+                {% assign cards = site.data.images | sort: "name" %}
+                {% for item in cards %}
+                    <option value="{{ item.slug }}" id="card-{{ item.slug }}">{{ item.name }}</option>
+                {% endfor %}
+            </select>
+
+            <div class="input-group">
+                <input placeholder="optional comment" class="form-control">
+                <span class="input-group-btn">
+                    <button class="btn btn-default" type="button" onclick="add()">
+                        <span class="glyphicon glyphicon-plus"></span> Add
+                    </button>
+                </span>
+            </div>
+        </fieldset>
+        <script src="https://rubaxa.github.io/Sortable/Sortable.js"></script>
+        <script>
+            var form = document.forms[0];
+            var result = document.getElementById('result');
+            var share = result.querySelector('input');
+            var deck = document.getElementById('deck');
+            var imageCdn = form.dataset['imageCdn'];
+            var cardSelector = form.querySelector('select');
+            var comment = form.querySelector('input');
+
+            var sort = Sortable.create(deck, {
+              animation: 150, // ms, animation speed moving items when sorting, `0` — without animation
+              handle: "img", // Restricts sort start click/touch to the specified element
+              draggable: ".item", // Specifies which items inside the element should be sortable
+              onUpdate: function (evt/**Event*/){
+                 update();
+              }
+            });
+
+
+            function getCurrentCard() {
+                var card = cardSelector.selectedOptions[0];
+
+                if (!card || card.disabled) {
+                    return;
+                }
+
+                return {
+                    'slug': card.value,
+                    'comment': comment.value
+                }
+            }
+
+            function cardName(slug) {
+                return (cardSelector.options.namedItem('card-' + slug)||{}).textContent;
+            }
+
+            function update() {
+                if (!deck.querySelector('*')) {
+                    result.style.display =  "none";
+                    return ;
+                }
+
+                result.style.display =  "";
+
+                var data = [].slice.apply(deck.querySelectorAll('.item')).reduce(function (data, item) {
+                    return data + (data ? "&" : "") + item.dataset['slug'] + "=" + encodeURIComponent(item.querySelector('p').innerText);
+                }, "");
+
+                share.value = window.location.href.replace(/\?.*|$/, "?" + data);
+
+                if ('history' in window && location.href !== share.value) {
+                    window.history.pushState({}, '', share.value);
+                }
+            }
+
+            function remove(e) {
+                e && e.parentNode && e.parentNode.removeChild(e);
+
+                update();
+            }
+
+            function add(card){
+                var needsUpdate = !card;
+                card = card || getCurrentCard();
+
+                if (!card) {
+                    cardSelector.parentNode.classList.add('has-error');
+                    cardSelector.focus();
+                    return;
+                }
+
+                cardSelector.parentNode.classList.remove('has-error');
+
+                deck.innerHTML += [
+                    '<div class="item col-xs-3" data-slug="'+ card.slug +'"><div class="thumbnail">',
+
+                        '<img src="' + imageCdn + card.slug + '.png" alt="' + cardName(card.slug) + '">',
+
+                    '<div class="caption">',
+                        '<p>' + (card.comment||cardName(card.slug)) + '</p>',
+                        '<button class="btn btn-danger btn-xs" onclick="remove(this.parentNode.parentNode.parentNode)">',
+                            '<span class="glyphicon glyphicon-trash"></span>Remove</a>',
+
+                    '</div></div></div>'
+
+                ].join("");
+
+                needsUpdate && update();
+            }
+
+            window.onpopstate = function () {
+                deck.innerHTML = '';
+                window.location.search.substr(1).split(/&/).forEach(function (item) {
+                    add({
+                        "slug": item.split(/=/)[0],
+                        "comment": decodeURIComponent(item.split(/=/)[1] || "")
+                    });
+
+                    update();
+                });
+            };
+            window.onpopstate();
+        </script>
+    </form>
+
+</div>
+
