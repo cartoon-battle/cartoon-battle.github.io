@@ -1,0 +1,14 @@
+---
+title: Card images
+weight: 8
+---
+
+{% for image in site.data.images %}
+    <h2 id="{{ image.slug }}">{{ image.name }}</h2>
+
+    <img src="https://s3-eu-west-1.amazonaws.com/cartoon-battle/{{ image.slug }}.png" alt="{{ image.name }}" _width="438" _height="588">
+
+    {% if "" != image.desc %}
+    <blockquote>{{ image.desc }}</blockquote>
+    {% endif %}
+{% endfor %}
