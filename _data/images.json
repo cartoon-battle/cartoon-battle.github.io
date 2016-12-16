@@ -460,6 +460,31 @@
         "desc": ""
     },
     {
+        "slug": "drunk-bullock",
+        "name": "Drunk Bullock",
+        "desc": "Did I ever tell you about the time I murdered the Bolshoi ballet?"
+    },
+    {
+        "slug": "drunk-fry",
+        "name": "Drunk Fry",
+        "desc": "I'm drunk, I'm grouchy, and I'm gonna eat this peanut butter."
+    },
+    {
+        "slug": "drunk-leela",
+        "name": "Drunk Leela",
+        "desc": "You stink! Hahahaha... nice one."
+    },
+    {
+        "slug": "drunk-peggy",
+        "name": "Drunk Peggy",
+        "desc": "Favorite Drink: Singapore Sling"
+    },
+    {
+        "slug": "fever-dreams",
+        "name": "Fever Dreams",
+        "desc": "Was that rug always twirling? Cause it makes me feel like hurling."
+    },
+    {
         "slug": "flare-gun",
         "name": "Flare Gun",
         "desc": "Yea, let's all keep our eyes peeled for a real emegency."

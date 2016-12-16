@@ -3,7 +3,9 @@
     $result = [];
 
     foreach(['cards.xml', 'cards_finalform.xml'] as $file) {
-        $file = new SimpleXMLElement(file_get_contents($file));
+        $file = new SimpleXMLElement(file_get_contents(
+            "https://cb-live.synapse-games.com/assets/" . $file
+        ));
 
         foreach ($file->xpath('//unit') as $unit) {
             if (
@@ -23,8 +25,7 @@
             $desc = (string)$unit->desc;
 
 
-            if (in_array($slug, ["man-of-the-house", 'drunk-peggy', 'belcher-date-night',
-                                    'drunk-bullock', 'fever-dreams', 'drunk-fry', 'drunk-leela'])) {
+            if (in_array($slug, ["man-of-the-house",  'belcher-date-night'])) {
                 continue;
             }
 
@@ -39,4 +40,4 @@
 
     ksort($result);
 
-    echo json_encode(array_values($result), JSON_PRETTY_PRINT);
+    echo str_replace('\\/', '/', json_encode(array_values($result), JSON_PRETTY_PRINT));
