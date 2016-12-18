@@ -1,3 +1,6 @@
+---
+layout: null
+---
 (function () {
 
 function _slugify(name) {
@@ -148,7 +151,7 @@ Card.prototype.setImage = function card__setImage(image) {
 
     this.image = image;
 
-    this.node.querySelector("img").src = "/images/cards/" + this.image + ".png";
+    this.node.querySelector("img").src = "{{ site.images_cdn }}deck/cards/" + this.image + ".png";
 }
 
 Card.prototype.setAttack = function card__setAttack(attack) {
