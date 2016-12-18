@@ -1,0 +1,129 @@
+---
+layout: null
+---
+
+cb-card {
+    display: block;
+    font-size: 75%;
+    font-family: 'AhkioW00-Regular';
+    width: 40.7em;
+    height: 56.4em;
+    color: white;
+    text-shadow: .3em .3em #111;
+    position: relative;
+}
+
+cb-card cb-frame, cb-card cb-frame cb-level, cb-card cb-frame cb-trait {
+    position: absolute;
+    background-size: 100% 100%;
+    z-index: 2;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    right: 0;
+}
+cb-card cb-frame cb-level {
+    top: .08em;
+    bottom: .08em;
+    font-size: 5.8em;
+    padding: .15em 0 0 .75em;
+}
+cb-card[rarity="common"] cb-frame cb-level {
+    top: 0;
+    bottom: 0;
+    padding-top: .23em;
+}
+cb-card cb-trait {
+    display: none;
+}
+cb-card[trait]:hover cb-trait {
+    display: block;
+}
+
+cb-card cb-name {
+    display: block;
+    padding: 1.4em 1em 0 4.5em;
+    color: white;
+    z-index: 4;
+    position: relative;
+    font-size: 2.8em;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+cb-card img {
+    z-index: 1;
+    position: absolute;
+    top: 2em;
+    left: 2em;
+    width: 90%;
+}
+
+cb-card cb-stats cb-value {
+    display: block;
+    margin: -.15em 0 0;
+    width: 1em;
+}
+cb-card cb-stats {
+    font-size: 4.5em;
+    position: absolute;
+    z-index: 5;
+    text-align: center;
+    right: 1.5em;
+    bottom: .3em;
+    margin: 0;
+}
+
+cb-card cb-skills cb-value {
+    display: block;
+    font-size: 1.3em;
+    height: 1.5em;
+    margin: .41em 0 0;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: left center;
+    padding: .15em 0 0 1.85em;
+    text-align: center;
+}
+cb-card cb-skills cb-value[target]:before {
+    background-image: url({{ site.images_cdn }}deck/skills/skill_special.png);
+    background-size: 100% 100%;
+    display: block;
+    width: 1.2em;
+    height: 1.2em;
+    position: absolute;
+    left: 0;
+    content: ""
+}
+cb-card cb-skills {
+    font-size: 3em;
+    position: absolute;
+    left: .4em;
+    bottom: 1.4em;
+    z-index: 4;
+    margin: 0;
+}
+
+{% for max_level in (3..6) %}
+    {% capture rarity %}{% cycle "common", "rare", "epic", "legendary" %}{% endcapture %}
+
+    {% for fused in (1..3) %}
+        {% for skills in (0..3) %}
+cb-card[rarity="{{ rarity }}"][fused="{{ fused }}"]{% if skills > 0 %}[skills="{{ skills }}"]{% endif %} cb-frame { 
+    background-image: url({{ site.images_cdn }}deck/frames/{{ rarity }}{{ fused }}{% if skills > 0 %}notrait{{ skills }}{% endif %}.png);
+}
+cb-card[rarity="{{ rarity }}"][fused="{{ fused }}"]{% if skills > 0 %}[skills="{{ skills }}"]{% endif %}[trait]:hover cb-frame { 
+    background-image: url({{ site.images_cdn }}deck/frames/{{ rarity }}{{ fused }}trait{% if skills > 0 %}{{ skills }}{% endif %}.png); 
+}{% endfor %}
+    {% endfor %}
+
+    {% for level in (1..max_level) %}
+cb-card[rarity="{{ rarity }}"][level="{{ level }}"] cb-level {
+    background-image: {% for layer in (1..level) %}url({{ site.images_cdn }}deck/frames/{{ rarity }}up{{ layer }}.png){% if layer < level %}, {% endif %}{% endfor %};
+}{% endfor %}
+{% endfor %}
+{% for name in site.data.values.skills %}
+cb-card cb-skills cb-value[type="{{ name[0] }}"] { background-image: url({{ site.images_cdn }}deck/skills/skill_{{ name[0] }}.png); }{% endfor %}
+
+{% for name in site.data.values.traits %}
+cb-card[trait="{{ name }}"] cb-trait { background-image: url({{ site.images_cdn }}deck/traits/trait_{{ name }}.png); }{% endfor %}

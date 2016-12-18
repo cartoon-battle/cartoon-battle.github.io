@@ -16,6 +16,30 @@ token_rate: 0.75
 adventure_drop_rate: 0.1
 adventure_gold_per_energy: 50
 adventure_energy_per_island: 3
+combo_values_multiplier: 1.1
+
+skills:
+    pierce: Jab
+    strike: Punch
+    armored: Sturdy
+    counter: Payback
+    weaken: Cripple
+    weakenall: Cripple All
+    poison: Gas
+    barrier: Shield
+    barrierall: Shield All
+    invigorate: Boost
+    outlast: Recover
+    rally: Cheer
+    rallyall: Cheer All
+    heal: Heal
+    healall: Heal All
+    leech: Leech
+    inspire: Motivate
+    shrapnel: Bomb
+    berserk: Crazed
+
+traits: [addicted, armed, artistic, athletic, drunk, educated, hyper, rich]
 
 win_rates: 
     '0.5': fifty-fifty

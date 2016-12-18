@@ -4,6 +4,7 @@ weight: 8
 ---
 
 <h2>This page uses Javascript to create & share your deck</h2>
+<link href="//db.onlinewebfonts.com/c/c99c1c85532dbaf7bc549b3d45836ee6?family=AhkioW00-Regular" rel="stylesheet" type="text/css"/>
 
 <style>
     #deck {
@@ -13,6 +14,10 @@ weight: 8
     #deck .item {
         display: inline-block;
         float: none;
+        width: 22%;
+    }
+    #deck .item cb-card {
+        font-size: 0.25em;
     }
 </style>
 
@@ -32,20 +37,16 @@ weight: 8
 
 
 <div id=setup>
-    <form class="form-inline" data-image-cdn="{{ site.images_cdn }}">
+    <form class="form-inline" data-image-cdn="{{ site.images_cdn }}" onsubmit="try { add(); } catch (E) { }; return false;">
         <fieldset class="form-group">
-            <select class="form-control">
-                <option selected disabled>choose a card
-                {% assign cards = site.data.images | sort: "name" %}
-                {% for item in cards %}
-                    <option value="{{ item.slug }}" id="card-{{ item.slug }}">{{ item.name }}</option>
-                {% endfor %}
-            </select>
+            <input class="form-control" list="cards" placeholder="Please wait for cards to load..." id="card">
+            <datalist id=cards>
+            </datalist>
 
             <div class="input-group">
-                <input placeholder="optional comment" class="form-control">
+                <input placeholder="card level, i.e. 5*" id="level" pattern='^\d+\s*[*]{0,2}$' class="form-control">
                 <span class="input-group-btn">
-                    <button class="btn btn-default" type="button" onclick="add()">
+                    <button class="btn btn-default" type="submit" disabled>
                         <span class="glyphicon glyphicon-plus"></span> Add
                     </button>
                 </span>
@@ -57,13 +58,13 @@ weight: 8
             var result = document.getElementById('result');
             var share = result.querySelector('input');
             var deck = document.getElementById('deck');
-            var imageCdn = form.dataset['imageCdn'];
-            var cardSelector = form.querySelector('select');
-            var comment = form.querySelector('input');
+            var cardSelector = form.card;
+            var level = form.level;
+
+            var cardList;
 
             var sort = Sortable.create(deck, {
               animation: 150, // ms, animation speed moving items when sorting, `0` — without animation
-              handle: "img", // Restricts sort start click/touch to the specified element
               draggable: ".item", // Specifies which items inside the element should be sortable
               onUpdate: function (evt/**Event*/){
                  update();
@@ -72,24 +73,19 @@ weight: 8
 
 
             function getCurrentCard() {
-                var card = cardSelector.selectedOptions[0];
-
-                if (!card || card.disabled) {
+                var card = cardSelector.value;
+                if (!card || !level.validity.valid) {
                     return;
                 }
 
                 return {
-                    'slug': card.value,
-                    'comment': comment.value
+                    'card': cardList.find(card),
+                    'level': level.value
                 }
             }
 
-            function cardName(slug) {
-                return (cardSelector.options.namedItem('card-' + slug)||{}).textContent;
-            }
-
             function update() {
-                if (!deck.querySelector('*')) {
+                if (!deck.querySelector('cb-card')) {
                     result.style.display =  "none";
                     return ;
                 }
@@ -97,11 +93,11 @@ weight: 8
                 result.style.display =  "";
 
                 var data = [].slice.apply(deck.querySelectorAll('.item')).reduce(function (data, item) {
-                    return data + (data ? "&" : "") + item.dataset['slug'] + "=" + encodeURIComponent(item.querySelector('p').innerText);
+                    var card = item.card;
+                    return data + (data ? "&" : "") + card.getSlug() + "=" + card.getLevelString();
                 }, "");
 
                 share.value = window.location.href.replace(/\?.*|$/, "?" + data);
-
                 if ('history' in window && location.href !== share.value) {
                     window.history.pushState({}, '', share.value);
                 }
@@ -117,7 +113,7 @@ weight: 8
                 var needsUpdate = !card;
                 card = card || getCurrentCard();
 
-                if (!card) {
+                if (!card || !card.card) {
                     cardSelector.parentNode.classList.add('has-error');
                     cardSelector.focus();
                     return;
@@ -125,39 +121,65 @@ weight: 8
 
                 cardSelector.parentNode.classList.remove('has-error');
 
-                deck.innerHTML += [
-                    '<div class="item col-xs-3" data-slug="'+ card.slug +'"><div class="thumbnail">',
+                try {
+                    card = CardCollection.forLevel(card.card, card.level);
+                } catch (E) {
+                    E.message && showMessage(E.message, 'danger');
+                    throw E;
+                }
 
-                        '<img src="' + imageCdn + card.slug + '.png" alt="' + cardName(card.slug) + '">',
+                var item = document.createElement('div');
+                item.className = 'item col-xs-3';
+                item.card = card;
+                
+                deck.appendChild(item);
+                item.appendChild(card.node);
 
-                    '<div class="caption">',
-                        '<p>' + (card.comment||cardName(card.slug)) + '</p>',
-                        '<button class="btn btn-danger btn-xs" onclick="remove(this.parentNode.parentNode.parentNode)">',
-                            '<span class="glyphicon glyphicon-trash"></span>Remove</a>',
+                item.appendChild((function (btn) {
+                    btn.className = 'btn btn-danger btn-xs';
+                    btn.onclick = function () { remove(this.parentNode); }
+                    btn.textContent = 'Remove';
 
-                    '</div></div></div>'
+                    btn.insertBefore(document.createElement('span'), btn.firstChild).className = 'glyphicon glyphicon-trash';
 
-                ].join("");
+                    return btn;
+                })(document.createElement('button')));
 
                 needsUpdate && update();
             }
 
-            window.onpopstate = function () {
-                deck.innerHTML = '';
-                window.location.search.substr(1).split(/&/).forEach(function (item) {
-                    if (!item) {
-                        return;
-                    }
+            getCards(function (cards) {
 
-                    add({
-                        "slug": item.split(/=/)[0],
-                        "comment": decodeURIComponent(item.split(/=/)[1] || "")
-                    });
+                var datalist = document.getElementById(cardSelector.getAttribute('list'));
+
+                cardList = cards;
+
+                form.querySelector('button').removeAttribute('disabled');
+                cardSelector.placeholder = "choose a card";
+                
+                cards.getDeck().forEach(function (card) {
+                    var option = document.createElement('option');
+                    option.textContent = card.name;
+                    datalist.appendChild(option);
                 });
 
-                update();
-            };
-            window.onpopstate();
+                window.onpopstate = function () {
+                    deck.innerHTML = '';
+                    window.location.search.substr(1).split(/&/).forEach(function (item) {
+                        if (!item) {
+                            return;
+                        }
+
+                        add({
+                            "card": cards.find(item.split(/=/)[0]),
+                            "level": decodeURIComponent(item.split(/=/)[1] || "1")
+                        });
+                    });
+
+                    update();
+                };
+                window.onpopstate();
+            });
         </script>
     </form>
 

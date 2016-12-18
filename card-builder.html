@@ -1,0 +1,148 @@
+---
+title: Card builder
+weight: 10
+---
+
+<form class="form-horizontal">
+    <div class="row"><div class="col-md-6">
+    <div class="form-group">
+        <div class=row>
+        <label for="card_name" class="col-sm-3 control-label">Name:</label>
+        <div class="col-sm-9">
+            <input id="card_name" class="form-control" value="Rodeo Peter">
+        </div>
+        </div>
+
+        <div class=row>
+        <label for="image" class="col-sm-3 control-label">Image:</label>
+        <div class="col-sm-9">
+            <input class="form-control" id="image" list="image_list">
+            <datalist id="image_list">
+                {% for image in site.data.images.images %}
+                <option>{{ image }}
+                {% endfor %}
+            </datalist>
+        </div>
+        </div>
+
+        <div class=row>
+        <label for="rarity" class="col-sm-3 control-label">Rarity:</label>
+        <div class="col-sm-9">
+            <select id="rarity" class="form-control">
+                <option>common
+                <option>rare
+                <option>epic
+                <option selected>legendary
+            </select>
+        </div>
+        </div>
+
+        <div class=row>
+        <label for="level" class="col-sm-3 control-label">Level:</label>
+        <div class="col-sm-5">
+            <select id="fusion" class="form-control">
+                <option selected>not fused
+                <option>once fused
+                <option>twice fused
+            </select>
+        </div>
+
+        <div class="col-sm-4">
+            <select id="level" class="form-control">
+                <option>1
+                <option>2
+                <option>3
+                <option>4
+                <option>5
+                <option selected>6
+            </select>
+        </div>
+        </div>
+
+        <div class=row>
+        <label for="attack" class="col-sm-3 control-label">Stats:</label>
+        <div class="col-sm-5">
+            <input id=attack class="form-control" placeholder=attack>
+        </div>
+        <div class="col-sm-4">
+            <input class="form-control" id=health placeholder=health>
+        </div>
+        </div>
+
+
+
+        <div class=row>
+        <label for="trait" class="col-sm-3 control-label">Trait:</label>
+        <div class="col-sm-9">
+            <select id="trait" class="form-control">
+                <option value="">none
+                {% for name in site.data.values.traits %}
+                <option>{{ name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        </div>
+
+        {% for name in (1..3) %}
+        {% capture name %}{% cycle 'alpha', 'bravo', 'charlie' %}{% endcapture %}
+        <div class=row>
+        <label for="skill_{{ name }}" class="col-sm-3 control-label">Skill:</label>
+        <div class="col-sm-5">
+            <select id="skill_{{ name }}" class="form-control" name=skill>
+                <option value="">none
+                {% for skill in site.data.values.skills %}
+                <option value="{{ skill[0] }}">{{ skill[1] }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="col-sm-4">
+            <input type=number class="form-control" placeholder="value" patter="\d+">
+        </div>
+        </div>
+        {% endfor %}
+    </div> <!-- .form-group -->
+    <div class=row>
+        <button class="btn btn-primary pull-right">Build</button>
+    </div>
+    </div>
+    <div class="col-sm-6" id=result></div>
+</div>
+
+
+</div>
+</form>
+
+<script>
+// CARD ///////////////////////////
+var card = new Card;
+
+document.getElementById('result').appendChild(card.node);
+
+// FORM ///////////////////////////
+var form = document.forms[0];
+var skills = [].slice.apply(form.querySelectorAll('[name="skill"]'));
+///////////////////////////////////
+
+function getSkills() {
+}
+
+form.onsubmit = function update() {
+    card.setName(form.card_name.value);
+    card.setRarity(form.rarity.value);
+    card.setLevel(form.level.value);
+    card.setFuse(form.fusion.selectedIndex);
+    card.setImage(form.image.value);
+    card.setTrait(form.trait.value);
+    card.setAttack(form.attack.value);
+    card.setHealth(form.health.value);
+
+    card.setSkills(skills.map(function (e) {
+        return {
+            type: e.value,
+            value: parseInt(e.parentNode.parentNode.querySelector('input').value) || null 
+        };
+    }).filter(function (s) { return s.type && s.value }));
+
+    return false;
+};
+</script>

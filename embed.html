@@ -1,0 +1,27 @@
+---
+layout: null
+---
+<!DOCTYPE html>
+<link rel="stylesheet" href="{{ site.baseurl }}/css/card.css">
+<link href="//db.onlinewebfonts.com/c/c99c1c85532dbaf7bc549b3d45836ee6?family=AhkioW00-Regular" rel="stylesheet" type="text/css"/>
+<script src="/javascript/cartoon-battle.js"></script>
+<style type="text/css">
+    body, html { margin: 0; padding: 0; }
+    body { line-height: 1.428; }
+    * { box-sizing: border-box; }
+    cb-card { font-size: 2.45vw; }
+</style>
+<body></body>
+
+<script type="text/javascript">
+    getCards('{{ site.cards_url }}', function (cards) {
+        var card = cards.find(window.location.search.split(/=/)[0]);
+        if (!card) return ;
+
+        var level = window.location.search.split(/=/)[1] || "1";
+
+        document.body.appendChild(cards.forLevel(card, level).node);
+
+        
+    });
+</script>

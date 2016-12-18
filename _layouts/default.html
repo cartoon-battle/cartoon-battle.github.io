@@ -9,7 +9,17 @@
 
 		<link rel="stylesheet" href="//fonts.googleapis.com/css?family=Merriweather:400,400italic,700,700italic|Open+Sans:400,400italic,600,600italic,700,700italic|Inconsolata:400,700">
 		<link rel="stylesheet" href="{{ site.baseurl }}/css/main.css">
+		<link rel="stylesheet" href="{{ site.baseurl }}/css/card.css">
 		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+        <link href="//db.onlinewebfonts.com/c/c99c1c85532dbaf7bc549b3d45836ee6?family=AhkioW00-Regular" rel="stylesheet" type="text/css"/>
+        <script src="/javascript/cartoon-battle.js"></script>
+        <script type="text/javascript">
+            getCards = (function (original) {
+                return function(cb) {
+                    original('{{ site.cards_url }}', cb);
+                }
+            })(getCards);
+        </script>
 
 		{% if jekyll.environment == 'production' and site.google_analytics_key != '' %}
 			<script>
@@ -59,6 +69,32 @@
 				<h2>{{ site.title }}</h2>
 				<h3>{{ page.title }}</h3>
 			</div>
+            <div class=content id=messages><script type="text/javascript">function showMessage(message, type) {
+                document.getElementById('messages').appendChild((function (p, message, type) {
+                    p.className = 'alert alert-' + (type || "warning");
+                    p.textContent = message;
+                    
+                    p.appendChild((function (button) {
+                        button.type = 'button';
+                        button.className = 'close';
+                        button.appendChild(document.createElement('span')).innerHTML = '&times;'
+                        return button;
+                    })(document.createElement('button')));
+
+                    return p;
+                })(document.createElement('p'), message, type));
+            }
+            document.getElementById('messages').addEventListener('click', function (e) {
+                var p = e.target;
+                while (p && 'P' !== p.tagName.toUpperCase() && p.parentNode !== this) {
+                    p = p.parentNode;
+                } 
+
+                if (p) {
+                    p.parentNode.removeChild(p);
+                }
+            });
+            </script></div>
 			<article class="content">
 				{{ content }}
 			</article>
