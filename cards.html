@@ -3,12 +3,15 @@ title: Cards
 weight: 8
 ---
 
-<div id="cards"></div>
+<style type="text/css">cb-card { font-size: 42%; float: left }</style>
+<div id="cards" class=row></div>
 <script type="text/javascript">
     getCards(function (cards) {
         var deck = document.getElementById('cards');
 
-        cards.getDeck().forEach(function (card) {
+        cards.getDeck().sort(function (alpha, bravo) {
+            return alpha.name.localeCompare(bravo.name);
+        }).forEach(function (card) {
             deck.appendChild(cards.forLevel(card, card.levels.length).node);
         })
     })
