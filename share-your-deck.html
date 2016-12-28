@@ -4,7 +4,6 @@ weight: 8
 ---
 
 <h2>This page uses Javascript to create & share your deck</h2>
-<link href="//db.onlinewebfonts.com/c/c99c1c85532dbaf7bc549b3d45836ee6?family=AhkioW00-Regular" rel="stylesheet" type="text/css"/>
 
 <style>
     #deck {
@@ -16,8 +15,12 @@ weight: 8
         float: none;
         width: 22%;
     }
+
     #deck .item cb-card {
         font-size: 0.25em;
+    }
+    #setup {
+        margin-bottom: 3em;
     }
 </style>
 
@@ -37,7 +40,7 @@ weight: 8
 
 
 <div id=setup>
-    <form class="form-inline" data-image-cdn="{{ site.images_cdn }}" onsubmit="try { add(); } catch (E) { }; return false;">
+    <form class="form-inline" data-image-cdn="{{ site.images_cdn }}" onsubmit="return false;">
         <fieldset class="form-group">
             <input class="form-control" list="cards" placeholder="Please wait for cards to load..." id="card">
             <datalist id=cards>
@@ -52,136 +55,11 @@ weight: 8
                 </span>
             </div>
         </fieldset>
-        <script src="https://rubaxa.github.io/Sortable/Sortable.js"></script>
-        <script>
-            var form = document.forms[0];
-            var result = document.getElementById('result');
-            var share = result.querySelector('input');
-            var deck = document.getElementById('deck');
-            var cardSelector = form.card;
-            var level = form.level;
-
-            var cardList;
-
-            var sort = Sortable.create(deck, {
-              animation: 150, // ms, animation speed moving items when sorting, `0` — without animation
-              draggable: ".item", // Specifies which items inside the element should be sortable
-              onUpdate: function (evt/**Event*/){
-                 update();
-              }
-            });
-
-
-            function getCurrentCard() {
-                var card = cardSelector.value;
-                if (!card || !level.validity.valid) {
-                    return;
-                }
-
-                return {
-                    'card': cardList.find(card),
-                    'level': level.value
-                }
-            }
-
-            function update() {
-                if (!deck.querySelector('cb-card')) {
-                    result.style.display =  "none";
-                    return ;
-                }
-
-                result.style.display =  "";
-
-                var data = [].slice.apply(deck.querySelectorAll('.item')).reduce(function (data, item) {
-                    var card = item.card;
-                    return data + (data ? "&" : "") + card.getSlug() + "=" + card.getLevelString();
-                }, "");
-
-                share.value = window.location.href.replace(/\?.*|$/, "?" + data);
-                if ('history' in window && location.href !== share.value) {
-                    window.history.pushState({}, '', share.value);
-                }
-            }
-
-            function remove(e) {
-                e && e.parentNode && e.parentNode.removeChild(e);
-
-                update();
-            }
-
-            function add(card){
-                var needsUpdate = !card;
-                card = card || getCurrentCard();
-
-                if (!card || !card.card) {
-                    cardSelector.parentNode.classList.add('has-error');
-                    cardSelector.focus();
-                    return;
-                }
-
-                cardSelector.parentNode.classList.remove('has-error');
-
-                try {
-                    card = CardCollection.forLevel(card.card, card.level);
-                } catch (E) {
-                    E.message && showMessage(E.message, 'danger');
-                    throw E;
-                }
-
-                var item = document.createElement('div');
-                item.className = 'item col-xs-3';
-                item.card = card;
-                
-                deck.appendChild(item);
-                item.appendChild(card.node);
-
-                item.appendChild((function (btn) {
-                    btn.className = 'btn btn-danger btn-xs';
-                    btn.onclick = function () { remove(this.parentNode); }
-                    btn.textContent = 'Remove';
-
-                    btn.insertBefore(document.createElement('span'), btn.firstChild).className = 'glyphicon glyphicon-trash';
-
-                    return btn;
-                })(document.createElement('button')));
-
-                needsUpdate && update();
-            }
-
-            getCards(function (cards) {
-
-                var datalist = document.getElementById(cardSelector.getAttribute('list'));
-
-                cardList = cards;
-
-                form.querySelector('button').removeAttribute('disabled');
-                cardSelector.placeholder = "choose a card";
-                
-                cards.getDeck().forEach(function (card) {
-                    var option = document.createElement('option');
-                    option.textContent = card.name;
-                    datalist.appendChild(option);
-                });
-
-                window.onpopstate = function () {
-                    deck.innerHTML = '';
-                    window.location.search.substr(1).split(/&/).forEach(function (item) {
-                        if (!item) {
-                            return;
-                        }
-
-                        add({
-                            "card": cards.find(item.split(/=/)[0]),
-                            "level": decodeURIComponent(item.split(/=/)[1] || "1")
-                        });
-                    });
-
-                    update();
-                };
-                window.onpopstate();
-            });
-        </script>
+        <script>require(['share-your-deck']);</script>
     </form>
+</div>
 
+<div class="panel panel-warning" style="display: none;" id="problems">
+    <p class="panel-heading">Those cards in your deck can combo with less than 75% of your deck, try working on it</p>
 </div>
 

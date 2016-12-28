@@ -11,15 +11,7 @@
 		<link rel="stylesheet" href="{{ site.baseurl }}/css/main.css">
 		<link rel="stylesheet" href="{{ site.baseurl }}/css/card.css">
 		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-        <link href="//db.onlinewebfonts.com/c/c99c1c85532dbaf7bc549b3d45836ee6?family=AhkioW00-Regular" rel="stylesheet" type="text/css"/>
-        <script src="/javascript/cartoon-battle.js"></script>
-        <script type="text/javascript">
-            getCards = (function (original) {
-                return function(cb) {
-                    original('{{ site.cards_url }}', cb);
-                }
-            })(getCards);
-        </script>
+        <script data-main="javascript/cartoon-battle" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.2/require.min.js"></script>
 
 		{% if jekyll.environment == 'production' and site.google_analytics_key != '' %}
 			<script>

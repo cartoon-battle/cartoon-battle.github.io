@@ -2,10 +2,20 @@
 layout: null
 ---
 
+@font-face {
+    font-family: "Cartoon Battle";
+    src: url("{{ site.images_cdn }}font/c99c1c85532dbaf7bc549b3d45836ee6.eot");
+    src: url("{{ site.images_cdn }}font/c99c1c85532dbaf7bc549b3d45836ee6.eot?#iefix") format("embedded-opentype"),
+    url("{{ site.images_cdn }}font/c99c1c85532dbaf7bc549b3d45836ee6.woff2") format("woff2"),
+    url("{{ site.images_cdn }}font/c99c1c85532dbaf7bc549b3d45836ee6.woff") format("woff"),
+    url("{{ site.images_cdn }}font/c99c1c85532dbaf7bc549b3d45836ee6.ttf") format("truetype"),
+    url("{{ site.images_cdn }}font/c99c1c85532dbaf7bc549b3d45836ee6.svg#AhkioW00-Regular") format("svg");
+}
+
 cb-card {
     display: block;
     font-size: 75%;
-    font-family: 'AhkioW00-Regular';
+    font-family: 'Cartoon Battle';
     width: 40.7em;
     height: 56.4em;
     color: white;
@@ -13,7 +23,7 @@ cb-card {
     position: relative;
 }
 
-cb-card cb-frame, cb-card cb-frame cb-level, cb-card cb-frame cb-trait {
+cb-card cb-frame, cb-card cb-frame:before, cb-card cb-frame cb-level, cb-card cb-frame cb-trait {
     position: absolute;
     background-size: 100% 100%;
     z-index: 2;
@@ -22,6 +32,14 @@ cb-card cb-frame, cb-card cb-frame cb-level, cb-card cb-frame cb-trait {
     bottom: 0;
     right: 0;
 }
+cb-card[trait]:hover cb-frame {
+    background-image: none !important;
+}
+cb-card:hover cb-frame:before {
+    content: "";
+    display: block;
+}
+
 cb-card cb-frame cb-level {
     top: .08em;
     bottom: .08em;
@@ -112,7 +130,7 @@ cb-card cb-skills {
 cb-card[rarity="{{ rarity }}"][fused="{{ fused }}"]{% if skills > 0 %}[skills="{{ skills }}"]{% endif %} cb-frame { 
     background-image: url({{ site.images_cdn }}deck/frames/{{ rarity }}{{ fused }}{% if skills > 0 %}notrait{{ skills }}{% endif %}.png);
 }
-cb-card[rarity="{{ rarity }}"][fused="{{ fused }}"]{% if skills > 0 %}[skills="{{ skills }}"]{% endif %}[trait]:hover cb-frame { 
+cb-card[rarity="{{ rarity }}"][fused="{{ fused }}"]{% if skills > 0 %}[skills="{{ skills }}"]{% endif %}[trait] cb-frame:before {
     background-image: url({{ site.images_cdn }}deck/frames/{{ rarity }}{{ fused }}trait{% if skills > 0 %}{{ skills }}{% endif %}.png); 
 }{% endfor %}
     {% endfor %}

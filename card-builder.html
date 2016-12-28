@@ -112,37 +112,37 @@ weight: 10
 </div>
 </form>
 
-<script>
-// CARD ///////////////////////////
-var card = new Card;
+<script>require(['cartoon-battle/Card'], function (Card) {
 
-document.getElementById('result').appendChild(card.node);
+    var card = new Card;
 
-// FORM ///////////////////////////
-var form = document.forms[0];
-var skills = [].slice.apply(form.querySelectorAll('[name="skill"]'));
-///////////////////////////////////
+    document.getElementById('result').appendChild(card.node);
 
-function getSkills() {
-}
+    // FORM ///////////////////////////
+    var form = document.forms[0];
+    var skills = [].slice.apply(form.querySelectorAll('[name="skill"]'));
+    ///////////////////////////////////
 
-form.onsubmit = function update() {
-    card.setName(form.card_name.value);
-    card.setRarity(form.rarity.value);
-    card.setLevel(form.level.value);
-    card.setFuse(form.fusion.selectedIndex);
-    card.setImage(form.image.value);
-    card.setTrait(form.trait.value);
-    card.setAttack(form.attack.value);
-    card.setHealth(form.health.value);
+    form.onsubmit = function update() {
+        card.setName(form.card_name.value);
+        card.setRarity(form.rarity.value);
+        card.setLevel(form.level.value);
+        card.setFuse(form.fusion.selectedIndex);
+        card.setImage(form.image.value);
+        card.setTrait(form.trait.value);
+        card.setAttack(form.attack.value);
+        card.setHealth(form.health.value);
 
-    card.setSkills(skills.map(function (e) {
-        return {
-            type: e.value,
-            value: parseInt(e.parentNode.parentNode.querySelector('input').value) || null 
-        };
-    }).filter(function (s) { return s.type && s.value }));
+        card.setSkills(skills.map(function (e) {
+            return {
+                type: e.value,
+                value: parseInt(e.parentNode.parentNode.querySelector('input').value) || null
+            };
+        }).filter(function (s) {
+            return s.type && s.value
+        }));
 
-    return false;
-};
+        return false;
+    };
+});
 </script>
