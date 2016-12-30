@@ -1,0 +1,40 @@
+---
+title: Combo Recipes
+weight: 8
+---
+<style type="text/css">
+	cb-card { font-size: 34%; cursor: pointer; }
+</style>
+<div class="panel panel-default">
+	<div class="panel-heading">
+		Choose a card and get all recipes information related to it.
+	</div>
+	<div class="panel-body">
+
+		<form class="form-inline" onsubmit="return false;">
+			<fieldset class="form-group">
+				<div class="input-group">
+					<input class="form-control" placeholder="Please wait for cards to load..." data-cards="deck, combo, -precombo">
+
+					<span class="input-group-btn">
+						<button class="btn btn-default" type="submit" disabled>
+							<span class="glyphicon glyphicon-search"></span> Show Recipes
+						</button>
+					</span>
+				</div>
+			</fieldset>
+			<script>require(['recipes']);</script>
+		</form>
+	</div>
+
+	<table class="table">
+		<thead>
+			<tr>
+				<th>Character Card</th>
+				<th>Item Card</th>
+				<th>Combo Card</th>
+			</tr>
+		</thead>
+		<tbody></tbody>
+	</table>
+</div>

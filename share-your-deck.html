@@ -32,7 +32,7 @@ weight: 8
     <div class="panel-footer">
         <div class="input-group">
             <span class="input-group-addon" id="basic-addon1">Share this URL:</span>
-            <input readonly value="http://foo.bar" class="form-control">
+            <input readonly value="" class="form-control">
         </div>
     </div>
 </div>
@@ -42,14 +42,12 @@ weight: 8
 <div id=setup>
     <form class="form-inline" data-image-cdn="{{ site.images_cdn }}" onsubmit="return false;">
         <fieldset class="form-group">
-            <input class="form-control" list="cards" placeholder="Please wait for cards to load..." id="card">
-            <datalist id=cards>
-            </datalist>
+            <input class="form-control" data-cards="deck" placeholder="Please wait for cards to load..." id="card">
 
             <div class="input-group">
                 <input placeholder="card level, i.e. 5*" id="level" pattern='^\d+\s*[*]{0,2}$' class="form-control">
                 <span class="input-group-btn">
-                    <button class="btn btn-default" type="submit" disabled>
+                    <button class="btn btn-default js-choose-card" type="submit" disabled>
                         <span class="glyphicon glyphicon-plus"></span> Add
                     </button>
                 </span>

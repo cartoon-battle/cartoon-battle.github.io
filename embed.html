@@ -14,7 +14,12 @@ layout: null
 
 <script type="text/javascript">require(['cartoon-battle'], function (getCards) {
     getCards(function (cards) {
-        var card = cards.find(window.location.search.split(/=/)[0]);
+        var items = window.location.search.split(/=/)[0].substr(1).split("+").map(function (name) {
+            return cards.find(name);
+        });
+
+        var card = 1 === items.length ? items.pop() : cards.getCombo.apply(cards, items).result;
+
         if (!card) return;
 
         var level = window.location.search.split(/=/)[1] || "1";

@@ -5,11 +5,11 @@ weight: 8
 
 <style type="text/css">cb-card { font-size: 42%; float: left }</style>
 <div id="cards" class=row></div>
-<script type="text/javascript">require('cartoon-battle', function (getCards) {
+<script type="text/javascript">require(['cartoon-battle'], function (getCards) {
     getCards(function (cards) {
         var deck = document.getElementById('cards');
 
-        cards.getDeck().sort(function (alpha, bravo) {
+        cards.getCards().sort(function (alpha, bravo) {
             return alpha.name.localeCompare(bravo.name);
         }).forEach(function (card) {
             deck.appendChild(cards.forLevel(card, card.levels.length).node);

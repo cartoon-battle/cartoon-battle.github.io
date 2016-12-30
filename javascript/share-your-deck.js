@@ -8,13 +8,19 @@ define(['cartoon-battle', 'cartoon-battle/util', 'https://rubaxa.github.io/Sorta
     var cardSelector = form.card;
     var level = form.level;
 
-    form.onsubmit = function () {
-        try {
-            add();
-        } catch (E) { }
+    form.addEventListener('card', function (e) {
+        e.preventDefault();
 
-        return false;
-    };
+        if (!e.detail || !level.validity.valid) {
+            cardSelector.parentNode.classList.add('has-error');
+            (card && level || cardSelector).focus();
+            return ;
+        }
+
+        cardSelector.parentNode.classList.remove('has-error');
+
+        add(e.detail, level.value, true);
+    });
 
     var cardList;
 
@@ -23,19 +29,6 @@ define(['cartoon-battle', 'cartoon-battle/util', 'https://rubaxa.github.io/Sorta
         draggable: ".item",
         onUpdate: update
     });
-
-
-    function getCurrentCard() {
-        var card = cardSelector.value;
-        if (!card || !level.validity.valid) {
-            return;
-        }
-
-        return {
-            'card': cardList.find(card),
-            'level': level.value
-        }
-    }
 
     function update() {
         if (!deck.querySelector('cb-card')) {
@@ -97,7 +90,7 @@ define(['cartoon-battle', 'cartoon-battle/util', 'https://rubaxa.github.io/Sorta
         problems.style.display = "none";
         (function (table) { table && table.parentNode.removeChild(table); })(problems.querySelector('table'));
 
-        if (combos.length) {
+        if (combos.length && cards.length > 15) {
             problems.style.display = 'block';
             problems.appendChild(util.createTable(combos, ["Card name", "Combo chance"]));
         }
@@ -115,20 +108,10 @@ define(['cartoon-battle', 'cartoon-battle/util', 'https://rubaxa.github.io/Sorta
         update();
     }
 
-    function add(card){
-        var needsUpdate = !card;
-        card = card || getCurrentCard();
-
-        if (!card || !card.card) {
-            cardSelector.parentNode.classList.add('has-error');
-            cardSelector.focus();
-            return;
-        }
-
-        cardSelector.parentNode.classList.remove('has-error');
+    function add(card, level, needsUpdate) {
 
         try {
-            card = cardList.forLevel(card.card, card.level);
+            card = cardList.forLevel(card, level || 1);
         } catch (E) {
             E.message && showMessage(E.message, 'danger');
             throw E;
@@ -156,18 +139,7 @@ define(['cartoon-battle', 'cartoon-battle/util', 'https://rubaxa.github.io/Sorta
 
     getCards(function (cards) {
 
-        var datalist = document.getElementById(cardSelector.getAttribute('list'));
-
         cardList = cards;
-
-        form.querySelector('button').removeAttribute('disabled');
-        cardSelector.placeholder = "choose a card";
-
-        cards.getDeck().forEach(function (card) {
-            var option = document.createElement('option');
-            option.textContent = card.name;
-            datalist.appendChild(option);
-        });
 
         window.onpopstate = function () {
             deck.innerHTML = '';
@@ -176,10 +148,7 @@ define(['cartoon-battle', 'cartoon-battle/util', 'https://rubaxa.github.io/Sorta
                     return;
                 }
 
-                add({
-                    "card": cards.find(item.split(/=/)[0]),
-                    "level": decodeURIComponent(item.split(/=/)[1] || "1")
-                });
+                add(cards.find(item.split(/=/)[0]), decodeURIComponent(item.split(/=/)[1] || "1"));
             });
 
             update();
