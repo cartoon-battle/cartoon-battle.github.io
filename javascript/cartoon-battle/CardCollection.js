@@ -121,6 +121,8 @@ define(['./util', './Rarity', './Level', './Card'], function define__cardcollect
     }
 
     function CardCollection(listResponseXML) {
+        this.defaultInclude = ['deck'];
+
         listResponseXML = listResponseXML.map(function (responseXML) {
             return (new DOMParser).parseFromString(responseXML, 'application/xml');
         });
@@ -140,9 +142,10 @@ define(['./util', './Rarity', './Level', './Card'], function define__cardcollect
     }
 
     CardCollection.prototype.getCards = function cardcollection__getCards(include) {
+        include = include || this.defaultInclude;
         return this.items.map(categorize_card)
             .filter(function (item) {
-                return (include || ['deck']).reduce(function (result, key) {
+                return include.reduce(function (result, key) {
                     var exclude = "-" === key[0];
                     key = key.replace(/^[+-]/, '');
 
@@ -167,7 +170,7 @@ define(['./util', './Rarity', './Level', './Card'], function define__cardcollect
         }
 
         var name = util.slugify(options.name);
-        var include = options.include || ['deck'];
+        var include = options.include || this.defaultInclude;
 
         return this.items.filter(function (card) {
             return name === card.slug;

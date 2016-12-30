@@ -14,7 +14,8 @@ weight: 8
 		<form class="form-inline" onsubmit="return false;">
 			<fieldset class="form-group">
 				<div class="input-group">
-					<input class="form-control" placeholder="Please wait for cards to load..." data-cards="deck, combo, -precombo">
+					<!-- combo first, so invalid precombo cards (treated as deck) don’t get precendence -->
+					<input class="form-control" placeholder="Please wait for cards to load..." data-cards="combo, deck, -precombo">
 
 					<span class="input-group-btn">
 						<button class="btn btn-default" type="submit" disabled>

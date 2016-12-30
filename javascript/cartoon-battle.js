@@ -39,7 +39,7 @@ define(['cartoon-battle/config', 'cartoon-battle/CardCollection'], function (con
                 input.setAttribute('list', cartoonbattle__createDatalist(filteredCards, include));
                 input.placeholder  = "choose a card";
 
-                input.find = cards.find.bind({"items": filteredCards});
+                input.find = cards.find.bind({"items": filteredCards, defaultInclude: include});
 
                 var button = input.form.querySelector(input.dataset['target-button'] || 'button');
                 if (button) {
