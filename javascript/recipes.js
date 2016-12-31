@@ -23,7 +23,7 @@ define(['cartoon-battle'], function (getCards) {
                 };
 
                 return node;
-            })(cards.forLevel(card).node)).parentNode).parentNode;
+            })(cards.forLevel(card, tr.childNodes.length < 2 ? '^*' : "1").node)).parentNode).parentNode;
         }, document.createElement('tr')));
 
         table.style.display = '';
@@ -35,7 +35,7 @@ define(['cartoon-battle'], function (getCards) {
         }
 
         clear();
-        cards.getRecipesIncluding(card).forEach(add);
+        cards.getRecipesIncluding(card, '^*').forEach(add);
 
         if ('history' in window && location.search.substr(1) !== card.slug) {
             window.history.pushState({}, '', '?' + card.slug);

@@ -1,5 +1,7 @@
 define(['./util', './Rarity', './Level', './Card'], function define__cardcollection(util, Rarity, Level, Card) {
 
+    var COMBO_STAT_COEFFICIENT = 77;
+
     function categorize_card(card) {
         var standard = card.set < 5000;
         var deck = standard && !card.commander && !card.is_combo && !card.is_defense && !card.hidden;
@@ -19,14 +21,49 @@ define(['./util', './Rarity', './Level', './Card'], function define__cardcollect
         return cardCategory.card;
     }
 
+    function upgrade_card(card, level) {
+        card = util.clone(card);
+
+        level = new Level(level, new Rarity(card.rarity));
+
+        var upgrade = card.levels[level.getAbsoluteValue() - 1];
+        if (!upgrade) {
+            throw new Error('„' + card.name + '” doesn’t have this level: ' + level.getAbsoluteValue());
+        }
+
+        card.attack = upgrade.attack;
+        card.health = upgrade.health;
+        card.skills = upgrade.skills;
+
+        card.level = level.getValue();
+        card.fuse = level.getFuse();
+
+        return card;
+    }
+
+    function combo_value(alpha, bravo, multiplier) {
+        return Math.max(alpha, bravo, Math.ceil(1.1 * (alpha + bravo) * multiplier));
+    }
+
     function hydrate_combo(combo) {
-        var character = this.get(combo.character);
-        var item = this.get(combo.item);
+        var character = upgrade_card(this.get(combo.character), combo.level || "1");
+        var item = upgrade_card(this.get(combo.item), combo.level || "1");
         var result = util.clone(this.get(combo.card_id));
 
         result.rarity = Math.ceil(character.rarity /2 + item.rarity /2);
-        result.health = Math.round(1.1 * (item.health + character.health) * result.health_multiplier);
-        result.attack = Math.round(1.1 * (item.attack + character.attack) * result.attack_multiplier);
+        result.health = combo_value(item.health, character.health, result.health_multiplier);
+        result.attack = combo_value(item.attack, character.attack, result.attack_multiplier);
+
+        var power = 1.1 * (3 * character.attack + 3 * item.attack + character.health + item.health);
+
+        result.skills = Object.keys(result.skills).reduce(function (skills, key) {
+            skills[key] = {
+                x: Math.round((power - result.skills[key].p) / COMBO_STAT_COEFFICIENT * result.skills[key].v),
+                y: result.skills[key].y
+            };
+
+            return skills;
+        }, {});
 
         return {
             "character": character,
@@ -82,7 +119,12 @@ define(['./util', './Rarity', './Level', './Card'], function define__cardcollect
         unit.skills = unit.skills || {};
 
         skills.forEach(function (e) {
-            unit.skills[e.getAttribute('id')] = parseInt(e.getAttribute('x') || e.getAttribute('v')) * (e.hasAttribute('y') ? -1 : 1);
+            unit.skills[e.getAttribute('id')] = {
+                "p": parseInt(e.getAttribute('p')) || null,
+                "x": parseInt(e.getAttribute('x')) || null,
+                "v": parseInt(e.getAttribute('v')) || null,
+                "y": e.getAttribute('y') || null
+            };
         });
 
         return unit;
@@ -193,18 +235,7 @@ define(['./util', './Rarity', './Level', './Card'], function define__cardcollect
     };
 
     CardCollection.forLevel = CardCollection.prototype.forLevel = function cardcollection__forLevel(card, level) {
-        card = util.clone(card);
-
-        level = new Level(level, new Rarity(card.rarity));
-
-        var upgrade = card.levels[level.getAbsoluteValue() - 1];
-        if (!upgrade) {
-            throw new Error('„' + card.name + '” doesn’t have this level: ' + level.getAbsoluteValue());
-        }
-
-        card.attack = upgrade.attack;
-        card.health = upgrade.health;
-        card.skills = upgrade.skills;
+        card = upgrade_card(card, level);
 
         return new Card({
             id: card.id,
@@ -213,14 +244,14 @@ define(['./util', './Rarity', './Level', './Card'], function define__cardcollect
             rarity: card.rarity,
             attack: card.attack,
             health: card.health,
-            level: level.getValue(),
+            level: card.level,
             trait: card.trait,
-            fuse: level.getFuse(),
+            fuse: card.fuse,
             skills: Object.keys(card.skills).map(function (skill) {
                 return {
                     type: skill,
-                    value: Math.abs(card.skills[skill]),
-                    target: card.skills[skill] < 0
+                    value: Math.abs(card.skills[skill].x),
+                    target: !!card.skills[skill].y
                 };
             })
         });
@@ -238,9 +269,16 @@ define(['./util', './Rarity', './Level', './Card'], function define__cardcollect
         return null;
     };
 
-    CardCollection.prototype.getRecipesIncluding = function(card) {
+    CardCollection.prototype.getRecipesIncluding = function(card, level) {
         return this.combos.filter(function (combo) {
             return !!~[combo.card_id, combo.character, combo.item].indexOf(card.id);
+        }).map(function (combo) {
+            return {
+                "character": combo.character,
+                "item": combo.item,
+                "card_id": combo.card_id,
+                "level": level
+            }
         }).map(hydrate_combo.bind(this));
     };
 
