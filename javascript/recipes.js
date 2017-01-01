@@ -51,14 +51,26 @@ define(['cartoon-battle'], function (getCards) {
         recipes(event.detail);
     });
 
-    return getCards(function (items) {
+    return getCards(function recipes__getCards(items) {
         cards = items;
 
-        if (window.location.search) {
-            setTimeout(function () {
-                recipes(input.find(window.location.search.substr(1)));
-            }, 0);
+        function deferred_recipes() {
+            var search = window.location.search.substr(1);
+
+            if (input.find) { // wait for other scripts to attach to the input
+                if (search) {
+                    recipes(input.find(search));
+                }
+
+                return;
+            }
+
+            setTimeout(deferred_recipes, 250);
         }
+
+        window.onpopstate = deferred_recipes;
+
+        deferred_recipes();
     });
 
 });

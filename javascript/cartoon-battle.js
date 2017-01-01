@@ -94,7 +94,11 @@ define(['cartoon-battle/config', 'cartoon-battle/CardCollection'], function (con
         });
     }
 
-    window.addEventListener('load', cartoonbattle__initCustomElements);
+    if (!!~["complete", "loaded", "interactive"].indexOf(document.readyState)) {
+        cartoonbattle__initCustomElements();
+    }
+
+    document.addEventListener('DOMContentLoaded', cartoonbattle__initCustomElements);
 
     return cartoonbattle__getCards;
 });
