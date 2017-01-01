@@ -37,10 +37,45 @@ define(['cartoon-battle'], function (getCards) {
         clear();
         cards.getRecipesIncluding(card, '^*').forEach(add);
 
+        filter_recipes();
+
         if ('history' in window && location.search.substr(1) !== card.slug) {
             window.history.pushState({}, '', '?' + card.slug);
         }
 
+    }
+
+    function filter_recipes() {
+        function get_filter_values(name) {
+            return [].slice.apply(document.querySelectorAll('[data-filter="'+name+'"].active')).map(function (e) {
+                return e.dataset.value;
+            });
+        }
+
+        var skills = get_filter_values('skill');
+        var rarities = get_filter_values('rarity');
+
+        [].slice.apply(table.querySelectorAll('tbody tr')).forEach(function (row) {
+            var cards = [].slice.call(row.querySelectorAll('cb-card'));
+
+            var character = cards.shift().card;
+            var item = cards.shift().card;
+            /** @var Card combo */
+            var combo = cards.shift().card;
+
+            row.style.display = (function () {
+                var skillTypes = combo.getSkils().map(function (skill) { return skill.type; });
+                var hasSkill = 0 === skills.length || skills.reduce(function (hasSkill, skill) {
+                    return hasSkill || !!~skillTypes.indexOf(skill);
+                }, false);
+
+                var hasRarity = 0 === rarities.length || [character, item].reduce(function (hasRarity, card) {
+                    return hasRarity && !!~rarities.indexOf(card.getRarity().name)
+                }, true);
+
+                return hasSkill && hasRarity;
+            })() ? "" : "none";
+        });
     }
 
     clear();
@@ -49,6 +84,24 @@ define(['cartoon-battle'], function (getCards) {
         event.preventDefault();
 
         recipes(event.detail);
+    });
+
+    document.querySelector('fieldset[data-filters]').addEventListener('click', function (e) {
+        var target = e.target;
+        while (target && 'button' !== target.nodeName.toLowerCase()) {
+            target = target.parentNode;
+        }
+
+        if (!target) {
+            return;
+        }
+
+        target.classList.toggle('btn-default');
+        target.classList.toggle('btn-info');
+        target.classList.toggle('active');
+
+        filter_recipes();
+
     });
 
     return getCards(function recipes__getCards(items) {

@@ -8,6 +8,8 @@ defaults:
 
 heroes:  [Brian, Stewie, Louise, Steve, Bender, Dale, Bob, Roger, Leela, Bobby, Peter, Tina, Stan, Fry, Hank]
 
+rarities: [common, rare, epic, legendary]
+
 daily_income: -500
 arena_time: 90
 adventure_time: 10

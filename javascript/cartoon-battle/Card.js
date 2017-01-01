@@ -19,6 +19,8 @@ define(['./config', './util', './Rarity'], function (config, util, Rarity) {
             ]]
         ]);
 
+        this.node.card = this;
+
         this.setId(value.id);
         this.setName(value.name);
         this.setImage(value.image);
@@ -65,6 +67,10 @@ define(['./config', './util', './Rarity'], function (config, util, Rarity) {
         this.rarity = new Rarity(rarity);
 
         this.node.setAttribute('rarity', this.rarity.name);
+    };
+
+    Card.prototype.getRarity = function card__getRarity() {
+        return this.rarity;
     };
 
     Card.prototype.setLevel = function card__setLevel(level) {
@@ -137,6 +143,10 @@ define(['./config', './util', './Rarity'], function (config, util, Rarity) {
                 e.removeAttribute('target');
             }
         });
+    };
+
+    Card.prototype.getSkils = function card__getSkills() {
+        return this.skills;
     };
 
     return Card;
