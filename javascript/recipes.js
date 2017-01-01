@@ -2,9 +2,10 @@ define(['cartoon-battle'], function (getCards) {
     var table = document.querySelector('table');
     var tbody = table.querySelector('tbody');
     var input = document.forms[0].querySelector('input');
+    var level = document.querySelector('select');
 
     /** @var CardCollection cards */
-    var cards;
+    var cards, selectedCard;
 
     function clear() {
         while (tbody.firstChild) {
@@ -13,6 +14,12 @@ define(['cartoon-battle'], function (getCards) {
 
         table.style.display = 'none';
     }
+
+    level.onchange = function () {
+        if (selectedCard) {
+            recipes(selectedCard);
+        }
+    };
 
     function add(recipe) {
 
@@ -23,7 +30,7 @@ define(['cartoon-battle'], function (getCards) {
                 };
 
                 return node;
-            })(cards.forLevel(card, tr.childNodes.length < 2 ? '^*' : "1").node)).parentNode).parentNode;
+            })(cards.forLevel(card, tr.childNodes.length < 2 ? level.value : "1").node)).parentNode).parentNode;
         }, document.createElement('tr')));
 
         table.style.display = '';
@@ -34,8 +41,10 @@ define(['cartoon-battle'], function (getCards) {
             return;
         }
 
+        selectedCard = card;
+
         clear();
-        cards.getRecipesIncluding(card, '^*').forEach(add);
+        cards.getRecipesIncluding(card, level.value).forEach(add);
 
         filter_recipes();
 
