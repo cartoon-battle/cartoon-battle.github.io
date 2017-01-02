@@ -45,9 +45,9 @@ define(['./util', './Rarity', './Level', './Card'], function define__cardcollect
         return Math.max(alpha, bravo, Math.ceil(1.1 * (alpha + bravo) * multiplier));
     }
 
-    function hydrate_combo(combo) {
-        var character = upgrade_card(this.get(combo.character), combo.level || "1");
-        var item = upgrade_card(this.get(combo.item), combo.level || "1");
+    function hydrate_combo(level, combo) {
+        var character = upgrade_card(this.get(combo.character), level || "1");
+        var item = upgrade_card(this.get(combo.item), level || "1");
         var result = util.clone(this.get(combo.card_id));
 
         result.rarity = Math.ceil(character.rarity /2 + item.rarity /2);
@@ -257,12 +257,12 @@ define(['./util', './Rarity', './Level', './Card'], function define__cardcollect
         });
     };
 
-    CardCollection.prototype.getCombo = function cardcollection__getCombo(alpha, bravo) {
+    CardCollection.prototype.getCombo = function cardcollection__getCombo(alpha, bravo, level) {
         var search = __comboId(alpha.id, bravo.id);
 
         for (var i = 0, combo; combo = this.combos[i]; i++) {
             if (combo.id === search) {
-                return hydrate_combo.call(this, combo);
+                return hydrate_combo.call(this, level, combo);
             }
         }
 
@@ -272,14 +272,7 @@ define(['./util', './Rarity', './Level', './Card'], function define__cardcollect
     CardCollection.prototype.getRecipesIncluding = function(card, level) {
         return this.combos.filter(function (combo) {
             return !!~[combo.card_id, combo.character, combo.item].indexOf(card.id);
-        }).map(function (combo) {
-            return {
-                "character": combo.character,
-                "item": combo.item,
-                "card_id": combo.card_id,
-                "level": level
-            }
-        }).map(hydrate_combo.bind(this));
+        }).map(hydrate_combo.bind(this, level));
     };
 
     return CardCollection;

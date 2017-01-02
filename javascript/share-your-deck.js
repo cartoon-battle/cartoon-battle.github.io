@@ -7,6 +7,7 @@ define(['cartoon-battle', 'cartoon-battle/util', 'https://rubaxa.github.io/Sorta
     var problems = document.getElementById('problems');
     var cardSelector = form.card;
     var level = form.level;
+    var availableCombos = document.getElementById('available-combos');
 
     form.addEventListener('card', function (e) {
         e.preventDefault();
@@ -36,7 +37,7 @@ define(['cartoon-battle', 'cartoon-battle/util', 'https://rubaxa.github.io/Sorta
             return ;
         }
 
-        var cards = [].slice.apply(deck.querySelectorAll('.item')).map(function (item) {
+        var cards = [].slice.apply(deck.querySelectorAll('cb-card')).map(function (item) {
             return item.card;
         });
 
@@ -59,14 +60,31 @@ define(['cartoon-battle', 'cartoon-battle/util', 'https://rubaxa.github.io/Sorta
             return items;
         }, {});
 
+
+        // clear avail combos:
+        while (availableCombos.firstChild) availableCombos.removeChild(availableCombos.firstChild);
+        availableCombos.appendChild(document.createElement('h2')).textContent = 'Combos you can create using this deck';
+
         var combos = cards.reduce(function (combos, card) {
             if (card.getName() in combos || cardList.isPrecombo(card)) {
                 return combos;
             }
 
-            combos[card.getName()] = cards.filter(function (comboCandidate) {
+            var cardCombos = cards.map(function (comboCandidate) {
                 return card.getId() !== comboCandidate.getId() && cardList.getCombo(card, comboCandidate);
-            }).length / (cards.length - byType[cardList.getComboRole(card)]);
+            }).filter(function (combo) {
+                 return !!combo;
+            });
+
+
+            cardCombos.forEach(function (combo) {
+                var title = combo.character.name + " + " + combo.item.name;
+
+                if (!availableCombos.querySelector('[title="'+ title +'"'))
+                    availableCombos.appendChild(cardList.forLevel(combo.result).node).title = title;
+            });
+
+            combos[card.getName()] = cardCombos.length / (cards.length - byType[cardList.getComboRole(card)]);
 
             return combos;
         }, {});
@@ -119,7 +137,6 @@ define(['cartoon-battle', 'cartoon-battle/util', 'https://rubaxa.github.io/Sorta
 
         var item = document.createElement('div');
         item.className = 'item col-xs-3';
-        item.card = card;
 
         deck.appendChild(item);
         item.appendChild(card.node);
