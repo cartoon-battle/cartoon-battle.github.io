@@ -165,7 +165,16 @@ define(['cartoon-battle', 'cartoon-battle/util', 'https://rubaxa.github.io/Sorta
                     return;
                 }
 
-                add(cards.find(item.split(/=/)[0]), decodeURIComponent(item.split(/=/)[1] || "1"));
+                item = item.split(/=/);
+                var name = item[0], level = item[1] || "1";
+
+                var card = cards.find(name);
+
+                if (!card) {
+                    return showMessage("Can’t find card named: " + name);
+                }
+
+                add(card, decodeURIComponent(level));
             });
 
             update();
