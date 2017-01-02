@@ -26,7 +26,7 @@ define(['cartoon-battle'], function (getCards) {
         tbody.appendChild([recipe.character, recipe.item, recipe.result].reduce(function (tr, card) {
             return tr.appendChild(document.createElement('td').appendChild((function (node) {
                 node.onclick = function () {
-                    return recipes(card);
+                    return (input.value = card.name) && recipes(card);
                 };
 
                 return node;
@@ -117,11 +117,12 @@ define(['cartoon-battle'], function (getCards) {
         cards = items;
 
         function deferred_recipes() {
-            var search = window.location.search.substr(1);
+            var search = window.location.search.substr(1), card;
 
             if (input.find) { // wait for other scripts to attach to the input
-                if (search) {
-                    recipes(input.find(search));
+                if (search && (card = input.find(search))) {
+                    recipes(card);
+                    input.value = input.value || card.name;
                 }
 
                 return;
