@@ -8,6 +8,7 @@ weight: 8
 <div class="panel panel-default">
 	<div class="panel-heading">
 		Choose a card and get all recipes information related to it.
+		<a class="pull-right" href="#sources">(sources)</a>
 	</div>
 	<div class="panel-body">
 
@@ -72,3 +73,36 @@ weight: 8
 		<tbody></tbody>
 	</table>
 </div>
+
+	<h3 id="sources">The source of the data:</h3>
+
+	<dl class="dl-horizontal">
+		<dt>
+			Data mining
+		</dt>
+		<dd>
+			The card and combo information are fetched in real time from the actual XML data files the game uses, so it’s always acurate.
+		</dd>
+		<dt>
+			Combo attack & health
+		</dt>
+		<dd>
+			It’s calculated using a formula: <code>1.1 × (character.attack + item.attack) × combo.attack_multiplier</code>. Same for the health.
+		</dd>
+		<dt>
+			Skill values
+		</dt>
+		<dd>
+			A combo power is calculated using formula: <code>1.1 × (3 × (character.attack + item.attack) + character.health + item.health)</code>
+			Then, given parameters <code>p</code> and <code>v</code> for each skill (from the XML files), each skill value is calculated using formula:
+			<code>(power - p) / 77 * v</code>. This is just an approximation
+		</dd>
+		<dt>
+			Credits
+		</dt>
+		<dd>
+			Huge thanks to <a href="https://reddit.com/u/toolazytomake">/u/toolazytomake</a> for their
+			<a href="https://www.reddit.com/r/AnimationThrowdown/comments/5gmtlw/combo_stat_research">research on Amy’s Talking Tattoo data</a>.
+			Also thanks everyone contributing in <a href="https://www.reddit.com/r/AnimationThrowdown/comments/5l69n2/do_you_have_any_ideas_how_the_combo_stats_are/">this thread</a> for hints!
+		</dd>
+	</dl>

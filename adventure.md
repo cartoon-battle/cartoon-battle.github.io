@@ -21,7 +21,7 @@ The most commonly adviced strategy is to take out the first card before it can c
  * Make use of the current event. For example, if Educated cards get 20% additional attack, put more of them into your deck. Again — those few points of dammage can make a difference
  * Your first card needs to combo to have high attack and high punch. This is the best strategy for most damage in a single turn. 
  
-Paddlin’ Peggy (Peggy and Rifle) is a great card to win those levels. You can farm those cards in the adventure, so everyone can get them. It has high punch and crazed, so you can take the advantage if the AI plays a card with a little lower health (like 16-19), and then the crazed kicks in and you can take out a stronger card in the second turn.
+[Paddlin’ Peggy (Peggy and Rifle)](/recipes?paddlin-peggy) is a great card to win those levels. You can farm those cards in the adventure, so everyone can get them. It has high punch and crazed, so you can take the advantage if the AI plays a card with a little lower health (like 16-19), and then the crazed kicks in and you can take out a stronger card in the second turn.
 
 Sometimes even after you manage to put Paddlin’ Peggy in the first spot you lose because she takes damage quicky and is knocked out. There is a trick you may try to avoid this. Insted of playing PP in the first spot, sacrifice another card for the first spot, and play PP in the second. It will take one turn more, the AI will manage to combo their first card and you will take a lot of damage, but your Peggy will build up attack with Crazed and evetually take out this first card with punch as well as the others.
 

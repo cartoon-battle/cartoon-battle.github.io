@@ -28,6 +28,8 @@ This will of course cost coins. One refresh costs 100 coins. It will take on ave
 
 From experience, it will take **about three weeks** of regular plays (with refills) to level from 5 to 10. For comparison, without the refreshes it would take nearly a year to max out.
 
+You can use [the simulator](/simulator) to get a gist of it.
+
 ## Except for the Maxing Out strategy, who should I skip in arena?
 
  * *Consuela* — it’s used by players spending money on the game. There is a chance their deck is stuffed with maxed legendaries and precombos. You will lose miserably

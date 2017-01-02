@@ -21,42 +21,41 @@ Source: [discussion started by /u/milkshaakes on reddit](https://www.reddit.com/
 
 There are specific usages for each skill, so keep various options in your deck. For example Cheer will enable the attack of a card crippled to zero, so it can activate it’s abilities (like Leech, Crazed, Gas, Bomb, etc)
 
-## I discovered Paddlin’ Peggy. Should I even bother with other cards in my deck?
+## I discovered [Paddlin’ Peggy](/recipes?paddlin-peggy). Should I even bother with other cards in my deck?
 
 Yes. More cards add more variety to your deck and allow you to respond better to the AI’s moves. Those are some examples of other cards with similiar firepower:
 
- * Rodeo Peter (not farmable of course) — Crazed, Boost, Motivate
- * Bob has a lot of strong combos — Burgerboss Bob, Anally Defaced, $300 Knife
- * Wingnut Leela — Sturdy, Punch, Crazed
- * Dodgeball Louise — Crazed, Payback, Cripple
- * Crack Addict Stan — Crazed, Gas, Sturdy
+ * [Rodeo Peter](/recipes?rodeo-peter) (not farmable of course) — Crazed, Boost, Motivate
+ * [Bob](/recipes?bob) has a lot of strong combos — Burgerboss Bob, Anally Defaced, $300 Knife
+ * [Wingnut Leela](/recipes?wingnut-leela) — Sturdy, Punch, Crazed
+ * [Dodgeball Louise](/recipes?dodgeball-louise) — Crazed, Payback, Cripple
+ * [Crack Addict Stan](/recipes?crack-addict-stan) — Crazed, Gas, Sturdy
 
 Crazed isn’t really required for a great card, here are some examples:
 
- * Record Holder Stan — Punch & Sturdy
- * Devil Hank - Punch, Gas, Leech
- * Drunk Leela — high Sturdy
- * Susan Boil — high Leech
- * Slurm Queen — high Gas
+ * [Record Holder Stan](/recipes?record-holder-stan) — Punch & Sturdy
+ * [Devil Hank](/recipes?devil-hank) - Punch, Gas, Leech
+ * [Drunk Leela](/recipes?drunk-leela) — high Sturdy
+ * [Susan Boil](/recipes?susan-boil) — high Leech
+ * [Slurm Queen](/recipes?slurm-queen) — high Gas
  
 After all, the game is about collecting cards. It would be boring with only two types of cards in a deck ;)
 
 ## Should I remove *some rare card* from my deck? What are their epic alternatives?
 
-As your deck evolves it will have more and more epics replacing rare (and common) cards. Eventually you will only want blue and purple cards. There are however some green cards without a better alternative:
+As your deck evolves it will have more and more epics replacing rare cards. Eventually you will only want blue and purple cards. There are however some green cards without a better alternative:
 
- * *Cars*: use Food Truck or Stan’s SUV
- * *Drugs*: Crack and Toad Licking
- * Slurm
- * *Gamer*: Burgerboss
- * Pro Pain (*needs feedback: as far as I remember there are some usages for this common card)
+ * *Cars*: [Stan’s SUV](/recipes?stans-suv)
+ * *Drugs*: [Crack](/recipes?crack) and [Toad Licking](/recipes?toad-licking)
+ * [Slurm](/recipes?slurm)
+ * *Gamer*: [Burgerboss](/recipes?burgerboss)
 
 There also some great Rare character cards (try to quad-fuse them):
 
- * Bill
- * Teddy
- * Quagmire
- * Gene
+ * [Bill](/recipes?bill)
+ * [Teddy](/recipes?teddy)
+ * [Quagmire](/recipes?quagmire)
+ * [Gene](/recipes?gene)
 
 ## Should I fuse these cards?
 
@@ -70,7 +69,12 @@ A lot of the time a lvl 5• epic will perform better than lvl 6 legendary.
 
 The health and attack values are the sum of individual cards’ values with a coefficient (usually around 0.7). More about the exact values can be extracted from the XML files (look up: data mining). This means that leveling a card that doesn’t rise health or attack **wont influence the cards combo value**. This means that maybe it isn’t worth spending those Giggitywats for that last update, and keep a card one level away from maxing out.
 
-As for the skill values, the exact method is not known. There is a notion of „combo points” in the XML files, but there is no proven theory about how they contribute to the final card.
+As for the skill values, the exact method is not known. There is some [ongoing research](https://www.reddit.com/r/AnimationThrowdown/comments/5l69n2/do_you_have_any_ideas_how_the_combo_stats_are/) into this topic and the current findings are:
+
+ * There is a notion of „combo power”, calculated using formula `1.1 ×  (3 × cards attack + cards health)`
+ * This power is reduced by the value of combo skill’s base power `p`
+ * The remainder used to calculate the skill value. A good **approximation** would be `skill value = power remainder / modifier * v`, where 
+    `modifier` is a constant with value `77`;  and the `v` value can be obtained from the XML files
 
 ## Is my *foo bar card* good enough for my deck?
 
@@ -79,6 +83,10 @@ Try to test it yourself. Put it in and go to Arena Practice. This way you can’
 ## Where can I get the Giggity I need?
 
 By [farming in the adventure](/adventure) and recycling unused cards. I know you hold on tight to those maxed out rares, but it’s time to forget them and move on. They will give you plenty of GW to start building your deck on epics.
+
+## What are the best combos for my *eglebegle card*?
+
+It’s a matter of an opinion, so you can [check the recipes yourself](/recipes).
 
 ## What should I research next?
 
