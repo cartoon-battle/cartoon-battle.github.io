@@ -62,7 +62,8 @@
 				<h2>{{ site.title }}</h2>
 				<h3>{{ page.title }}</h3>
 			</div>
-            <div class=content id=messages><script type="text/javascript">function showMessage(message, type) {
+            <div class=content id=messages><script type="text/javascript">
+            function showMessage(message, type) {
                 document.getElementById('messages').appendChild((function (p, message, type) {
                     p.className = 'alert alert-' + (type || "warning");
                     p.textContent = message;
@@ -73,6 +74,12 @@
                         button.appendChild(document.createElement('span')).innerHTML = '&times;'
                         return button;
                     })(document.createElement('button')));
+
+                    if (!!~['success', 'info'].indexOf(type)) {
+                        setTimeout(function () {
+                            p && p.parentNode && p.parentNode.removeChild(p);
+                        }, 5000);
+                    }
 
                     return p;
                 })(document.createElement('p'), message, type));
@@ -87,6 +94,15 @@
                     p.parentNode.removeChild(p);
                 }
             });
+            var originalTitle;
+            function setTitle(title) {
+                if (!originalTitle) {
+                    originalTitle = document.title;
+                }
+
+                document.title = title ? title + " — " + originalTitle : originalTitle;
+            }
+
             </script></div>
 			<article class="content">
 				{{ content }}

@@ -42,6 +42,7 @@ define(['cartoon-battle'], function (getCards) {
         }
 
         selectedCard = card;
+        setTitle(card.name);
 
         clear();
         cards.getRecipesIncluding(card, level.value).forEach(add);
