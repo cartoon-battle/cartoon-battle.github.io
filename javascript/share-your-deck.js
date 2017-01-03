@@ -8,6 +8,7 @@ define(['cartoon-battle', 'cartoon-battle/util', 'https://rubaxa.github.io/Sorta
     var cardSelector = form.card;
     var level = form.level;
     var availableCombos = document.getElementById('available-combos');
+    var overview = document.getElementById('overview');
 
     document.getElementById('save-your-deck').onclick = function () {
         localStorage.deck = share.value;
@@ -16,7 +17,7 @@ define(['cartoon-battle', 'cartoon-battle/util', 'https://rubaxa.github.io/Sorta
 
     if (localStorage.deck) {
         (function (yourDeck, deck) {
-            yourDeck.appendChild(document.createTextNode('Load your saved deck'))
+            yourDeck.appendChild(document.createTextNode('Load your saved deck'));
             yourDeck.href = deck;
             yourDeck.classList.add('pull-right');
             yourDeck.onclick = function () {
@@ -79,6 +80,9 @@ define(['cartoon-battle', 'cartoon-battle/util', 'https://rubaxa.github.io/Sorta
             return items;
         }, {});
 
+        var availableForComboCount = Object.keys(byType).reduce(function (sum, v) { return sum + byType[v]; }, 0);
+        byType.precombo = cards.length - availableForComboCount;
+
 
         // clear avail combos:
         while (availableCombos.firstChild) availableCombos.removeChild(availableCombos.firstChild);
@@ -104,10 +108,13 @@ define(['cartoon-battle', 'cartoon-battle/util', 'https://rubaxa.github.io/Sorta
                     availableCombos.appendChild(cardList.forLevel(combo.result).node).title = title;
             });
 
-            combos[card.getName()] = cardCombos.length / (cards.length - byType[cardList.getComboRole(card)]);
+            combos[card.getName()] = cardCombos.length / (availableForComboCount - byType[cardList.getComboRole(card)]);
 
             return combos;
         }, {});
+
+        byType.combos = availableCombos.children.length +
+            (byType.character && byType.item && ('<small>/' + byType.character * byType.item + '</small>') || '');
 
         if (availableCombos.firstChild) {
             availableCombos.parentNode.insertBefore(document.createElement('div'), availableCombos);
@@ -133,11 +140,18 @@ define(['cartoon-battle', 'cartoon-battle/util', 'https://rubaxa.github.io/Sorta
         });
 
         problems.style.display = "none";
+        overview.style.display = "none";
         (function (table) { table && table.parentNode.removeChild(table); })(problems.querySelector('table'));
 
         if (combos.length && cards.length > 15) {
             problems.style.display = 'block';
+            overview.style.display = 'block';
+
             problems.appendChild(util.createTable(combos, ["Card name", "Combo chance"]));
+
+            overview.querySelectorAll('[data-card-role]').forEach(function (counter) {
+                counter.innerHTML = byType[counter.dataset.cardRole] || "n/a";
+            });
         }
 
 

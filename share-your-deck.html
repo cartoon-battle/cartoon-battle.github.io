@@ -13,7 +13,9 @@ weight: 8
         float: none;
         width: 22%;
     }
-
+    .jumbotron {
+        text-align: center;
+    }
     #deck .item cb-card {
         font-size: 0.25em;
     }
@@ -68,10 +70,23 @@ weight: 8
     </div>
 
 
-
+    <div class="jumbotron panel-body" id="overview" style="display: none;">
+        <div class="col-md-3">
+            <h1 data-card-role="character">n/a</h1> <p> character cards </p>
+        </div>
+        <div class="col-md-3">
+            <h1 data-card-role="item">n/a</h1> <p> item cards </p>
+        </div>
+        <div class="col-md-3">
+            <h1 data-card-role="precombo">n/a</h1> <p> precombo cards </p>
+        </div>
+        <div class="col-md-3">
+            <h1 data-card-role="combos">n/a</h1> <p> potential combos </p>
+        </div>
+    </div>
 
     <div class="panel-warning" style="display: none;" id="problems">
-        <div class="panel-heading">Those cards in your deck can combo with less than 75% of your deck, try working on it</div>
+        <div class="panel-heading">Those cards can combo with less than 75% of your deck (excluding precombo), try working on it</div>
     </div>
 
     <div id="available-combos" class="panel-body">
