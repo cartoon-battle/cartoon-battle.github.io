@@ -3,8 +3,6 @@ title: Share your deck
 weight: 8
 ---
 
-<h2>This page uses Javascript to create & share your deck</h2>
-
 <style>
     #deck {
         overflow-x: auto;
@@ -23,50 +21,63 @@ weight: 8
         overflow: auto;
     }
     #available-combos cb-card {
-        font-size: 0.3em;
+        font-size: 0.28em;
         float: left;
         margin: 0 12px 12px 0;
     }
-    #setup {
+    .panel-footer {
         margin-bottom: 3em;
     }
 </style>
 
-<div id="result" style="display:none">
 
 <div class="panel panel-default">
-    <div class="panel-body" id="deck" style="">
+    <div class="panel-heading">
+        Add cards to analyze your deck and share it with others
     </div>
-    <div class="panel-footer">
-        <div class="input-group">
-            <span class="input-group-addon" id="basic-addon1">Share this URL:</span>
-            <input readonly value="" class="form-control">
+
+    <div id=setup class="panel-body">
+        <form class="form-inline" data-image-cdn="{{ site.images_cdn }}" onsubmit="return false;">
+            <fieldset class="form-group">
+                <input class="form-control" data-cards="deck" placeholder="Please wait for cards to load..." id="card">
+
+                <div class="input-group">
+                    <input placeholder="card level, i.e. 5*" id="level" pattern='^\d+\s*[*]{0,2}$' class="form-control">
+                    <span class="input-group-btn">
+                        <button class="btn btn-default js-choose-card" type="submit" disabled>
+                            <span class="glyphicon glyphicon-plus"></span> Add
+                        </button>
+                    </span>
+                </div>
+            </fieldset>
+        </form>
+    </div>
+
+    <div id="result" style="display:none">
+        <div class="panel-body" id="deck" style="">
         </div>
-    </div>
-</div>
-</div>
-
-
-<div id=setup>
-    <form class="form-inline" data-image-cdn="{{ site.images_cdn }}" onsubmit="return false;">
-        <fieldset class="form-group">
-            <input class="form-control" data-cards="deck" placeholder="Please wait for cards to load..." id="card">
-
+        <div class="panel-footer">
             <div class="input-group">
-                <input placeholder="card level, i.e. 5*" id="level" pattern='^\d+\s*[*]{0,2}$' class="form-control">
-                <span class="input-group-btn">
-                    <button class="btn btn-default js-choose-card" type="submit" disabled>
-                        <span class="glyphicon glyphicon-plus"></span> Add
-                    </button>
+                <span class="input-group-addon" id="basic-addon1">Share this URL:</span>
+                <input readonly value="" class="form-control">
+                <span class="input-group-addon btn btn-success" id="save-your-deck">
+                    Save as your deck
                 </span>
             </div>
-        </fieldset>
-        <script>require(['share-your-deck']);</script>
-    </form>
-</div>
+        </div>
+    </div>
 
-<div class="panel panel-warning" style="display: none;" id="problems">
-    <p class="panel-heading">Those cards in your deck can combo with less than 75% of your deck, try working on it</p>
-</div>
 
-<div id="available-combos"></div>
+
+
+    <div class="panel-warning" style="display: none;" id="problems">
+        <div class="panel-heading">Those cards in your deck can combo with less than 75% of your deck, try working on it</div>
+    </div>
+
+    <div id="available-combos" class="panel-body">
+
+    </div>
+</div> <!-- panel -->
+
+
+<script>require(['share-your-deck']);</script>

@@ -9,6 +9,25 @@ define(['cartoon-battle', 'cartoon-battle/util', 'https://rubaxa.github.io/Sorta
     var level = form.level;
     var availableCombos = document.getElementById('available-combos');
 
+    document.getElementById('save-your-deck').onclick = function () {
+        localStorage.deck = share.value;
+        showMessage('Your deck have been saved', 'success');
+    };
+
+    if (localStorage.deck) {
+        (function (yourDeck, deck) {
+            yourDeck.appendChild(document.createTextNode('Load your saved deck'))
+            yourDeck.href = deck;
+            yourDeck.classList.add('pull-right');
+            yourDeck.onclick = function () {
+                if ("history" in window) {
+                    history.pushState({}, '', this.href);
+                }
+            }
+
+        })(document.querySelector('.panel-heading').appendChild(document.createElement('a')), localStorage.deck);
+    }
+
     form.addEventListener('card', function (e) {
         e.preventDefault();
 
@@ -63,7 +82,8 @@ define(['cartoon-battle', 'cartoon-battle/util', 'https://rubaxa.github.io/Sorta
 
         // clear avail combos:
         while (availableCombos.firstChild) availableCombos.removeChild(availableCombos.firstChild);
-        availableCombos.appendChild(document.createElement('h2')).textContent = 'Combos you can create using this deck';
+        if (availableCombos.previousSibling && availableCombos.previousSibling.className === 'panel-heading')
+            availableCombos.parentNode.removeChild(availableCombos.previousSibling);
 
         var combos = cards.reduce(function (combos, card) {
             if (card.getName() in combos || cardList.isPrecombo(card)) {
@@ -88,6 +108,13 @@ define(['cartoon-battle', 'cartoon-battle/util', 'https://rubaxa.github.io/Sorta
 
             return combos;
         }, {});
+
+        if (availableCombos.firstChild) {
+            availableCombos.parentNode.insertBefore(document.createElement('div'), availableCombos);
+            availableCombos.previousSibling.classList.add('panel-heading');
+            availableCombos.previousSibling.textContent = 'Combos you can create using this deck';
+        }
+
 
         combos = Object.keys(combos).map(function (key) {
             return {
