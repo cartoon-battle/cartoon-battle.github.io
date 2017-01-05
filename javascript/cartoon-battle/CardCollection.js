@@ -2,6 +2,11 @@ define(['./util', './Rarity', './Level', './Card'], function define__cardcollect
 
     var COMBO_STAT_COEFFICIENT = 77;
 
+    function CardNotFound() {}
+    CardNotFound.prototype = Error;
+
+    function identity(x) { return !!x; }
+
     function categorize_card(card) {
         var standard = card.set < 5000;
         var deck = standard && !card.commander && !card.is_combo && !card.is_defense && !card.hidden;
@@ -46,19 +51,35 @@ define(['./util', './Rarity', './Level', './Card'], function define__cardcollect
     }
 
     function hydrate_combo(characterLevel, itemLevel, combo) {
-        var character = upgrade_card(this.get(combo.character), characterLevel || "1");
-        var item = upgrade_card(this.get(combo.item), itemLevel || "1");
-        var result = util.clone(this.get(combo.card_id));
+        if (2 === arguments.length) {
+            combo = arguments[1];
+            itemLevel = characterLevel = arguments[0];
+        } else if (1 === arguments.length) {
+            combo = arguments[0];
+            characterLevel = itemLevel = "1";
+        }
+
+        try {
+            var character = upgrade_card(this.get(combo.character), characterLevel || "1");
+            var item = upgrade_card(this.get(combo.item), itemLevel || "1");
+            var result = util.clone(this.get(combo.card_id));
+        } catch (E) {
+            if (E.constructor.name = CardNotFound.name) {
+                return null;
+            }
+
+            throw E;
+        }
 
         result.rarity = Math.ceil(character.rarity /2 + item.rarity /2);
         result.health = combo_value(item.health, character.health, result.health_multiplier);
         result.attack = combo_value(item.attack, character.attack, result.attack_multiplier);
 
-        var power = 1.1 * (3 * character.attack + 3 * item.attack + character.health + item.health);
+        result.power = 1.1 * (3 * character.attack + 3 * item.attack + character.health + item.health);
 
         result.skills = Object.keys(result.skills).reduce(function (skills, key) {
             skills[key] = {
-                x: Math.round((power - result.skills[key].p) / COMBO_STAT_COEFFICIENT * result.skills[key].v),
+                x: Math.round((result.power - result.skills[key].p) / COMBO_STAT_COEFFICIENT * result.skills[key].v),
                 y: result.skills[key].y
             };
 
@@ -228,6 +249,8 @@ define(['./util', './Rarity', './Level', './Card'], function define__cardcollect
                 return card;
             }
         }
+
+        throw new CardNotFound;
     };
 
     CardCollection.forLevel = CardCollection.prototype.forLevel = function cardcollection__forLevel(card, level) {
@@ -253,6 +276,10 @@ define(['./util', './Rarity', './Level', './Card'], function define__cardcollect
         });
     };
 
+    CardCollection.prototype.getHydratedCombos = function cardcollection__getHydratedCombos(characterLevel, itemLevel) {
+        return this.combos.map(hydrate_combo.bind(this, characterLevel, itemLevel)).filter(identity);
+    };
+
     CardCollection.prototype.getCombo = function cardcollection__getCombo(alpha, bravo) {
         for (var i = 0, combo; combo = this.combos[i]; i++) {
             if (combo.character === alpha.id && combo.item === bravo.id) {
@@ -265,10 +292,10 @@ define(['./util', './Rarity', './Level', './Card'], function define__cardcollect
         return null;
     };
 
-    CardCollection.prototype.getRecipesIncluding = function(card, level) {
+    CardCollection.prototype.getRecipesIncluding = function cardcollection__getRecipesIncluding(card, level) {
         return this.combos.filter(function (combo) {
             return !!~[combo.card_id, combo.character, combo.item].indexOf(card.id);
-        }).map(hydrate_combo.bind(this, level, level));
+        }).map(hydrate_combo.bind(this, level, level)).filter(identity);
     };
 
     return CardCollection;
