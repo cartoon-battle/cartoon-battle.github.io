@@ -140,20 +140,19 @@ define(['cartoon-battle', 'cartoon-battle/util', 'https://rubaxa.github.io/Sorta
         });
 
         problems.style.display = "none";
-        overview.style.display = "none";
         (function (table) { table && table.parentNode.removeChild(table); })(problems.querySelector('table'));
 
         if (combos.length && cards.length > 15) {
             problems.style.display = 'block';
-            overview.style.display = 'block';
 
             problems.appendChild(util.createTable(combos, ["Card name", "Combo chance"]));
 
-            overview.querySelectorAll('[data-card-role]').forEach(function (counter) {
-                counter.innerHTML = byType[counter.dataset.cardRole] || "n/a";
-            });
         }
 
+        overview.style.display = (cards.length > 15) ? 'block' : 'none';
+        overview.querySelectorAll('[data-card-role]').forEach(function (counter) {
+            counter.innerHTML = byType[counter.dataset.cardRole] || "n/a";
+        });
 
         share.value = window.location.href.replace(/\?.*|$/, "?" + data);
         if ('history' in window && location.href !== share.value) {
