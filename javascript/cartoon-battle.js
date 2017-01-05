@@ -71,16 +71,16 @@ define(['cartoon-battle/config', 'cartoon-battle/CardCollection'], function (con
     }
 
     function cartoonbattle__getCards(cb) {
-        var data = [];
+        var data = [], dispatched = false;
 
         if (cards) {
-            cb(cards);
+            return cb(cards);
         }
 
         function data__callback(content) {
             data.push(content);
 
-            if (data.length === config.files.length) {
+            if (data.length === config.files.length && false === dispatched) {
                 cb(cards = new CardCollection(data));
             }
         }
