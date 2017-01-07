@@ -41,7 +41,7 @@ define(['cartoon-battle/config', 'cartoon-battle/CardCollection'], function (con
 
                 input.find = cards.find.bind({"items": filteredCards, defaultInclude: include});
 
-                var button = input.form.querySelector(input.dataset['target-button'] || 'button');
+                var button = input.form.querySelector(input.dataset.targetButton || 'button');
                 if (button) {
                     button.removeAttribute('disabled');
 
@@ -49,7 +49,7 @@ define(['cartoon-battle/config', 'cartoon-battle/CardCollection'], function (con
                         var event = new CustomEvent('card'), card = input.find(input.value);
 
                         event.initCustomEvent(event.type, true, true, card);
-                        button.form.dispatchEvent(event);
+                        input.dispatchEvent(event);
 
                         return !event.defaultPrevented && false;
                     };
