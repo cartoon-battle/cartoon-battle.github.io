@@ -1,0 +1,164 @@
+---
+title: Peculiar Combos
+weight: 10
+---
+
+<style type="text/css">
+	cb-card { font-size: 0.29em; float: left; margin: 0 10px 10px 0; }
+</style>
+
+<h2>Those are some edge cases & interesting combos</h2>
+
+<div class="panel panel-default">
+
+</div>
+
+<script type="text/javascript">require(['cartoon-battle'], function (getCards) {
+	function get_combo_stats(cards) {
+		return cards.getHydratedCombos('^**', '^**').reduce(function (stats, combo) {
+			if (combo.result.set >= 5000) {
+				return stats;
+			}
+
+			if (!stats[combo.result.id]) {
+				stats[combo.result.id] = {
+					"count": 0,
+					"title": combo.character.name + " + " + combo.item.name,
+					"card": combo.result,
+					"character": combo.character,
+					"item": combo.item
+				}
+			}
+
+			stats[combo.result.id].count++;
+
+			return stats;
+		}, {});
+	}
+
+	function populate_card_list(element, combo) {
+		var node = combo.card ? this.forLevel(combo.card).node : combo.node;
+
+		element.appendChild(node).setAttribute('title', combo.title);
+
+		return element;
+	}
+
+	var items = {
+		"Most powerful rare cards": function bestRares(cards) {
+			return cards.getCards().filter(function (card) {
+				return 2 === card.rarity;
+			}).map(function (card) {
+
+				card = cards.forLevel(card, '^**');
+
+				card.title = 3 * card.attack + card.health;
+
+				return card;
+
+			}).sort(function (alpha, bravo) {
+				return bravo.title - alpha.title;
+			}).slice(0, 8);
+		},
+
+		"Most powerful epics cards": function bestEpics(cards) {
+			return cards.getCards().filter(function (card) {
+				return 3 === card.rarity && cards.getRecipesIncluding(card).length > 0;
+			}).map(function (card) {
+
+				card = cards.forLevel(card, '^**');
+
+				card.title = 3 * card.attack + card.health;
+
+				return card;
+
+			}).sort(function (alpha, bravo) {
+				return bravo.title - alpha.title;
+			}).slice(0, 8);
+		},
+
+		"Cards with most combo possibilities": function mostCombos(cards) {
+			return cards.getCards().map(function (card) {
+				return {
+					"title": cards.getRecipesIncluding(card).length,
+					"card": card
+				};
+			}).sort(function (alpha, bravo) {
+				return bravo.title - alpha.title;
+			}).slice(0, 8);
+
+		},
+
+		"Cards with least combo possibilities": function leastCombos(cards) {
+			return cards.getCards().map(function (card) {
+				return {
+					"title": cards.getRecipesIncluding(card).length,
+					"card": card
+				};
+			}).filter(function (item) {
+				return item.title > 0;
+			}).sort(function (alpha, bravo) {
+				return - bravo.title + alpha.title;
+			}).slice(0, 8);
+
+		},
+
+		"Only one recipe for these combos (hover to see them)": function getUniqueCombos(cards) {
+			var stats = get_combo_stats(cards);
+
+			return Object.keys(stats).map(function (key) {
+				var item = stats[key];
+
+				return 1 === item.count ? item : null;
+			}).filter(function (v) {
+				return !!v;
+			})
+		},
+		"Best farmable „quick assault” combos": function quickAssauldFarmableCombos(cards) {
+			return cards.combos.filter(function (combo) {
+				return cards.farmable[combo.character] && cards.farmable[combo.item];
+			}).map(function (combo) {
+				var character = cards.get(combo.character);
+				var item = cards.get(combo.item);
+
+				var result = cards.getCombo(
+					character = cards.forLevel(character, character.rarity > 2 ? '5*' : '^**'),
+					item = cards.forLevel(item, item.rarity > 2 ? '5*' : '^**')
+				).result;
+
+				var value = result.attack + ((result.skills.strike || {}).x || 0);
+				return {
+					"card": result,
+					"title": value + " = " + character.getFullDescription() + " + " + item.getFullDescription(),
+					"value": value
+				}
+			}).filter(function (item) {
+				return item.value > 16;
+			}).sort(function (alpha, bravo) {
+				return bravo.value - alpha.value;
+			}).reduce(function (result, item) {
+				if (!result.seen[item.card.id]) {
+					result.seen[item.card.id] = true;
+					result.items.push(item);
+				}
+
+				return result;
+			}, { seen: {}, items: [] }).items;
+		}
+	};
+
+
+	getCards(function (cards) {
+		var panel = document.querySelector('.panel');
+		Object.keys(items).forEach(function (title) {
+			panel.appendChild(document.createElement('div'))
+					.appendChild(document.createTextNode(title))
+					.parentNode.className = 'panel panel-heading';
+
+			items[title](cards).reduce(
+				populate_card_list.bind(cards),
+				panel.appendChild(document.createElement('div'))
+			).className = 'panel-body';
+		});
+	});
+});</script>

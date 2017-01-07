@@ -194,6 +194,18 @@ define(['./util', './Rarity', './Level', './Card'], function define__cardcollect
             return collection.concat([].slice.apply(xml.querySelectorAll('combo')).map(parseCombo));
         }, []);
 
+        this.farmable = listResponseXML.reduce(function (farmable, xml) {
+            return [].slice.apply(xml.querySelectorAll('rewards card')).reduce(function(farmable, card) {
+                if (parseInt(card.parentNode.parentNode.querySelector('id').textContent) > 1000) {
+                    return farmable;
+                }
+
+                farmable[card.getAttribute('id')] = true;
+
+                return farmable;
+            }, farmable);
+        }, {});
+
         this.types = {
             "characters": this.combos.map(function (combo) { return combo.character; }),
             "items": this.combos.map(function (combo) { return combo.item; })
