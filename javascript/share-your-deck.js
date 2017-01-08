@@ -104,8 +104,15 @@ define(['cartoon-battle', 'cartoon-battle/util', 'https://rubaxa.github.io/Sorta
             cardCombos.forEach(function (combo) {
                 var title = combo.character.name + " + " + combo.item.name;
 
-                if (!availableCombos.querySelector('[title="'+ title +'"'))
-                    availableCombos.appendChild(cardList.forLevel(combo.result).node).title = title;
+                var existing = availableCombos.querySelector('[title="'+ title +'"');
+                var card = cardList.forLevel(combo.result);
+
+                if (!existing) {
+                    availableCombos.appendChild(card.node).title = title;
+                } else if (existing.card.attack * 3 + existing.card.health < card.attack * 3 + card.health) {
+                    card.node.title = title;
+                    availableCombos.replaceChild(card.node, existing);
+                }
             });
 
             combos[card.getName()] = cardCombos.length / (availableForComboCount - byType[cardList.getComboRole(card)]);
