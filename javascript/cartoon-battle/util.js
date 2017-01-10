@@ -13,6 +13,14 @@ define(function () {
             return copy;
         },
 
+        "cleanElement": function util__cleanElement(e) {
+            while (e && e.firstChild) {
+                e.removeChild(e.firstChild)
+            }
+
+            return e;
+        },
+
         "createFragment": function util__createFragment(name, children) {
             var element = document.createElement(name);
             for (var i = 0, cn; cn = children[i]; i++) {

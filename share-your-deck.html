@@ -11,7 +11,10 @@ weight: 8
     #deck .item {
         display: inline-block;
         float: none;
-        width: 22%;
+        width: 24%;
+    }
+    #deck .edit cb-card {
+        opacity: 0.5;
     }
     .jumbotron {
         text-align: center;
@@ -90,8 +93,14 @@ weight: 8
         <div class="panel-heading">Those cards can combo with less than 75% of your deck (excluding precombo), try working on it</div>
     </div>
 
-    <div id="available-combos" class="panel-body">
-
+    <div class="panel-heading">
+        Combos you can create using this deck
+        <div class="btn-group pull-right" role="group">
+            <button type="button" class="active btn btn-default btn-xs" data-group-by="">None</button>
+            <button type="button" class="btn btn-default btn-xs" data-group-by="character">Character</button>
+            <button type="button" class="btn btn-default btn-xs" data-group-by="item">Item</button>
+        </div>
+    </div><div class="panel-body" id="available-combos">
     </div>
 </div> <!-- panel -->
 

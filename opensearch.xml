@@ -4,6 +4,6 @@
 		Cartoon Battle recipes
 	</Description>
 	<InputEncoding>UTF-8</InputEncoding>
-	<Image width="16" height="16" type="image/x-icon">/favicon.png</Image>
-	<Url type="text/html" method="get" template="/recipes?{searchTerms}"/>
+	<Image width="16" height="16" type="image/x-icon">https://cartoon-battle.github.io/favicon.png</Image>
+	<Url type="text/html" method="get" template="https://cartoon-battle.github.io/recipes?{searchTerms}"/>
 </OpenSearchDescription>

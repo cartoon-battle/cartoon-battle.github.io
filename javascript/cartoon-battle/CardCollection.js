@@ -93,12 +93,6 @@ define(['./util', './Rarity', './Level', './Card'], function define__cardcollect
         }
     }
 
-
-    var COMBO_ROLE_CHARACTER = 'character';
-    var COMBO_ROLE_ITEM = 'item';
-
-    var COMBO_ROLE_PRECOMBO = 'precombo';
-
     function parseCombo(combo) {
         var character = parseInt(combo.querySelector('cards').getAttribute('card1'));
         var item = parseInt(combo.querySelector('cards').getAttribute('card2'));
@@ -212,6 +206,12 @@ define(['./util', './Rarity', './Level', './Card'], function define__cardcollect
         }
     }
 
+    CardCollection.prototype.COMBO_ROLE_CHARACTER = 'character';
+    CardCollection.prototype.COMBO_ROLE_ITEM = 'item';
+    CardCollection.prototype.COMBO_ROLE_PRECOMBO = 'precombo';
+
+
+
     CardCollection.prototype.getCards = function cardcollection__getCards(include) {
         include = include || this.defaultInclude;
         return this.items.map(categorize_card)
@@ -226,13 +226,13 @@ define(['./util', './Rarity', './Level', './Card'], function define__cardcollect
     };
 
     CardCollection.prototype.getComboRole = function cardcollection__getComboRole(card) {
-        return -1 !== this.types.characters.indexOf(card.id) ? COMBO_ROLE_CHARACTER
-            : -1 !== this.types.items.indexOf(card.id) ? COMBO_ROLE_ITEM
-            : COMBO_ROLE_PRECOMBO;
+        return -1 !== this.types.characters.indexOf(card.id) ? this.COMBO_ROLE_CHARACTER
+            : -1 !== this.types.items.indexOf(card.id) ? this.COMBO_ROLE_ITEM
+            : this.COMBO_ROLE_PRECOMBO;
     };
 
     CardCollection.prototype.isPrecombo = function cardcollection__isPrecombo(card) {
-        return COMBO_ROLE_PRECOMBO === this.getComboRole(card);
+        return this.COMBO_ROLE_PRECOMBO === this.getComboRole(card);
     };
 
     CardCollection.prototype.find = function cardcollection__find(options) {

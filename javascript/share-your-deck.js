@@ -1,6 +1,7 @@
-define(['cartoon-battle', 'cartoon-battle/util', 'https://rubaxa.github.io/Sortable/Sortable.js'], function (getCards, util, Sortable) {
+define(['cartoon-battle', 'cartoon-battle/util', 'cartoon-battle/Analysis'], function (getCards, util, Analysis) {
 
     var form = document.forms[0];
+    var button = form.querySelector('button');
     var result = document.getElementById('result');
     var share = result.querySelector('input');
     var deck = document.getElementById('deck');
@@ -14,6 +15,20 @@ define(['cartoon-battle', 'cartoon-battle/util', 'https://rubaxa.github.io/Sorta
         localStorage.deck = share.value;
         showMessage('Your deck have been saved', 'success');
     };
+
+    var groupByButtons = [].slice.apply(document.querySelectorAll('[data-group-by]'));
+
+    groupByButtons.forEach(function (button) {
+        button.onclick = function () {
+            groupByButtons.forEach(function (e) {
+                e.classList.remove('active');
+            });
+
+            this.classList.add('active');
+
+            update();
+        }
+    });
 
     if (localStorage.deck) {
         (function (yourDeck, deck) {
@@ -45,150 +60,101 @@ define(['cartoon-battle', 'cartoon-battle/util', 'https://rubaxa.github.io/Sorta
 
     var cardList;
 
-    Sortable.create(deck, {
-        animation: 150,
-        draggable: ".item",
-        onUpdate: update
-    });
-
     function update() {
-        if (!deck.querySelector('cb-card')) {
-            result.style.display =  "none";
-            return ;
-        }
-
         var cards = [].slice.apply(deck.querySelectorAll('cb-card')).map(function (item) {
             return item.card;
         });
 
+        result.style.display =  cards.length ? "" : "none";
 
-        result.style.display =  "";
+        var data = cards.map(function (card) {
+            return card.getSlug() + "=" + card.getLevelString();
+        }).join("&");
 
-        var data = cards.reduce(function (data, card) {
-            return data + (data ? "&" : "") + card.getSlug() + "=" + card.getLevelString();
-        }, "");
-
-        var byType = cards.reduce(function (items, card) {
-            if (cardList.isPrecombo(card)) {
-                return items;
-            }
-
-            var type = cardList.getComboRole(card);
-
-            items[type] = (items[type]||0) + 1;
-
-            return items;
-        }, {});
-
-        var availableForComboCount = Object.keys(byType).reduce(function (sum, v) { return sum + byType[v]; }, 0);
-        byType.precombo = cards.length - availableForComboCount;
-
+        var analysis = new Analysis(cardList, cards);
 
         // clear avail combos:
-        while (availableCombos.firstChild) availableCombos.removeChild(availableCombos.firstChild);
-        if (availableCombos.previousSibling && availableCombos.previousSibling.className === 'panel-heading')
-            availableCombos.parentNode.removeChild(availableCombos.previousSibling);
+        util.cleanElement(availableCombos);
 
-
-        var availableCombosList = {};
-
-        var combos = cards.reduce(function (combos, card) {
-            if (card.getName() in combos || cardList.isPrecombo(card)) {
-                return combos;
-            }
-
-            var cardCombos = cards.map(function (comboCandidate) {
-                return card.getId() !== comboCandidate.getId() && cardList.getCombo(card, comboCandidate);
-            }).filter(function (combo) {
-                 return !!combo;
-            });
-
-
-            cardCombos.forEach(function (combo) {
-                availableCombosList[combo.character.name] = availableCombosList[combo.character.name] || {};
-
-                var existing = availableCombosList[combo.character.name][combo.result.name];
-                var card = combo.result;
-
-                card.title = combo.character.name + " + " + combo.item.name;
-
-                if (existing && (existing.attack * 3 + existing.health > card.attack * 3 + card.health)) {
-                    card = existing;
-                }
-
-                availableCombosList[combo.character.name][combo.result.name] = card;
-            });
-
-            combos[card.getName()] = cardCombos.length / (availableForComboCount - byType[cardList.getComboRole(card)]);
-
-            return combos;
-        }, {});
-
-        byType.combos = availableCombos.children.length +
-            (byType.character && byType.item && ('<small>/' + byType.character * byType.item + '</small>') || '');
-
-        if (Object.keys(availableCombosList).length) {
-            availableCombos.parentNode.insertBefore(document.createElement('div'), availableCombos);
-            availableCombos.previousSibling.classList.add('panel-heading');
-            availableCombos.previousSibling.textContent = 'Combos you can create using this deck';
-
-            Object.keys(availableCombosList).sort().forEach(function (comboGroup) {
-                Object.keys(availableCombosList[comboGroup]).sort().forEach(function (comboId) {
-                    var card = availableCombosList[comboGroup][comboId];
-
-                    availableCombos.appendChild(cardList.forLevel(card).node).title = card.title;
-                });
-
-                availableCombos.appendChild(document.createElement('hr'));
-            });
-
-        }
-
-
-        combos = Object.keys(combos).map(function (key) {
-            return {
-                "name": key,
-                "count": combos[key]
-            }
-        }).sort(function (alpha, bravo) {
-            return alpha.count - bravo.count;
-        }).filter(function (item) {
-            return item.count < 0.75;
-        }).map(function (item) {
-            return {
-                "name": item.name,
-                "count": Math.round(item.count * 100) + "%"
-            }
+        overview.style.display = analysis.isDeck() ? 'block' : 'none';
+        overview.querySelectorAll('[data-card-role]').forEach(function (counter) {
+            counter.textContent = analysis.types[counter.dataset.cardRole] || "n/a";
         });
+
+        if (analysis.getPotentialCombos()) {
+            overview.querySelector('[data-card-role="combos"]')
+                .appendChild(document.createElement('small'))
+                .appendChild(document.createTextNode('/' + analysis.getPotentialCombos()));
+        }
 
         problems.style.display = "none";
         (function (table) { table && table.parentNode.removeChild(table); })(problems.querySelector('table'));
 
-        if (combos.length && cards.length > 15) {
+        if (analysis.isDeck() && analysis.getProblems()) {
             problems.style.display = 'block';
 
-            problems.appendChild(util.createTable(combos, ["Card name", "Combo chance"]));
-
+            problems.appendChild(util.createTable(analysis.getProblems(), ["Card name", "Combo chance"]));
         }
 
-        overview.style.display = (cards.length > 15) ? 'block' : 'none';
-        overview.querySelectorAll('[data-card-role]').forEach(function (counter) {
-            counter.innerHTML = byType[counter.dataset.cardRole] || "n/a";
+        var groupBy = document.querySelector('[data-group-by].active').dataset.groupBy;
+
+        analysis.getCombos(groupBy).forEach(function (comboGroup) {
+            comboGroup.forEach(function (card) {
+                availableCombos.appendChild(cardList.forLevel(card.result).node)
+                    .title = card.character.name + ' + ' + card.item.name;
+            });
+
+            availableCombos.appendChild(document.createElement('hr'));
         });
 
-        share.value = window.location.href.replace(/\?.*|$/, "?" + data);
+        availableCombos.previousSibling.style.display = availableCombos.style.display = availableCombos.firstChild ? '' : 'none';
+        availableCombos.lastChild && availableCombos.removeChild(availableCombos.lastChild);
+
+        share.value = window.location.href.replace(/\?.*|$/, data ? ("?" + data) : '');
         if ('history' in window && location.href !== share.value) {
             window.history.pushState({}, '', share.value);
         }
     }
 
+    function enter_edit_mode() {
+        cancel_edit_mode();
+        button.lastChild.nodeValue = ' Save';
+        button.querySelector('span').className = 'glyphicon glyphicon-edit';
+    }
+
+    function cancel_edit_mode() {
+        [].slice.apply(deck.querySelectorAll('.edit')).forEach(function (e) {
+            e.classList.remove('edit');
+        });
+
+        button.lastChild.nodeValue = ' Add';
+        button.querySelector('span').className = 'glyphicon glyphicon-plus';
+    }
+
+    function edit(node) {
+        if (node.parentNode.classList.contains('edit')) {
+            return cancel_edit_mode();
+        }
+
+        enter_edit_mode();
+
+        node.parentNode.classList.add('edit');
+
+        cardSelector.value = node.card.name;
+        level.value = node.card.getLevelString();
+    }
+
     function remove(e) {
+        cancel_edit_mode();
         e && e.parentNode && e.parentNode.removeChild(e);
 
         update();
     }
 
     function add(card, level, needsUpdate) {
+        [].slice.apply(deck.querySelectorAll('.edit')).forEach(function (e) {
+            deck.removeChild(e);
+        });
 
         try {
             card = cardList.forLevel(card, level || 1);
@@ -200,15 +166,38 @@ define(['cartoon-battle', 'cartoon-battle/util', 'https://rubaxa.github.io/Sorta
         var item = document.createElement('div');
         item.className = 'item col-xs-3';
 
-        deck.appendChild(item);
+        [].slice.apply(deck.querySelectorAll('cb-card')).reduce(function (success, e) {
+            if (success) {
+                return success;
+            }
+
+            if ((e.card.name === card.name && e.card.level > card.level) || e.card.name > card.name) {
+                deck.insertBefore(item, e.parentNode);
+
+                return true;
+            }
+
+            return false;
+
+        }, false) || deck.appendChild(item);
         item.appendChild(card.node);
 
         item.appendChild((function (btn) {
             btn.className = 'btn btn-danger btn-xs';
             btn.onclick = function () { remove(this.parentNode); };
-            btn.textContent = 'Remove';
+            btn.textContent = ' Remove';
 
             btn.insertBefore(document.createElement('span'), btn.firstChild).className = 'glyphicon glyphicon-trash';
+
+            return btn;
+        })(document.createElement('button')));
+
+        item.appendChild((function (btn) {
+            btn.className = 'btn btn-primary btn-xs pull-right';
+            btn.onclick = function () { edit(this.parentNode.querySelector('cb-card')); };
+            btn.textContent = ' Edit ';
+
+            btn.insertBefore(document.createElement('span'), btn.firstChild).className = 'glyphicon glyphicon-edit';
 
             return btn;
         })(document.createElement('button')));
