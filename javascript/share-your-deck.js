@@ -89,6 +89,9 @@ define(['cartoon-battle', 'cartoon-battle/util', 'https://rubaxa.github.io/Sorta
         if (availableCombos.previousSibling && availableCombos.previousSibling.className === 'panel-heading')
             availableCombos.parentNode.removeChild(availableCombos.previousSibling);
 
+
+        var availableCombosList = {};
+
         var combos = cards.reduce(function (combos, card) {
             if (card.getName() in combos || cardList.isPrecombo(card)) {
                 return combos;
@@ -102,17 +105,18 @@ define(['cartoon-battle', 'cartoon-battle/util', 'https://rubaxa.github.io/Sorta
 
 
             cardCombos.forEach(function (combo) {
-                var title = combo.character.name + " + " + combo.item.name;
+                availableCombosList[combo.character.name] = availableCombosList[combo.character.name] || {};
 
-                var existing = availableCombos.querySelector('[title="'+ title +'"');
-                var card = cardList.forLevel(combo.result);
+                var existing = availableCombosList[combo.character.name][combo.result.name];
+                var card = combo.result;
 
-                if (!existing) {
-                    availableCombos.appendChild(card.node).title = title;
-                } else if (existing.card.attack * 3 + existing.card.health < card.attack * 3 + card.health) {
-                    card.node.title = title;
-                    availableCombos.replaceChild(card.node, existing);
+                card.title = combo.character.name + " + " + combo.item.name;
+
+                if (existing && (existing.attack * 3 + existing.health > card.attack * 3 + card.health)) {
+                    card = existing;
                 }
+
+                availableCombosList[combo.character.name][combo.result.name] = card;
             });
 
             combos[card.getName()] = cardCombos.length / (availableForComboCount - byType[cardList.getComboRole(card)]);
@@ -123,10 +127,21 @@ define(['cartoon-battle', 'cartoon-battle/util', 'https://rubaxa.github.io/Sorta
         byType.combos = availableCombos.children.length +
             (byType.character && byType.item && ('<small>/' + byType.character * byType.item + '</small>') || '');
 
-        if (availableCombos.firstChild) {
+        if (Object.keys(availableCombosList).length) {
             availableCombos.parentNode.insertBefore(document.createElement('div'), availableCombos);
             availableCombos.previousSibling.classList.add('panel-heading');
             availableCombos.previousSibling.textContent = 'Combos you can create using this deck';
+
+            Object.keys(availableCombosList).sort().forEach(function (comboGroup) {
+                Object.keys(availableCombosList[comboGroup]).sort().forEach(function (comboId) {
+                    var card = availableCombosList[comboGroup][comboId];
+
+                    availableCombos.appendChild(cardList.forLevel(card).node).title = card.title;
+                });
+
+                availableCombos.appendChild(document.createElement('hr'));
+            });
+
         }
 
 
