@@ -155,6 +155,7 @@ define(['cartoon-battle', 'cartoon-battle/util', 'cartoon-battle/Analysis'], fun
         [].slice.apply(deck.querySelectorAll('.edit')).forEach(function (e) {
             deck.removeChild(e);
         });
+        cancel_edit_mode();
 
         try {
             card = cardList.forLevel(card, level || 1);
