@@ -14,17 +14,20 @@ layout: null
 
 <script type="text/javascript">require(['cartoon-battle'], function (getCards) {
     getCards(function (cards) {
-        var items = window.location.search.split(/=/)[0].substr(1).split("+").map(function (name) {
-            return cards.find(name);
+        var items = decodeURIComponent(window.location.search.substr(1)).split(/\s*\+\s*/).map(function (s) {
+            return s.match(/^\s*(.+?)(\s+(\d+|\^)\s*[*]{0,2})?\s*$/).slice(1, 3);
+        }).map(function (item) {
+            var card = item.shift();
+            var level = item.shift() || "1";
+
+            return cards.forLevel(cards.find(card), level);
         });
 
-        var card = 1 === items.length ? items.pop() : cards.getCombo.apply(cards, items).result;
+        var card = 1 === items.length ? items.pop() : cards.forLevel(cards.getCombo.apply(cards, items).result);
 
         if (!card) return;
 
-        var level = window.location.search.split(/=/)[1] || "1";
-
-        document.body.appendChild(cards.forLevel(card, level).node);
+        document.body.appendChild(card.node);
 
 
     });

@@ -3,6 +3,10 @@ title: Cards
 weight: 8
 ---
 
+<p class="alert alert-info">
+    <a href="#usage">Did you know you can embed those cards on your site? (click to see how!)</a>
+</p>
+<hr>
 <style type="text/css">cb-card { font-size: 42%; float: left }</style>
 <div id="cards" class=row></div>
 <script type="text/javascript">require(['cartoon-battle'], function (getCards) {
@@ -17,3 +21,33 @@ weight: 8
     });
 });
 </script>
+
+<style type="text/css">pre {font-size: 80%;}</style>
+<h2 id="usage" style="padding-top: 4em;">Usage</h2>
+<div class="row">
+    <div class="col-md-9">
+        <p>You can embed those cards on your site using an iframe:</p>
+        <pre><code>&lt;iframe src="{{ site.url }}/embed?Leela"/&gt;</code></pre>
+    </div>
+    <div class="col-md-3">
+        <iframe src="/embed?Leela" width="170" height="240" frameborder="0"></iframe>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-9">
+        <p>Just use <code>/embed?</code> address and the card name and optional level:</p>
+        <pre><code>&lt;iframe src="{{ site.url }}/embed?Leela 5*"/&gt;</code></pre>
+    </div>
+    <div class="col-md-3">
+        <iframe src="/embed?Leela 5*" width="170" height="240" frameborder="0"></iframe>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-9">
+        <p>You can also make combos by combining two cards using <code>+</code> sign:</p>
+        <pre><code>&lt;iframe src="{{ site.url }}/embed?Leela 5* + Rifle 5**"/&gt;</code></pre>
+    </div>
+    <div class="col-md-3">
+        <iframe src="/embed?Leela 5* + Rifle 5**" width="170" height="240" frameborder="0"></iframe>
+    </div>
+</div>

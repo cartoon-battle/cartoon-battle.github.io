@@ -1,6 +1,6 @@
 define(function () {
     function Level(level, rarity) {
-        level = (""+(level || "1")).match(/^(\d+|\^)\s*([*]{0,2})$/);
+        level = (""+(level || "1")).match(/^\s*(\d+|\^)\s*([*]{0,2})$/);
 
         var fuseLevel = rarity.getFusionLevel(),
             value = parseInt(level[1]) || fuseLevel, // allow a "max-level" shortcut
