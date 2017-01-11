@@ -60,7 +60,22 @@
 
 		<section class="main">
 			<div class="page-title">
-				<h2>{{ site.title }}</h2>
+                <div class="panel panel-primary">
+                    <div class="panel-heading">
+                        <p class="panel-title">Looking for new recruits!</p>
+                    </div>
+                    <div class="panel-body">
+                        Did you know that <strong>Asari</strong> — the group behind this website — is looking for
+                        active rumblers? If you want to join a guild with active chat and high aspirations, please drop
+                        <a href="https://www.reddit.com/user/pottersmash"
+                           onclick="ga('send', 'event', 'recruitment', 'click', 'reddit');">/u/pottersmash</a>
+                        a message on reddit or comment in our
+                        <a href="http://www.kongregate.com/forums/727069-guild-recruitment/topics/698848-asari-is-recruiting-rumblers"
+                           onclick="ga('send', 'event', 'recruitment', 'click', 'kongregate');">recruitment topic on kongregate</a>
+                    </div>
+                </div>
+
+                <h2>{{ site.title }}</h2>
 				<h3>{{ page.title }}</h3>
 			</div>
             <div class=content id=messages><script type="text/javascript">

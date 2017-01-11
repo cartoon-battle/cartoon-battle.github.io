@@ -41,7 +41,7 @@ define(['cartoon-battle', 'cartoon-battle/util', 'cartoon-battle/Analysis'], fun
                 }
             }
 
-        })(document.querySelector('.panel-heading').appendChild(document.createElement('a')), localStorage.deck);
+        })(document.querySelector('.panel-default .panel-heading').appendChild(document.createElement('a')), localStorage.deck);
     }
 
     form.addEventListener('card', function (e) {
