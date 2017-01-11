@@ -1,4 +1,4 @@
-define(['cartoon-battle'], function (getCards) {
+/* global define */ define(['cartoon-battle', 'cartoon-battle/util'], function (getCards, util) {
     var table = document.querySelector('table');
     var tbody = table.querySelector('tbody');
     var input = document.forms[0].querySelector('input');
@@ -118,10 +118,10 @@ define(['cartoon-battle'], function (getCards) {
         cards = items;
 
         function deferred_recipes() {
-            var search = window.location.search.substr(1), card;
+            var search = decodeURIComponent(window.location.search.substr(1)), card;
 
             if (input.find) { // wait for other scripts to attach to the input
-                if (search && (card = input.find(search))) {
+                if (search && (card = input.find(util.slugify(search)))) {
                     recipes(card);
                     input.value = input.value || card.name;
                 }
