@@ -35,9 +35,13 @@ cb-card cb-frame, cb-card cb-frame:before, cb-card cb-frame cb-level, cb-card cb
 cb-card[trait]:hover cb-frame {
     background-image: none !important;
 }
-cb-card:hover cb-frame:before {
+cb-card cb-frame:before {
     content: "";
-    display: block;
+    width: 0;
+
+}
+cb-card:hover cb-frame:before {
+    width: auto;
 }
 
 cb-card cb-frame cb-level {
@@ -52,10 +56,10 @@ cb-card[rarity="common"] cb-frame cb-level {
     padding-top: .23em;
 }
 cb-card cb-trait {
-    display: none;
+    width: 0;
 }
 cb-card[trait]:hover cb-trait {
-    display: block;
+    width: auto;
 }
 
 cb-card cb-name {
