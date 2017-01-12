@@ -138,7 +138,7 @@
 			document.getElementById("open-nav").addEventListener("click", function () {
 				document.body.classList.toggle("nav-open");
 			});
-        (function (headers, history) {
+        function apply_headers(headers, history, HEADER_OFFSET) {
 			headers.forEach(function(e) {
 				e.innerHTML = '<a href="#' + e.id + '">' + e.innerHTML + '</a>';
 			});
@@ -148,9 +148,9 @@
     }
 
     var targetHeader = {};
-    var HEADER_OFFSET = 80;
     var ANIMATION_TIME = 500;
     var FPS = 25;
+    HEADER_OFFSET = HEADER_OFFSET || 80;
 
     function easing(t) {
         return t < .5 ? 4 * t * t * t : (t - 1) * (2 * t - 2) * (2 * t - 2) + 1
@@ -223,8 +223,11 @@
                 scrollToHeader(findHeader().prev || document.body);
                 break;
         }
-    }
-})(document.querySelectorAll('h2[id], h3[id]'), window.history || {});
+    };
+
+    return scrollToHeader;
+}
+            apply_headers(document.querySelectorAll('h2[id], h3[id]'), window.history || {});
     </script>
 
 	</body>

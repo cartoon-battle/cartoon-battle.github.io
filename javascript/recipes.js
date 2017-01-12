@@ -74,7 +74,7 @@
             var combo = cards.shift().card;
 
             row.style.display = (function () {
-                var skillTypes = combo.getSkils().map(function (skill) { return skill.type; });
+                var skillTypes = combo.getSkills().map(function (skill) { return skill.type; });
                 var hasSkill = 0 === skills.length || skills.reduce(function (hasSkill, skill) {
                     return hasSkill || !!~skillTypes.indexOf(skill);
                 }, false);

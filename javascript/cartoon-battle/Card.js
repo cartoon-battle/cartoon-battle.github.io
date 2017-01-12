@@ -149,8 +149,14 @@ define(['./config', './util', './Rarity'], function (config, util, Rarity) {
         });
     };
 
-    Card.prototype.getSkils = function card__getSkills() {
+    Card.prototype.getSkills = function card__getSkills() {
         return this.skills;
+    };
+
+    Card.prototype.getSkillValue = function card__getSkillValue(name) {
+        return this.skills.reduce(function (value, skill) {
+            return value || skill.type === name ? skill.value : 0
+        }, 0);
     };
 
     return Card;

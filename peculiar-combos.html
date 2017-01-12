@@ -13,7 +13,7 @@ weight: 10
 
 </div>
 
-<script type="text/javascript">require(['cartoon-battle'], function (getCards) {
+<script type="text/javascript">require(['cartoon-battle', 'cartoon-battle/util'], function (getCards, util) {
 	function get_combo_stats(cards) {
 		return cards.getHydratedCombos('^**', '^**').reduce(function (stats, combo) {
 			if (combo.result.set >= 5000) {
@@ -45,7 +45,7 @@ weight: 10
 	}
 
 	var items = {
-		"Most powerful rare cards": function bestRares(cards) {
+		"Most powerful rare cards in terms of combo power, i.e. they can be used with epics and legends": function bestRares(cards) {
 			return cards.getCards().filter(function (card) {
 				return 2 === card.rarity;
 			}).map(function (card) {
@@ -114,6 +114,25 @@ weight: 10
 				return !!v;
 			})
 		},
+
+		"Most healthy farmable cards for defense": function mostHealthyDefenceCards(cards) {
+			return cards.getCards().filter(function (card) {
+				return cards.farmable[card.id];
+			}).map(function (card) {
+				return cards.forLevel(card, card.rarity <= 2 ? '^**' : '^*');
+			}).map(function (card) {
+				return {
+					"card": card,
+					"value": card.health + card.getSkillValue("armored")
+				}
+			}).sort(function (alpha, bravo) {
+				return bravo.value - alpha.value;
+			}).map(function (item) {
+				item.card.title = item.value;
+				return item.card;
+			}).slice(0, 8);
+		},
+
 		"Best farmable „quick assault” combos": function quickAssauldFarmableCombos(cards) {
 			return cards.combos.filter(function (combo) {
 				return cards.farmable[combo.character] && cards.farmable[combo.item];
@@ -147,7 +166,6 @@ weight: 10
 		}
 	};
 
-
 	getCards(function (cards) {
 		var panel = document.querySelector('.panel-default');
 		Object.keys(items).forEach(function (title) {
@@ -160,5 +178,21 @@ weight: 10
 				panel.appendChild(document.createElement('div'))
 			).className = 'panel-body';
 		});
+
+		var headers = panel.querySelectorAll('.panel-heading');
+
+        [].slice.apply(headers).forEach(function (h) {
+			h.setAttribute('id', util.slugify(h.textContent));
+			h.onclick = function (e) {
+				scrollToHeader(this);
+				e.preventDefault();
+			}
+		});
+
+		var scrollToHeader = apply_headers(headers, window.history || {}, 120);
+
+		if (window.location.hash) {
+			scrollToHeader(document.querySelector(window.location.hash));
+		}
 	});
 });</script>
