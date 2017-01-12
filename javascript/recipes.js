@@ -119,7 +119,7 @@
         cards = items;
 
         function deferred_recipes() {
-            var search = decodeURIComponent(window.location.search.substr(1)), card;
+            var search = decodeURIComponent(window.location.search.substr(1)).replace(/[+]/g, ' '), card;
 
             if (input.find) { // wait for other scripts to attach to the input
                 if (search && (card = input.find(util.slugify(search)))) {
