@@ -40,7 +40,7 @@ layout: null
 
         if (!card) return;
 
-        "function" === typeof ga && ga("send", "event", "card", "embed", card.title);
+        "function" === typeof ga && ga("send", "event", "card", "embed", card.name);
         document.body.appendChild(card.node);
 
 
