@@ -13,6 +13,7 @@ define(['cartoon-battle', 'cartoon-battle/util', 'cartoon-battle/Analysis'], fun
 
     document.getElementById('save-your-deck').onclick = function () {
         localStorage.deck = share.value;
+        "function" === typeof ga && ga("send", "event", "deck", "save", share.value);
         showMessage('Your deck have been saved', 'success');
     };
 

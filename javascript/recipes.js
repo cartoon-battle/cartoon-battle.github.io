@@ -43,6 +43,7 @@
 
         selectedCard = card;
         setTitle(card.name);
+        "function" === typeof ga && ga("send", "event", "recipe", "search", card.name);
 
         clear();
         cards.getRecipesIncluding(card, level.value).forEach(add);
