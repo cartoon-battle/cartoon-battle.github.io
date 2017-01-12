@@ -155,7 +155,7 @@ define(['./config', './util', './Rarity'], function (config, util, Rarity) {
 
     Card.prototype.getSkillValue = function card__getSkillValue(name) {
         return this.skills.reduce(function (value, skill) {
-            return value || skill.type === name ? skill.value : 0
+            return value || ((skill.type === name) ? skill.value : 0)
         }, 0);
     };
 
