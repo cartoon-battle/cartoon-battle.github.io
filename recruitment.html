@@ -85,7 +85,10 @@
 
 <div class="panel panel-default">
 	<div class="panel-heading">
-		<input type="search" class="form-control" placeholder="search players">
+		<input type="search" class="form-control" placeholder="search players" style="
+			background: white url('/images/Algolia_logo_bg-white.jpg') no-repeat right 10px center;
+			background-size: auto 75%
+			">
 	</div>
 </div>
 <script type="text/javascript">require(['cartoon-battle', 'cartoon-battle/util', 'https://cdnjs.cloudflare.com/ajax/libs/algoliasearch/3.20.3/algoliasearch.min.js'], function (getCards, util, algoliasearch) {
@@ -94,6 +97,10 @@
 		var user = {};
 
 		var search = document.querySelector('[type="search"]').onkeyup = function () {
+			if (!this.value) {
+				return ;
+			}
+
 			index.search(this.value, function (err, results) {
 				var table = document.querySelector('table');
 				if (table) table.parentNode.removeChild(table);
