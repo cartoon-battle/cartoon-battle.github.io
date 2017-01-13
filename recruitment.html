@@ -1,0 +1,198 @@
+---
+---
+
+<style type="text/css">
+	.leader {
+		width: 25%;
+		background-size: 114% 114%;
+		background-position: center top;
+	}
+	{% for leader in site.data.values.heroes %}
+	.leader[data-leader="{{leader|downcase}}"] {
+		background-image: url('https://cartoon-battle.narzekasz.pl/deck/cards/leaderdefense_{{ leader|downcase }}.png');
+	}
+	{% endfor %}
+
+	fieldset h2 {
+		margin-top: 0 !important;
+		margin: 0 0 .4em;
+	}
+	fieldset h3:before {
+		content: none !important;
+	}
+	dt {
+		text-align: left !important;
+	}
+
+	.panel {
+		margin-top: 4em;
+	}
+	table img {
+
+	}
+
+</style>
+
+<form onsubmit="return false" class="row">
+	<p class="alert alert-info">Looking for a new guild for rumbles? Leave your Player ID and
+		contact data so other guild owners can find you!
+	</p>
+	<fieldset class="col-md-6">
+		<div class="form-group">
+			<label class="form-label" for="userId">
+				Your Game player ID
+			</label>
+			<input class="form-control" id="userId">
+		</div>
+		<div class="form-group">
+			<label class="form-label" for="comment">
+				Leave a comment about yourself. Be sure to include information how to contact you,
+				for example your Line or Reddit username.
+			</label>
+			<textarea class="form-control" id="comment"></textarea>
+		</div>
+		<div class="form-group">
+			<button class="btn btn-success" type="submit">
+				<span class="glyphicon glyphicon-search"></span> Search
+			</button>
+		</div>
+	</fieldset>
+	<fieldset class="col-md-6" style="display: none;" id="profile">
+		<img id="leader" class="leader pull-right" data-leader="" src="/images/leaderCard_hud_frame_blue.png">
+		<h2 id="profile_name"></h2>
+		<h3 id="guild_name"></h3>
+
+		<dl>
+			<dt>Level</dt>
+			<dd id="profile_level"></dd>
+			<dt>Arena level</dt>
+			<dd id="arena_level"></dd>
+			<dt>Hero level</dt>
+			<dd id="hero_level"></dd>
+		</dl>
+
+		<blockquote><p id="profile_comment"></p></blockquote>
+
+		<button id="index" class="btn btn-primary" type="button">
+			<span class="glyphicon glyphicon-ok"></span> Save!
+		</button>
+
+		<button id="delete" class="btn btn-danger pull-right" type="button">
+			<span class="glyphicon glyphicon-trash"></span> Remove me!
+		</button>
+	</fieldset>
+</form>
+
+<div class="panel panel-default">
+	<div class="panel-heading">
+		<input type="search" class="form-control" placeholder="search players">
+	</div>
+</div>
+<script type="text/javascript">require(['cartoon-battle', 'cartoon-battle/util', 'https://cdnjs.cloudflare.com/ajax/libs/algoliasearch/3.20.3/algoliasearch.min.js'], function (getCards, util, algoliasearch) {
+	getCards(function (cards) {
+		var profile = document.getElementById('profile');
+		var user = {};
+
+		var search = document.querySelector('[type="search"]').onkeyup = function () {
+			index.search(this.value, function (err, results) {
+				var table = document.querySelector('table');
+				if (table) table.parentNode.removeChild(table);
+
+				if (0 === results.hits.length) {
+					return;
+				}
+
+				var data = results.hits.map(function (item) {
+					return {
+						"image": function () {
+							var image = new Image;
+							image.className = 'leader';
+							image.src = document.getElementById('leader').src;
+							image.dataset.leader = item.leader;
+							return image;
+						},
+						"name": item.name,
+						"guild_name": item.guild_name,
+						"level": item.level,
+						"hero_level": item.hero_level,
+						"arena_level": item.arena_level,
+						"comment": function () {
+							return (item.comment+"").split(/\n/).reduce(function (div, text) {
+								return div
+										.appendChild(document.createElement('p'))
+										.appendChild(document.createTextNode(text))
+										.parentNode.parentNode;
+							}, document.createElement('div'));
+						}
+					}
+				});
+
+				document.querySelector('.panel-default').appendChild(
+					util.createTable(data, ['', 'Name', 'Guild', 'Adventure Level', 'Hero level', 'Arena level', 'Comment'])
+				);
+			})
+		};
+
+		var index = algoliasearch('DFSUM1PBGX', 'e56a6dc079fe75127b2de6a14b0fd6eb', {protocol: 'https:'})
+				.initIndex('cartoon_battle');
+
+		document.getElementById('index').onclick = function () {
+			index.addObjects([user]);
+		};
+
+		document.getElementById('delete').onclick = function () {
+			index.deleteObject(user.objectID);
+		};
+
+		function render() {
+			profile.style = user.name ? 'block' : 'none';
+			document.getElementById('profile_name').textContent = user.name;
+			document.getElementById('guild_name').textContent = user.guild_name;
+			document.getElementById('profile_level').textContent = user.level;
+			document.getElementById('arena_level').textContent = user.arena_level;
+			document.getElementById('hero_level').textContent = user.hero_level;
+			document.getElementById('leader').dataset.leader = user.leader;
+			document.getElementById('profile_comment').textContent = user.comment;
+		}
+
+		document.forms[0].onsubmit = function () {
+			var userId = '7232069';
+			var password = '1027fd20001a5e38de00a7d35c257c58';
+			var targetUserId = this.querySelector('input').value;
+
+			profile.style.display = 'none';
+
+			var xhr = new XMLHttpRequest();
+
+			xhr.open("POST", "https://cb-live.synapse-games.com/api.php?message=getUserProfile&user_id=" + userId);
+			xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+			xhr.onload = function () {
+				var user_profile_info = (JSON.parse(xhr.responseText) || {}).user_profile_info;
+
+				if (!user_profile_info) {
+					return showMessage('There was a problem fetching Player Information');
+				}
+
+				user = {
+					"objectID": targetUserId,
+					"date": Math.floor((new Date).valueOf() / 1000),
+					"name": user_profile_info.name,
+					"guild_name": user_profile_info.guild && user_profile_info.guild.name || "",
+					"level": parseInt(user_profile_info.level),
+					"arena_level": parseInt(user_profile_info.pvp_data.level),
+					"hero_level": parseInt(user_profile_info.commander.level),
+					"leader": cards.get(parseInt(user_profile_info.commander.unit_id)).slug,
+					"cards_by_rarity": user_profile_info.cards_by_rarity,
+					"comment": document.getElementById('comment').value,
+				};
+
+				render();
+			};
+
+			xhr.send("password=" + password + '&target_user_id=' + targetUserId);
+
+			return false;
+		};
+	});
+});
+</script>

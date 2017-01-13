@@ -39,7 +39,9 @@ define(function () {
 
             function row(data, type) {
                 return data.map(function (name) {
-                    return document.createElement(type || 'td').appendChild(document.createTextNode(name)).parentNode;
+                    return document.createElement(type || 'td').appendChild(
+                        "function" === typeof name ? name() : document.createTextNode(name)
+                    ).parentNode;
                 }).reduce(function (tr, node) {
                     return tr.appendChild(node).parentNode;
                 }, document.createElement('tr'));
