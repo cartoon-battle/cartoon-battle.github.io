@@ -84,6 +84,13 @@ Try to test it yourself. Put it in and go to Arena Practice. This way you can’
 
 By [farming in the adventure](/adventure) and recycling unused cards. I know you hold on tight to those maxed out rares, but it’s time to forget them and move on. They will give you plenty of GW to start building your deck on epics.
 
+## How much Giggity will I need to…?
+
+ * Maxing a Common card will require **188GW**
+ * Maxing a Rare card will require **473GW**
+ * Epic cards from zero to 5* takes **244GW** and anotheh whooping **714GW** to max out
+ * You can single fuse a Legendary if you have **419GW**. Taking it all the way is another whooping **1444GW**
+
 ## What are the best combos for my *eglebegle card*?
 
 It’s a matter of an opinion, so you can [check the recipes yourself](/recipes).
