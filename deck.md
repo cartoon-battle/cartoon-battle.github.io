@@ -88,8 +88,8 @@ By [farming in the adventure](/adventure) and recycling unused cards. I know you
 
  * Maxing a Common card will require **188GW**
  * Maxing a Rare card will require **473GW**
- * Epic cards from zero to 5* takes **244GW** and anotheh whooping **714GW** to max out
- * You can single fuse a Legendary if you have **419GW**. Taking it all the way is another whooping **1444GW**
+ * Epic cards from zero to 5* takes **244GW**, while maxing out two 5* epic is **470**
+ * You can single fuse a Legendary if you have **419GW**. Taking it all all the way after having two 6* is another whooping **1025GW**
 
 ## What are the best combos for my *eglebegle card*?
 
