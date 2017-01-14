@@ -1,8 +1,10 @@
-define(function () {
+define(['cartoon-battle/config', 'cartoon-battle/Rarity'], function (config, Rarity) {
+    function util__slugify(name) {
+        return name.replace(/[^\d\w -]/g, '').replace(/ /g, '-').toLowerCase();
+    }
+
     return {
-        "slugify": function util__slugify(name) {
-            return name.replace(/[^\d\w -]/g, '').replace(/ /g, '-').toLowerCase();
-        },
+        "slugify": util__slugify,
 
         "clone": function util__clone(obj) {
             if (null == obj || "object" !== typeof obj) return obj;
@@ -32,6 +34,33 @@ define(function () {
             return element;
         },
 
+        "rarityCounter": function util__rarityCounter(data) {
+            return [1,2,3,4].map(function (key) {
+                return {
+                    rarity: new Rarity(key),
+                    count: data[key] || 0
+                }
+            }).reduce(function (div, item) {
+                div.className = 'btn-group btn-counter';
+
+                var img = document.createElement('img');
+                img.src = config.images_cdn + "icons/rarityicon_" + item.rarity.name + ".png";
+                img.alt = item.rarity.name;
+
+                var button = document.createElement('button');
+                button.setAttribute('type', 'button');
+                button.className = 'btn btn-default';
+
+                button.appendChild(document.createTextNode(item.count + ' '));
+                button.appendChild(img);
+
+                div.appendChild(button);
+
+                return div;
+
+            }, document.createElement('div'));
+        },
+
         "createTable": function util__createTable(data, keys) {
             if (!data.length) {
                 return ;
@@ -39,7 +68,13 @@ define(function () {
 
             function row(data, type) {
                 return data.map(function (name) {
-                    return document.createElement(type || 'td').appendChild(
+                    var element = document.createElement(type || 'td');
+
+                    if ('TH' === element.nodeName && "string" === typeof name) {
+                        element.className = util__slugify(name);
+                    }
+
+                    return element.appendChild(
                         "function" === typeof name ? name() : document.createTextNode(name)
                     ).parentNode;
                 }).reduce(function (tr, node) {

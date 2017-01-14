@@ -60,6 +60,17 @@
 
 		<section class="main">
 			<div class="page-title">
+                {% if "/rumble-recruitment" != page.url %}
+                <div class="panel panel-primary">
+                    <div class="panel-heading">
+                        <p class="panel-title">
+                            <a href="/rumble-recruitment">
+                                Looking for a new guild? Try out the new Rumble Recruitment (beta). •click• •click•
+                            </a>
+                        </p>
+                    </div>
+                </div>
+                {% endif %}
                 <h2>{{ site.title }}</h2>
 				<h3>{{ page.title }}</h3>
 			</div>
@@ -200,6 +211,10 @@
     }
 
     document.body.onkeypress = function (e) {
+        if (!!~['TEXTAREA', 'INPUT', 'SELECT'].indexOf(e.target.nodeName)) {
+            return;
+        }
+
         switch (String.fromCharCode(e.which).toLowerCase()) {
             case "j".charAt(0):
                 scrollToHeader(findHeader().next);
