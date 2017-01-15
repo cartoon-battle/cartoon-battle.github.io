@@ -41,7 +41,7 @@ skills:
     shrapnel: Bomb
     berserk: Crazed
 
-traits: [addicted, armed, artistic, athletic, drunk, educated, hyper, rich]
+traits: [addicted, armed, artistic, athletic, disguised, drunk, educated, fighter, hyper, rich]
 
 win_rates: 
     '0.5': fifty-fifty
