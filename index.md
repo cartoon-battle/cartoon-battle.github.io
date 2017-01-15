@@ -21,6 +21,7 @@ There are some excelent sites out there covering different aspects of the game:
  * [spAnser’s Cards Data (aka The Data Mining)](https://spanser.net/AnimationThrowdown/cards.xml) — raw info about cards. More files linked in [the reddit thread](https://www.reddit.com/r/AnimationThrowdown/comments/52zx3p/data_mining/)
  * [Reddit](https://www.reddit.com/r/AnimationThrowdown/) — great place for discussions
  * [Upgrading, Recycling, Challenges, Drop rates & Hero tokens](https://docs.google.com/spreadsheets/d/1HSguYSuQeQQjMoJiodyjKbHSzwujvkv3P3DzKxTFTyI/pubhtml#) — great spreadsheet by [/u/milkshaakes](https://www.reddit.com/user/milkshaakes)
+ * [A great list of useful information](https://www.reddit.com/r/AnimationThrowdown/comments/5o16g6/useful_information/?utm_content=comments&utm_medium=new&utm_source=reddit&utm_name=AnimationThrowdown) curated by [/u/Serpent330 on reddit](https://www.reddit.com/user/Serpent330)
 
 ## Contributing 
 
