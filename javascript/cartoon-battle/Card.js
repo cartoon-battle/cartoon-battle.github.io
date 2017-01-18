@@ -63,6 +63,10 @@ define(['./config', './util', './Rarity'], function (config, util, Rarity) {
         return "" + this.level + "*"['repeat'](this.fuse);
     };
 
+    Card.prototype.getLevelValue = function card__getLevelValue() {
+        return this.level + this.rarity.getFusionLevel() * this.fuse;
+    };
+
     Card.prototype.getFullDescription = function card__getGetFullDescription() {
         return this.name + " " + this.getLevelString();
     };
