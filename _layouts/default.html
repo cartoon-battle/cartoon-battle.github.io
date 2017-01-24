@@ -54,26 +54,33 @@
 						Use <code>j</code> and <code>k</code> keys to navigate between questions
 						</p>
 					</li>
+                    <li class="nav-item top-level">
+                        <a href="https://www.patreon.com/mlebkowski" style="padding:0">
+                        <img src="http://patreon_public_assets.s3.amazonaws.com/sized/becomeAPatronBanner.png" heigth=32
+                            alt="Support me on Patreon">
+                        </a>
+                    </li>
 				</ul>
 			</nav>
 		</header>
 
 		<section class="main">
 			<div class="page-title">
-                {% if "/rumble-recruitment" != page.url %}
+                <h2>{{ site.title }}</h2>
+				<h3>{{ page.title }}</h3>
+			</div>
+                {% if "/recipes" == page.url %}
                 <div class="panel panel-primary">
                     <div class="panel-heading">
                         <p class="panel-title">
-                            <a href="/rumble-recruitment">
-                                Looking for a new guild? Try out the new Rumble Recruitment (beta). •click• •click•
+                            <a href="https://www.patreon.com/mlebkowski">
+                                Hey! I need your help to keep this site running. Check out the details on patreon. °click°
                             </a>
                         </p>
                     </div>
                 </div>
                 {% endif %}
-                <h2>{{ site.title }}</h2>
-				<h3>{{ page.title }}</h3>
-			</div>
+
             <div class=content id=messages><script type="text/javascript">
             function showMessage(message, type) {
                 document.getElementById('messages').appendChild((function (p, message, type) {
@@ -98,9 +105,9 @@
             }
             document.getElementById('messages').addEventListener('click', function (e) {
                 var p = e.target;
-                while (p && 'P' !== p.tagName.toUpperCase() && p.parentNode !== this) {
+                while (p && 'P' !== p.tagName && p.parentNode !== this) {
                     p = p.parentNode;
-                } 
+                }
 
                 if (p) {
                     p.parentNode.removeChild(p);
