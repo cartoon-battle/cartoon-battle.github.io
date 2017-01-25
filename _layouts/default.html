@@ -55,9 +55,8 @@
 						</p>
 					</li>
                     <li class="nav-item top-level">
-                        <a href="https://www.patreon.com/mlebkowski" style="padding:0">
-                        <img src="http://patreon_public_assets.s3.amazonaws.com/sized/becomeAPatronBanner.png" heigth=32
-                            alt="Support me on Patreon">
+                        <a href="{{ site.patreon_url }}" style="padding:0">
+                        <img src="http://patreon_public_assets.s3.amazonaws.com/sized/becomeAPatronBanner.png" alt="Support me on Patreon">
                         </a>
                     </li>
 				</ul>
@@ -69,17 +68,6 @@
                 <h2>{{ site.title }}</h2>
 				<h3>{{ page.title }}</h3>
 			</div>
-                {% if "/recipes" == page.url %}
-                <div class="panel panel-primary">
-                    <div class="panel-heading">
-                        <p class="panel-title">
-                            <a href="https://www.patreon.com/mlebkowski">
-                                Hey! I need your help to keep this site running. Check out the details on patreon. °click°
-                            </a>
-                        </p>
-                    </div>
-                </div>
-                {% endif %}
 
             <div class=content id=messages><script type="text/javascript">
             function showMessage(message, type) {
@@ -123,6 +111,30 @@
             }
 
             </script></div>
+
+            {% if page.promote %}
+            <section class="content">
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <p class="panel-title">
+                        <strong>The Warriors</strong> support this site
+                    </p>
+                </div>
+                <div class="panel-body">
+                    <p>The Warriors guild support this site and now you can do something for them! They finished #28
+                        in the last rumble, but they can do better with your help. </p>
+                    <a class="btn btn-primary" href="https://www.reddit.com/user/excelphysicslab">
+                        Send /u/excelphysicslab a message to join their guild
+                    </a>
+                    <a href="{{ site.patreon_url }}" class="pull-right btn btn-success">
+                        Become a supporter!
+                    </a>
+
+                </div>
+            </div>
+            </section>
+            {% endif %}
+
 			<article class="content">
 				{{ content }}
 			</article>
