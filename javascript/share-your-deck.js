@@ -1,6 +1,6 @@
 define(['cartoon-battle', 'cartoon-battle/util', 'cartoon-battle/Analysis'], function (getCards, util, Analysis) {
 
-    var form = document.forms[0];
+    var form = document.forms.deck;
     var button = form.querySelector('button');
     var result = document.getElementById('result');
     var share = result.querySelector('input');

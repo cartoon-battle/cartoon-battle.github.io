@@ -1,7 +1,7 @@
 /* global define */ define(['cartoon-battle', 'cartoon-battle/util'], function (getCards, util) {
     var table = document.querySelector('table');
     var tbody = table.querySelector('tbody');
-    var input = document.forms[0].querySelector('input');
+    var input = document.forms.recipes.querySelector('input');
     var level = document.querySelector('select');
 
     /** @var CardCollection cards */
@@ -91,7 +91,7 @@
 
     clear();
 
-    document.querySelector('form').addEventListener('card', function (event) {
+    document.forms.recipes.addEventListener('card', function (event) {
         event.preventDefault();
 
         recipes(event.detail);

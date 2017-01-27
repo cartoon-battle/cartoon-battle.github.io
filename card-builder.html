@@ -3,7 +3,7 @@ title: Card builder
 weight: 10
 ---
 
-<form class="form-horizontal">
+<form class="form-horizontal" name="builder">
     <div class="row"><div class="col-md-6">
     <div class="form-group">
         <div class=row>
@@ -119,7 +119,7 @@ weight: 10
     document.getElementById('result').appendChild(card.node);
 
     // FORM ///////////////////////////
-    var form = document.forms[0];
+    var form = document.forms.builder;
     var skills = [].slice.apply(form.querySelectorAll('[name="skill"]'));
     ///////////////////////////////////
 

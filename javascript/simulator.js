@@ -225,4 +225,4 @@
         return false;
     }
 
-})(document.forms[0], document.getElementById('result'));
+})(document.forms.simulator, document.getElementById('result'));

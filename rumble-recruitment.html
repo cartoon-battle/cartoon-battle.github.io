@@ -159,7 +159,7 @@ weight: 9
 
 <h3>Post your interest in finding a new guild:</h3>
 
-<form onsubmit="return false" class="row">
+<form onsubmit="return false" class="row" name="add">
 	<fieldset class="col-md-6">
 		<div class="form-group">
 			<label class="form-label" for="userId">
@@ -332,7 +332,7 @@ weight: 9
 			profile.replaceChild(util.rarityCounter(user.cards_by_rarity), profile.querySelector('.btn-group'));
 		}
 
-		document.forms[0].onsubmit = function () {
+		document.forms.add.onsubmit = function () {
 			var userId = '7232069';
 			var password = '1027fd20001a5e38de00a7d35c257c58';
 			var targetUserId = this.querySelector('input').value;
