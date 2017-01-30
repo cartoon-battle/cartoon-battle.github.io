@@ -1,0 +1,43 @@
+---
+title: Settings
+weight: 100
+---
+
+<form name="settings">
+    <p class="alert alert-info">The settings are saved automatically</p>
+    <fieldset/>
+</form>
+
+<script type="text/javascript">
+    /* global require */
+    require(['react', 'react-dom', 'settings'], function (React, ReactDOM, Settings) {
+        var fieldset = document.forms.settings.querySelector('fieldset');
+
+        function render_root() {
+            var root = React.createElement('fieldset', {}, Settings.all().map(function (setting) {
+                var onChange = function (event) {
+                    "function" === typeof ga && ga('send', 'event', 'setting', setting.getName(), event.target.checked ? "enabled" : "disabled");
+                    setting.setValue(!!event.target.checked);
+                    render_root();
+                };
+
+                return (
+                        React.createElement('div', {"className": "checkbox", "key": setting.getName()},
+                                React.createElement('label', {},
+                                        React.createElement('input', {
+                                            "type": "checkbox",
+                                            "checked": !!setting.getValue(),
+                                            "onChange": onChange
+                                        }),
+                                        setting.getLabel()
+                                )
+                        )
+                );
+            }));
+
+            ReactDOM.render(root, fieldset);
+        }
+
+        render_root();
+    });
+</script>
