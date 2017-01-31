@@ -22,6 +22,7 @@ There are some excelent sites out there covering different aspects of the game:
  * [Reddit](https://www.reddit.com/r/AnimationThrowdown/) — great place for discussions
  * [Upgrading, Recycling, Challenges, Drop rates & Hero tokens](https://docs.google.com/spreadsheets/d/1HSguYSuQeQQjMoJiodyjKbHSzwujvkv3P3DzKxTFTyI/pubhtml#) — great spreadsheet by [/u/milkshaakes](https://www.reddit.com/user/milkshaakes)
  * [A great list of useful information](https://www.reddit.com/r/AnimationThrowdown/comments/5o16g6/useful_information/?utm_content=comments&utm_medium=new&utm_source=reddit&utm_name=AnimationThrowdown) curated by [/u/Serpent330 on reddit](https://www.reddit.com/user/Serpent330)
+ * [The best islands to farm](https://docs.google.com/spreadsheets/d/1KWnow60A8EAqeBsLHQVlfXbZvP83LzEOOuxTwW-QYAk/pubhtml) — a spreadsheet by [/u/Ak-Xo](https://www.reddit.com/u/Ak-Xo)
 
 ## Contributing 
 

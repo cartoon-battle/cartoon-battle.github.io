@@ -13,6 +13,8 @@ First five islands have best drop rate to energy ratio. Choose the one that has 
 
 You may want to look at the next five islands since they also have a good ratio, but different sets of rewards. For example, 7-2 (Swat Bob on 7th island) can give you both Bob and Burger Suit, so it’s better than anything on the second island if you’re interested in those two cards in particular.
 
+Check out the detailed information on [the best islands to farm](https://docs.google.com/spreadsheets/d/1KWnow60A8EAqeBsLHQVlfXbZvP83LzEOOuxTwW-QYAk/pubhtml) in a spreadsheet by [/u/Ak-Xo](https://www.reddit.com/u/Ak-Xo)
+
 ## I am stuck on some of the last islands, any advice?
 
 The most commonly adviced strategy is to take out the first card before it can combo. To do this:
