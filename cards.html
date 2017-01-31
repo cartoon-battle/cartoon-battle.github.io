@@ -9,14 +9,18 @@ weight: 8
 <hr>
 <style type="text/css">cb-card { font-size: 22%; float: left }</style>
 <div id="cards" class=row></div>
-<script type="text/javascript">require(['cartoon-battle'], function (getCards) {
+<script type="text/javascript">require(['cartoon-battle', 'cartoon-battle/util'], function (getCards, util) {
     getCards(function (cards) {
         var deck = document.getElementById('cards');
 
         cards.getCards().sort(function (alpha, bravo) {
             return alpha.name.localeCompare(bravo.name);
         }).forEach(function (card) {
-            deck.appendChild(cards.forLevel(card, card.levels.length).node);
+            deck.appendChild(
+                document.createElement('a').appendChild(
+                    cards.forLevel(card, card.levels.length).node
+                ).parentNode
+            ).href = "/recipes?" + util.slugify(card.name);
         })
     });
 });
