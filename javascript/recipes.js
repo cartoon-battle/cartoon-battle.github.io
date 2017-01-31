@@ -1,4 +1,4 @@
-/* global define */ define(['cartoon-battle', 'cartoon-battle/util', 'settings'], function (getCards, util, Settings) {
+/* global define */ define(['cartoon-battle', 'cartoon-battle/util'], function (getCards, util) {
     var table = document.querySelector('table');
     var tbody = table.querySelector('tbody');
     var input = document.forms.recipes.querySelector('input');
@@ -40,8 +40,6 @@
         if (!card) {
             return;
         }
-
-        document.getElementById('resolution_alert').style.display = Settings.getValue('high_resolution_images') ? "none" : "block";
 
         selectedCard = card;
         setTitle(card.name);

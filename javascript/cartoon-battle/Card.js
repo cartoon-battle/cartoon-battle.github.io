@@ -1,4 +1,4 @@
-define(['./config', './util', './Rarity', 'settings'], function (config, util, Rarity, Settings) {
+define(['./config', './util', './Rarity'], function (config, util, Rarity) {
     function Card(value) {
         value = value || {};
         this.node = util.createFragment('cb-card', [
@@ -101,8 +101,7 @@ define(['./config', './util', './Rarity', 'settings'], function (config, util, R
 
         this.image = image;
 
-        var path = Settings.getValue('high_resolution_images') ? "cards" : "thumbnails";
-        this.node.querySelector("img").src = config.images_cdn + "deck/" + path + "/" + this.image + ".png";
+        this.node.querySelector("img").src = config.images_cdn + "deck/cards/" + this.image + ".png";
     };
 
     Card.prototype.setAttack = function card__setAttack(attack) {
