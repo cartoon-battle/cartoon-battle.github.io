@@ -10,32 +10,53 @@
     /* global require */
     require(['react', 'react-dom', 'settings'], function (React, ReactDOM, Settings) {
         var fieldset = document.forms.settings.querySelector('fieldset');
+        var $ = React.createElement;
 
-        function render_root() {
-            var root = React.createElement('fieldset', {}, Settings.all().map(function (setting) {
-                var onChange = function (event) {
-                    "function" === typeof ga && ga('send', 'event', 'setting', setting.getName(), event.target.checked ? "enabled" : "disabled");
-                    setting.setValue(!!event.target.checked);
-                    render_root();
-                };
+        var settingsItem = React.createClass({
+            "propTypes": {
+                "setting": React.PropTypes.object.isRequired
+            },
+            "getInitialState": function() {
+                return { "setting": this.props.setting };
+            },
+            "onChange": function (event) {
+                var setting = this.state.setting;
 
+                "function" === typeof ga && ga('send', 'event', 'setting', setting.getName(), event.target.checked ? "enabled" : "disabled");
+                setting.setValue(!!event.target.checked);
+
+                this.setState({"setting": setting});
+            },
+            render: function () {
                 return (
-                        React.createElement('div', {"className": "checkbox", "key": setting.getName()},
-                                React.createElement('label', {},
-                                        React.createElement('input', {
-                                            "type": "checkbox",
-                                            "checked": !!setting.getValue(),
-                                            "onChange": onChange
-                                        }),
-                                        setting.getLabel()
-                                )
+                    $('div', {"className": "checkbox", "key": this.props.setting.getName()},
+                        $('label', {},
+                            $('input', {
+                                "type": "checkbox",
+                                "checked": !!this.props.setting.getValue(),
+                                "onChange": this.onChange
+                            }),
+                            this.props.setting.getLabel()
                         )
+                    )
                 );
-            }));
+            }
+        });
 
-            ReactDOM.render(root, fieldset);
-        }
+        var settingsList = React.createClass({
+            "propTypes": {
+                "settings": React.PropTypes.arrayOf(React.PropTypes.object).isRequired
+            },
+            render: function () {
+                return $('fieldset', {}, this.props.settings.map(function (setting) {
+                    return $(settingsItem, {
+                        "setting": setting,
+                        "key": setting.getName()
+                    })
+                }));
+            }
+        });
 
-        render_root();
+        ReactDOM.render(React.createElement(settingsList, {"settings": Settings.all()}), fieldset);
     });
 </script>
