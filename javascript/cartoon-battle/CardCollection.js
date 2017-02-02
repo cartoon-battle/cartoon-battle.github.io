@@ -8,7 +8,8 @@ define(['./util', './Rarity', './Level', './Card'], function define__cardcollect
     function identity(x) { return !!x; }
 
     function categorize_card(card) {
-        var standard = card.set < 5000;
+
+        var standard = card.set < 5000 || 7000 === card.set;
         var deck = standard && !card.commander && !card.is_combo && !card.is_defense && !card.hidden;
         var combo = 1 === card.levels.length && !!card.attack_multiplier;
 
@@ -151,10 +152,12 @@ define(['./util', './Rarity', './Level', './Card'], function define__cardcollect
             return (unit.querySelector(name) || {}).textContent;
         }
 
+        var name = (7000 === parseInt(v('set')) ? "Mythic " : "") + v('name');
+
         return addLevels(addSkills({
             id: parseInt(v('id')),
-            name: v('name'),
-            slug: util.slugify(v('name')),
+            name: name,
+            slug: util.slugify(name),
             desc: v('desc'),
             picture: normalizePicture(v('picture'), v('type')),
             commander: !!v('commander'),

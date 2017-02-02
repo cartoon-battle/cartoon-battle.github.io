@@ -1,5 +1,5 @@
 define(function () {
-    var RARITY_LEVELS = ['common', 'rare', 'epic', 'legendary'];
+    var RARITY_LEVELS = ['common', 'rare', 'epic', 'legendary', 'mythic'];
 
     function Rarity(value) {
         this.name = (parseInt(value) == value) ? RARITY_LEVELS[value - 1] : value || RARITY_LEVELS[0];
