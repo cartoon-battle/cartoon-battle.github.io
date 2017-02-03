@@ -6,6 +6,8 @@ define(['cartoon-battle/config', 'cartoon-battle/Rarity'], function (config, Rar
     return {
         "slugify": util__slugify,
 
+        "card_with_level_re": /^\s*(.+?)(?:\s+((\d+|\^)\s*[*]{0,2}))?\s*$/,
+
         "clone": function util__clone(obj) {
             if (null == obj || "object" !== typeof obj) return obj;
             var copy = {};
