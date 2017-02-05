@@ -91,7 +91,7 @@ define(['cartoon-battle', 'cartoon-battle/util', 'cartoon-battle/Analysis'], fun
         problems.style.display = "none";
         (function (table) { table && table.parentNode.removeChild(table); })(problems.querySelector('table'));
 
-        if (analysis.isDeck() && analysis.getProblems()) {
+        if (analysis.isDeck() && analysis.getProblems().length) {
             problems.style.display = 'block';
 
             problems.appendChild(util.createTable(analysis.getProblems(), ["Card name", "Combo chance"]));
