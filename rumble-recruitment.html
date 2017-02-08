@@ -312,6 +312,12 @@ weight: 9
 				.initIndex('cartoon_battle');
 
 		document.getElementById('index').onclick = function () {
+            user.rumble_points = parseInt(document.getElementById('rumble_points').value) || 0;
+            user.comment = document.getElementById('comment').value;
+            if (!user.comment) {
+                document.getElementById('comment').focus();
+            }
+
 			index.addObjects([user]);
 			"function" === typeof ga && ga("send", "event", "recruitment", "add", user.name);
 		};
