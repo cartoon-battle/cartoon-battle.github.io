@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root>
+    <combo>
+        <card_id>999000</card_id>
+        <cards card1="10004" card2="20008"/>
+    </combo>
+
+    <combo>
+        <card_id>999000</card_id>
+        <cards card1="10004" card2="40010"/>
+    </combo>
+    <combo>
+        <card_id>999000</card_id>
+        <cards card1="10004" card2="10015"/>
+    </combo>
+    <combo>
+        <card_id>999000</card_id>
+        <cards card1="10004" card2="50013"/>
+    </combo>
+    <combo>
+        <card_id>999000</card_id>
+        <cards card1="10004" card2="60002"/>
+    </combo>
+    <combo>
+        <card_id>999000</card_id>
+        <cards card1="10004" card2="10031"/>
+    </combo>
+
+    <unit>
+        <id>999000</id>
+        <name>Whales</name>
+        <desc>Box full of precombos? Om! nom! nom!</desc>
+        <picture>whale2</picture>
+        <rarity>1</rarity>
+        <set>1001</set>
+        <type>6</type>
+        <attack_multiplier>2</attack_multiplier>
+        <health_multiplier>2</health_multiplier>
+        <skill id="poison" p="15" v="17"/>
+        <skill id="weakenall" p="25" v="10"/>
+        <skill id="leech" p="35" v="20"/>
+    </unit>
+</root>

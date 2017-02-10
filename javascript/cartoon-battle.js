@@ -62,7 +62,7 @@ define(['cartoon-battle/config', 'cartoon-battle/CardCollection'], function (con
     function getFile(file, cb) {
         var xhr = new XMLHttpRequest;
 
-        xhr.open("GET", config.data_url + file);
+        xhr.open("GET", /\//.test(file) ? file : config.data_url + file);
         xhr.onload = function () {
             cb(sessionStorage[file] = xhr.responseText);
         };
