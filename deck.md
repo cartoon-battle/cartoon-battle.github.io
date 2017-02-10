@@ -57,6 +57,10 @@ There also some great Rare character cards (try to quad-fuse them):
  * [Quagmire](/recipes?quagmire)
  * [Gene](/recipes?gene)
 
+## What are the best farmable epics?
+
+Check out the [Nickplosion’s Analysis](https://www.reddit.com/r/AnimationThrowdown/comments/5t7wcb/nickplosions_tierlist_analysis_for_farmable_cards/) on that topic published by /u/ballpitpredator
+
 ## Should I fuse these cards?
 
 This depends on the state of your deck. When you still have a lot of rares in in, and the deck is far from it’s final form — **don’t fuse, unless you have a good enough card to replace it**.
