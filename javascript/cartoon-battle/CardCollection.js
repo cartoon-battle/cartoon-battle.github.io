@@ -7,7 +7,12 @@ define(['./util', './Rarity', './Level', './Card'], function define__cardcollect
 
     function identity(x) { return !!x; }
 
-    function categorize_card(card) {
+    /**
+     * @param {CardCollection} cardList
+     * @param card
+     * @returns {{standard: boolean, deck: boolean, combo: boolean, farmable: string}}
+     */
+    function categorize_card(cardList, card) {
         var standard = card.set < 5000;
         var deck = standard && !card.commander && !card.is_combo && !card.is_defense && !card.hidden;
         var combo = 1 === card.levels.length && !!card.attack_multiplier;
@@ -16,6 +21,8 @@ define(['./util', './Rarity', './Level', './Card'], function define__cardcollect
             "standard": standard,
             "deck": deck,
             "combo": combo,
+            "f2p": 1 === card.set,
+            "item": cardList.isItem(card),
             "precombo": !!card.combo_card_id,
             "hidden": card.hidden,
             "card": card
@@ -214,7 +221,7 @@ define(['./util', './Rarity', './Level', './Card'], function define__cardcollect
 
     CardCollection.prototype.getCards = function cardcollection__getCards(include) {
         include = include || this.defaultInclude;
-        return this.items.map(categorize_card)
+        return this.items.map(categorize_card.bind(null, this))
             .filter(function (item) {
                 return include.reduce(function (result, key) {
                     var exclude = "-" === key[0];
@@ -235,6 +242,10 @@ define(['./util', './Rarity', './Level', './Card'], function define__cardcollect
         return this.COMBO_ROLE_PRECOMBO === this.getComboRole(card);
     };
 
+    CardCollection.prototype.isItem = function cardcollection__isItem(card) {
+        return this.COMBO_ROLE_ITEM === this.getComboRole(card);
+    };
+
     CardCollection.prototype.find = function cardcollection__find(options) {
         if ("string" === typeof options) {
             options = { "name": options }
@@ -245,7 +256,7 @@ define(['./util', './Rarity', './Level', './Card'], function define__cardcollect
 
         return this.items.filter(function (card) {
             return name === card.slug;
-        }).map(categorize_card).sort(function (alpha, bravo) {
+        }).map(categorize_card.bind(null, this)).sort(function (alpha, bravo) {
             return include.reduce(function (result, key) {
                 var dir = "-" === key[0] ? -1 : 1;
                 key = key.replace(/^[+-]/, '');
@@ -255,11 +266,15 @@ define(['./util', './Rarity', './Level', './Card'], function define__cardcollect
         }).map(flatten_card_category)[0];
     };
 
-    CardCollection.prototype.get = function cardcollection_(id) {
+    CardCollection.prototype.get = function cardcollection_(id, optional) {
         for (var i = 0, card; card = this.items[i]; i++) {
             if (id === card.id) {
                 return card;
             }
+        }
+
+        if (optional) {
+            return null;
         }
 
         throw new CardNotFound;

@@ -1,0 +1,115 @@
+---
+title: Compare cards
+weight: 9
+---
+<style type="text/css">
+	cb-card { font-size: 30%; cursor: pointer; }
+	tbody, thead { display: block }
+	tbody { max-height: 460px; overflow: auto }
+	#results { overflow: auto; }
+</style>
+<div class="panel panel-default">
+	<div class="panel-heading">
+		Compare item cards that make similar combos
+	</div>
+	<div class="panel-body">
+
+	<form onsubmit="return false;" name="compare">
+		<fieldset class="form-group form-inline">
+			<div class="input-group">
+				<input class="form-control" autofocus placeholder="Please wait for cards to load..." data-cards="item">
+
+				<span class="input-group-btn">
+					<button class="btn btn-default" type="submit" disabled>
+						<span class="glyphicon glyphicon-search"></span> Compare
+					</button>
+				</span>
+			</div>
+
+			<span id="select-level"></span>
+		</fieldset>
+		<fieldset id="filters"></fieldset>
+		<fieldset id="results"></fieldset>
+
+		<script>require([
+			'cartoon-battle',
+			'react-dom',
+			'cartoon-battle/util',
+			'views/CommonLevelSelect',
+			'views/RaritiesFilter',
+			'cartoon-battle/Comparison'
+		], function (getCards, ReactDOM, util, LevelSelect, RaritiesFilter, getComparison) {
+			getCards(function (cards) {
+				var input = document.forms.compare.querySelector('[data-cards]');
+				var card = cards.find(window.location.search.replace('?', ''));
+
+				var results = document.getElementById('results');
+
+				var state = {
+					"level": "^*",
+					"rarities": [],
+					"farmable": true,
+					"card": card
+				};
+
+				function setState(partialState) {
+					state = Object.assign({}, state, partialState || {});
+
+					while (results.firstChild) {
+						results.removeChild(results.firstChild);
+					}
+
+					if (!state.card) {
+						return;
+					}
+
+					input.value = state.card.name;
+
+					var comparison = getComparison(cards, state);
+
+					results.appendChild(util.createTable(comparison.matrix, comparison.items));
+
+					setTitle(state.card.name);
+					"function" === typeof ga && ga("send", "event", "comparison", "search", state.card.name);
+
+					if ('history' in window && location.search.substr(1) !== state.card.slug) {
+						window.history.pushState({}, '', '?' + state.card.slug);
+					}
+
+				}
+
+				window.onpopstate = function () {
+					var card = cards.find(window.location.search.replace('?', ''));
+
+					if (card) {
+						setState({"card": card});
+					}
+				};
+
+				setState();
+
+				ReactDOM.render(LevelSelect({
+					"onChange": function (value) {
+						setState({"level": value});
+					}
+				}), document.getElementById('select-level'));
+
+				ReactDOM.render(RaritiesFilter({
+					"onChange": function (value) {
+						setState({ "rarities": value });
+					}
+				}), document.getElementById('filters'));
+
+				input.addEventListener('card', function (event) {
+					event.preventDefault();
+
+					setState({ "card": event.detail });
+
+					return false;
+				});
+			});
+
+		});</script>
+	</form>
+</div>
+</div>
