@@ -80,8 +80,10 @@
                     return hasSkill || !!~skillTypes.indexOf(skill);
                 }, false);
 
-                var hasRarity = 0 === rarities.length || [character, item].reduce(function (hasRarity, card) {
-                    return hasRarity && !!~rarities.indexOf(card.getRarity().name)
+                var hasRarity = 0 === rarities.length || [character, item].filter(function (card) {
+                    return card.name !== selectedCard.name;
+                }).reduce(function (hasRarity, card) {
+                    return hasRarity && !!~rarities.indexOf(card.getRarity().name);
                 }, true);
 
                 return hasSkill && hasRarity;
