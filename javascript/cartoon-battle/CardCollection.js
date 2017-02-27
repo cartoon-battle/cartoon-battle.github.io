@@ -13,7 +13,7 @@ define(['./util', './Rarity', './Level', './Card'], function define__cardcollect
      * @returns {{standard: boolean, deck: boolean, combo: boolean, farmable: string}}
      */
     function categorize_card(cardList, card) {
-        var standard = card.set < 5000;
+        var standard = card.set < 5000 || 7000 === card.set;
         var deck = standard && !card.commander && !card.is_combo && !card.is_defense && !card.hidden;
         var combo = 1 === card.levels.length && !!card.attack_multiplier;
 
@@ -83,6 +83,8 @@ define(['./util', './Rarity', './Level', './Card'], function define__cardcollect
         result.attack = combo_value(item.attack, character.attack, result.attack_multiplier);
 
         result.power = 1.1 * (3 * character.attack + 3 * item.attack + character.health + item.health);
+
+        result.is_combo = true;
 
         result.skills = Object.keys(result.skills).reduce(function (skills, key) {
             skills[key] = {
@@ -158,16 +160,19 @@ define(['./util', './Rarity', './Level', './Card'], function define__cardcollect
             return (unit.querySelector(name) || {}).textContent;
         }
 
+        var rarity = parseInt(v('rarity'));
+        var name = (5 === rarity ? "Mythic " : "") + v('name');
+
         return addLevels(addSkills({
             id: parseInt(v('id')),
-            name: v('name'),
-            slug: util.slugify(v('name')),
+            name: name,
+            slug: util.slugify(name),
             desc: v('desc'),
             picture: normalizePicture(v('picture'), v('type')),
             commander: !!v('commander'),
             is_combo: !!parseFloat(v("attack_multiplier")),
             is_defense: !!v('defense_card_id'),
-            rarity: parseInt(v('rarity')),
+            rarity: rarity,
             trait: v('trait'),
             set: parseInt(v('set')),
             type: parseInt(v('type')),
@@ -293,6 +298,7 @@ define(['./util', './Rarity', './Level', './Card'], function define__cardcollect
             level: card.level,
             trait: card.trait,
             fuse: card.fuse,
+            is_combo: card.is_combo,
             skills: Object.keys(card.skills).map(function (skill) {
                 return {
                     type: skill,

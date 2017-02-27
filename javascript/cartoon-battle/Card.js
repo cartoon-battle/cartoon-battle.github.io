@@ -31,6 +31,7 @@ define(['./config', './util', './Rarity'], function (config, util, Rarity) {
         this.setLevel(value.level);
         this.setFuse(value.fuse);
         this.setTrait(value.trait);
+        this.setCombo(value.is_combo);
 
         this.setSkills(value.skills);
 
@@ -76,6 +77,19 @@ define(['./config', './util', './Rarity'], function (config, util, Rarity) {
 
         this.node.setAttribute('rarity', this.rarity.name);
     };
+
+    Card.prototype.setCombo = function card__setCombo(combo) {
+        this.combo = !!combo;
+
+        if (this.combo) {
+            this.node.setAttribute('level', "combo");
+            this.node.removeAttribute('fuse');
+        } else {
+            this.setLevel(this.level);
+            this.setFuse(this.fuse);
+        }
+    };
+
 
     Card.prototype.getRarity = function card__getRarity() {
         return this.rarity;

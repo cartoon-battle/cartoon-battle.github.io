@@ -55,6 +55,11 @@ cb-card[rarity="common"] cb-frame cb-level {
     bottom: 0;
     padding-top: .23em;
 }
+
+cb-card[level="combo"] cb-level {
+    display: none;
+}
+
 cb-card cb-trait {
     width: 0;
 }
@@ -126,8 +131,8 @@ cb-card cb-skills {
     margin: 0;
 }
 
-{% for max_level in (3..6) %}
-    {% capture rarity %}{% cycle "common", "rare", "epic", "legendary" %}{% endcapture %}
+{% for max_level in (3..7) %}
+    {% capture rarity %}{% cycle "common", "rare", "epic", "legendary", "mythic" %}{% endcapture %}
 
     {% for fused in (1..3) %}
         {% for skills in (0..3) %}
@@ -138,6 +143,16 @@ cb-card[rarity="{{ rarity }}"][fused="{{ fused }}"]{% if skills > 0 %}[skills="{
     background-image: url({{ site.images_cdn }}deck/frames/{{ rarity }}{{ fused }}trait{% if skills > 0 %}{{ skills }}{% endif %}.png); 
 }{% endfor %}
     {% endfor %}
+
+    {% capture combo_rarity %}{% cycle "common", "rare", "epic", "legendary", "legendary" %}{% endcapture %}
+    {% for skills in (0..3) %}
+    cb-card[rarity="{{ rarity }}"][level="combo"]{% if skills > 0 %}[skills="{{ skills }}"]{% endif %} cb-frame {
+    background-image: url({{ site.images_cdn }}deck/frames/{{ combo_rarity }}1combonotrait{% if skills > 0 %}{{ skills }}{% endif %}.png);
+    }
+    cb-card[rarity="{{ rarity }}"][level="combo"]{% if skills > 0 %}[skills="{{ skills }}"]{% endif %}[trait] cb-frame:before {
+    background-image: url({{ site.images_cdn }}deck/frames/{{ combo_rarity }}1combotrait{% if skills > 0 %}{{ skills }}{% endif %}.png);
+    }{% endfor %}
+
 
     {% for level in (1..max_level) %}
 cb-card[rarity="{{ rarity }}"][level="{{ level }}"] cb-level {
