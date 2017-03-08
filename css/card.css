@@ -23,7 +23,7 @@ cb-card {
     position: relative;
 }
 
-cb-card cb-frame, cb-card cb-frame:before, cb-card cb-frame cb-level, cb-card cb-frame cb-trait {
+cb-card cb-frame, cb-card cb-frame:before, cb-card cb-frame cb-level {
     position: absolute;
     background-size: 100% 100%;
     z-index: 2;
@@ -62,9 +62,16 @@ cb-card[level="combo"] cb-level {
 
 cb-card cb-trait {
     width: 0;
+    position: absolute;
+    right: 1em;
+    top: 9em;
+    height: 7em;
+    background-size: 100% 100%;
+    z-index: 2;
 }
+
 cb-card[trait]:hover cb-trait {
-    width: auto;
+    width: 7em;
 }
 
 cb-card cb-name {
@@ -163,4 +170,4 @@ cb-card[rarity="{{ rarity }}"][level="{{ level }}"] cb-level {
 cb-card cb-skills cb-value[type="{{ name[0] }}"] { background-image: url({{ site.images_cdn }}deck/skills/skill_{{ name[0] }}.png); }{% endfor %}
 
 {% for name in site.data.values.traits %}
-cb-card[trait="{{ name }}"] cb-trait { background-image: url({{ site.images_cdn }}deck/traits/trait_{{ name }}.png); }{% endfor %}
+cb-card[trait="{{ name }}"] cb-trait { background-image: url({{ site.images_cdn }}deck/traits/icon_large_{{ name }}.png); }{% endfor %}
