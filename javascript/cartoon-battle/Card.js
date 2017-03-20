@@ -115,7 +115,19 @@ define(['./config', './util', './Rarity'], function (config, util, Rarity) {
 
         this.image = image;
 
-        this.node.querySelector("img").src = config.images_cdn + "deck/cards/" + this.image + ".png";
+        this.node.querySelector("img").onload = function () {
+            var cardHeight = this.parentNode.clientHeight;
+            var imageHeight = this.clientHeight;
+
+            if (imageHeight / cardHeight < 0.9) {
+                this.style.marginTop = ((cardHeight - imageHeight)/2) + "px";
+            }
+        };
+
+        this.node.querySelector("img").src = /^http/.test(this.image)
+            ? this.image
+            : config.images_cdn + "deck/cards/" + this.image + ".png";
+
     };
 
     Card.prototype.setAttack = function card__setAttack(attack) {

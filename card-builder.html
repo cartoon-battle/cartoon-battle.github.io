@@ -33,6 +33,7 @@ weight: 10
                 <option>rare
                 <option>epic
                 <option selected>legendary
+                <option>mythic
             </select>
         </div>
         </div>
@@ -55,6 +56,7 @@ weight: 10
                 <option>4
                 <option>5
                 <option selected>6
+                <option>7
             </select>
         </div>
         </div>
@@ -123,7 +125,7 @@ weight: 10
     var skills = [].slice.apply(form.querySelectorAll('[name="skill"]'));
     ///////////////////////////////////
 
-    form.onsubmit = function update() {
+    function update() {
         card.setName(form.card_name.value);
         card.setRarity(form.rarity.value);
         card.setLevel(form.level.value);
@@ -142,7 +144,41 @@ weight: 10
             return s.type && s.value
         }));
 
+        if ('history' in window) {
+            var state = [].map.call(form.querySelectorAll('select, input'), function (element) {
+                return (element.id) + '=' + encodeURIComponent(element.value);
+            }).join("&");
+
+            if (state && state !== window.location.search.substr(1)) {
+                console.log('pushstate', state);
+                window.history.pushState(null, "", "?" + state);
+            }
+        }
+
         return false;
+    }
+
+    form.onsubmit = update;
+
+    window.onpopstate = function () {
+        var hasChanged = false;
+        window.location.search.substr(1).split("&").forEach(function (pair) {
+            var id = pair.split('=')[0];
+            var value = pair.split('=')[1];
+
+            if (form[id] && form[id].value !== decodeURIComponent(value)) {
+                hasChanged = true;
+                form[id].value = decodeURIComponent(value);
+            }
+        });
+
+        if (hasChanged) {
+            update();
+        }
+
     };
+
+    window.onpopstate();
+
 });
 </script>
