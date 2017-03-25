@@ -1,0 +1,84 @@
+---
+title: Create card list
+weight: 9
+---
+<style type="text/css">
+	cb-card { font-size: 30%;  }
+</style>
+<div class="panel panel-default">
+	<div class="panel-heading">
+		Pass a google spreadsheet URL here to create a list of cards
+		<a class="pull-right" href="?url=https%3A%2F%2Fdocs.google.com%2Fspreadsheets%2Fd%2F1rL710rZputqQtJaHf4toeBASfbU2Rvj3Yw-xBOk3Ijo%2Fpubhtml">(example)</a>
+	</div>
+	<div class="panel-body">
+
+		<form method=get action="">
+			<div class="form-group">
+				<label class="form-label" for="url">
+					Make sure your spreadsheet is publicly available (using File &gt; Publish to the web…)
+				</label>
+				<input class="form-control" autofocus placeholder="https://drive.google.com/spreadsheet/d/…/pubhtml"
+					   pattern="^https://docs.google.com/spreadsheets/d/.+/pubhtml$"
+					   name="url" type="url" id="url">
+			</div>
+
+			<button type="submit" class="btn btn-primary">Create list</button>
+		</form>
+	</div>
+
+	<table class="table" id="result"></table>
+
+	<script>require(['cartoon-battle', 'cartoon-battle/util'], function (getCards, util) {
+		var re = /https:\/\/docs\.google\.com\/spreadsheets\/d\/(.+)\/pubhtml$/;
+		getCards(function (cards) {
+			decodeURIComponent(window.location.search + "").replace(re, function (_, id) {
+				document.getElementById('url').value = 'https://docs.google.com/spreadsheets/d/' + id + '/pubhtml';
+
+				var script = document.body.appendChild(document.createElement('script'));
+				script.onerror = function (e) {
+					showMessage("Failed to load spreadsheet", "warning");
+				};
+				script.src = "https://spreadsheet.google.com/tq?key=" + id;
+			});
+
+			var result = document.getElementById('result');
+
+			function hydrateCard(name) {
+				var items = name.split(/\s*\+\s*/).map(function (s) {
+					return s.match(util.card_with_level_re).slice(1, 3);
+				}).map(function (item) {
+					var card = item.shift();
+					var level = item.shift() || "1";
+
+					return cards.forLevel(cards.find(card), level);
+				});
+
+				var card = 1 === items.length ? items.pop() : cards.forLevel(cards.getCombo.apply(cards, items).result);
+
+				return card.node;
+			}
+
+			window.google = {
+				visualization: {
+					Query: {
+						setResponse: function (spreadsheet) {
+							spreadsheet.table.rows.shift().c.reduce(function (row, column) {
+								return row.appendChild(document.createElement('th'))
+									.appendChild(document.createTextNode(column.v))
+									.parentNode.parentNode;
+							}, result.appendChild(document.createElement('thead')).appendChild(document.createElement('tr')))
+
+							spreadsheet.table.rows.reduce(function (tbody, row) {
+								return row.c.reduce(function (tr, item) {
+									return tr.appendChild(document.createElement('td')).appendChild(
+										1 === tr.childNodes.length ? hydrateCard(item.v) : document.createTextNode(item.v)
+									).parentNode.parentNode;
+								}, tbody.appendChild(document.createElement('tr'))).parentNode;
+							}, result.appendChild(document.createElement('tbody')));
+						}
+					}
+				}
+			}
+		});
+	})</script>
+</div>
