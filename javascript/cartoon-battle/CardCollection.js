@@ -114,6 +114,12 @@ define(['./util', './Rarity', './Level', './Card'], function define__cardcollect
         }
     }
 
+    function releaseDate(combo) {
+        var startTime = combo.querySelector('start_time') || {"textContent":0};
+
+        return (new Date) / 1000 > startTime.textContent;
+    }
+
     function addLevels(unit, upgrades) {
         unit.levels = [{
             "health": unit.health,
@@ -197,7 +203,11 @@ define(['./util', './Rarity', './Level', './Card'], function define__cardcollect
         }, []);
 
         this.combos = listResponseXML.reduce(function (collection, xml) {
-            return collection.concat([].slice.apply(xml.querySelectorAll('combo')).map(parseCombo));
+            return collection.concat(
+                [].slice.apply(xml.querySelectorAll('combo'))
+                    .filter(releaseDate)
+                    .map(parseCombo)
+            );
         }, []);
 
         this.farmable = listResponseXML.reduce(function (farmable, xml) {
