@@ -101,6 +101,15 @@ setInterval(function () {
             result.appendChild(cards.forLevel(card, parseInt(deck[unit_index].level)).node);
         });
 
+        result.appendChild(document.createElement('p'))
+            .appendChild(document.createElement('a'))
+            .appendChild(document.createTextNode('Full deck'))
+            .parentNode.href = '/share-your-deck?' + Object.keys(deck).reduce(function (shareYourDeck, unit_index) {
+                var card = cards.get(parseInt(deck[unit_index].unit_id));
+
+                return shareYourDeck.concat(card.slug + "=" + deck[unit_index].level);
+            }, []).join('&');
+
     };
     xhr.send();
 
