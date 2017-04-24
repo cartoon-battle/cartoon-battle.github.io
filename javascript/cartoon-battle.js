@@ -1,4 +1,4 @@
-define(['cartoon-battle/config', 'cartoon-battle/CardCollection'], function (config, CardCollection) {
+/* global define */ /* global FuzzySet */ define(['cartoon-battle/config', 'cartoon-battle/CardCollection'], function (config, CardCollection) {
 
     var cards;
 
@@ -49,13 +49,33 @@ define(['cartoon-battle/config', 'cartoon-battle/CardCollection'], function (con
                 if (button) {
                     button.removeAttribute('disabled');
 
-                    button.form.onsubmit = button.onclick = function () {
-                        var event = new CustomEvent('card'), card = input.find(input.value);
+                    function cardFoundCallback(card) {
+                        var event = new CustomEvent('card');
 
                         event.initCustomEvent(event.type, true, true, card);
                         input.dispatchEvent(event);
 
-                        return !event.defaultPrevented && false;
+                        return false;
+                    }
+
+                    button.form.onsubmit = button.onclick = function () {
+                        var card = input.find(input.value);
+
+                        if (card) {
+                            return cardFoundCallback(card);
+                        }
+
+                        require(['fuzzyset'], function (/* FuzzySet */) {
+                            var result = FuzzySet(filteredCards.map(function (card) {
+                                return card.name;
+                            })).get(input.value).shift();
+
+                            console.log('Fuzzy result', result);
+
+                            return cardFoundCallback((result[0] > 0.5) ? input.find(input.value = result[1]) : null);
+                        });
+
+                        return false;
                     };
                 }
 
