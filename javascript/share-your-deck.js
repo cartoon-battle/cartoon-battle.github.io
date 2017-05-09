@@ -9,6 +9,7 @@ define(['cartoon-battle', 'cartoon-battle/util', 'cartoon-battle/Analysis'], fun
     var cardSelector = form.card;
     var level = form.level;
     var availableCombos = document.getElementById('available-combos');
+    var suggestedCards = document.getElementById('suggested-cards');
     var overview = document.getElementById('overview');
 
     document.getElementById('save-your-deck').onclick = function () {
@@ -110,6 +111,25 @@ define(['cartoon-battle', 'cartoon-battle/util', 'cartoon-battle/Analysis'], fun
 
         availableCombos.previousSibling.style.display = availableCombos.style.display = availableCombos.firstChild ? '' : 'none';
         availableCombos.lastChild && availableCombos.removeChild(availableCombos.lastChild);
+
+        while(suggestedCards.firstChild) suggestedCards.removeChild(suggestedCards.firstChild);
+        ['Francine', 'Planet Express Ship'].map(function (name) {
+            return cardList.find(name);
+        }).filter(function(card) {
+            return !!card;
+        }).forEach(function (card) {
+            suggestedCards.appendChild((function(div) {
+                div.className = 'item';
+                div.title = 'Add this card to your deck';
+                return div;
+            })(document.createElement('div'))).appendChild(
+                cardList.forLevel(card, 10).node
+            ).onclick = function () {
+                add(card, 10, true);
+            }
+        });
+
+        suggestedCards.previousSibling.style.display = suggestedCards.style.display = suggestedCards.firstChild ? '' : 'none';
 
         share.value = window.location.href.replace(/\?.*|$/, data ? ("?" + data) : '');
         if ('history' in window && location.href !== share.value) {

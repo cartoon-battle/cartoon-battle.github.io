@@ -4,22 +4,25 @@ weight: 8
 ---
 
 <style>
-    #deck {
+    .deck {
         overflow-x: auto;
         white-space: nowrap;
     }
-    #deck .item {
+    .deck .item {
         display: inline-block;
         float: none;
         width: 24%;
     }
-    #deck .edit cb-card {
+    #suggested-cards cb-card {
+        cursor: pointer;
+    }
+    .deck .edit cb-card {
         opacity: 0.5;
     }
     .jumbotron {
         text-align: center;
     }
-    #deck .item cb-card {
+    .deck .item cb-card {
         font-size: 0.25em;
     }
     #available-combos {
@@ -60,7 +63,7 @@ weight: 8
     </div>
 
     <div id="result" style="display:none">
-        <div class="panel-body" id="deck" style="">
+        <div class="panel-body deck" id="deck">
         </div>
         <div class="panel-footer">
             <div class="input-group">
@@ -91,6 +94,10 @@ weight: 8
 
     <div class="panel-warning" style="display: none;" id="problems">
         <div class="panel-heading">Those cards can combo with less than 75% of your deck (excluding precombo), try working on it</div>
+    </div>
+
+    <div class="panel-heading" style="display: none;">Those cards can improve your deck:
+    </div><div class="panel-body deck" id="suggested-cards">
     </div>
 
     <div class="panel-heading">
