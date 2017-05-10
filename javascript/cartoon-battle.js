@@ -70,8 +70,6 @@
                                 return card.name;
                             })).get(input.value).shift();
 
-                            console.log('Fuzzy result', result);
-
                             return cardFoundCallback((result[0] > 0.5) ? input.find(input.value = result[1]) : null);
                         });
 

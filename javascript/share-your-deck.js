@@ -129,7 +129,7 @@ define(['cartoon-battle', 'cartoon-battle/util', 'cartoon-battle/Analysis'], fun
             }
         });
 
-        suggestedCards.previousSibling.style.display = suggestedCards.style.display = suggestedCards.firstChild ? '' : 'none';
+        suggestedCards.previousSibling.style.display = suggestedCards.style.display = (suggestedCards.firstChild && analysis.isDeck() ? '' : 'none');
 
         share.value = window.location.href.replace(/\?.*|$/, data ? ("?" + data) : '');
         if ('history' in window && location.href !== share.value) {
