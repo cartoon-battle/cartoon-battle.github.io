@@ -116,7 +116,7 @@ define(['cartoon-battle', 'cartoon-battle/util', 'cartoon-battle/Analysis'], fun
         ['Francine', 'Planet Express Ship'].map(function (name) {
             return cardList.find(name);
         }).filter(function(card) {
-            return !!card;
+            return !!card && !~cards.map(function (card) { return card.id }).indexOf(card.id);
         }).forEach(function (card) {
             suggestedCards.appendChild((function(div) {
                 div.className = 'item';
