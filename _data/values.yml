@@ -40,6 +40,9 @@ skills:
     inspire: Motivate
     shrapnel: Bomb
     berserk: Crazed
+    hijack: Hijack
+    bodyguard: Bodyguard
+    give: Give
 
 traits: [addicted, armed, artistic, athletic, disguised, drunk, educated, fighter, hyper, rich, musical]
 
