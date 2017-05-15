@@ -1,0 +1,14 @@
+---
+---
+<style type="text/css">
+    .name {
+        font: 2em "Cartoon Battle";
+    }
+</style>
+<div id="rumble-standings"></div>
+<script type="text/javascript">
+	require(['views/RumbleStandings', 'react-dom'], function (RumbleStandings, ReactDOM) {
+	    ReactDOM.render(RumbleStandings(), document.getElementById('rumble-standings'));
+	});
+</script>
+
