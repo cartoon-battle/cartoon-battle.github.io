@@ -96,7 +96,9 @@
         render: function () {
             return (
                 $('div', {"className": "panel panel-primary"},
-                    $('div', {"className": "panel-heading"}, this.props.title),
+                    $('div', {"className": "panel-heading"}, this.props.title, $('span', {"className": "pull-right"}, $(
+                        'a', {"href": "#form", "className": "btn btn-default btn-xs"}, "(add/update your guild)"
+                    ))),
                     $(RumbleDescription, {"rumble": this.state.rumble}),
                     $('table', {"className":"table table-striped"}, this.state.rumble && [$(RumbleStandingsHeading, {key: "heading"})]
                             .concat($('thead', {"key": "body"}, this.state.rumble.standings.map(function (position) {
