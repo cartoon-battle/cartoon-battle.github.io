@@ -38,7 +38,7 @@
             "place": React.PropTypes.number.isRequired,
             "guild": React.PropTypes.shape({
                 "name": React.PropTypes.string.isRequired,
-                "message": React.PropTypes.string.isRequired,
+                "message": React.PropTypes.string,
                 "recruiting": React.PropTypes.bool.isRequired,
                 "url": React.PropTypes.string
             }).isRequired
