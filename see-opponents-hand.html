@@ -85,9 +85,10 @@ setInterval(function () {
 
         result.innerHTML = '<h2>Playing against: ' + data.active_battle_data.enemy_name + '</h2>';
 
-        var deck = data.active_battle_data.state_data.attacker_deck.units;
+        var side = false === data.active_battle_data.host_is_attacker ? 'attacker' : 'defender';
+        var deck = data.active_battle_data.state_data[side + '_deck'].units;
 
-        Object.keys(data.active_battle_data.state_data.attacker_state.hand).forEach(function (unit_index) {
+        Object.keys(data.active_battle_data.state_data[side + '_state'].hand).forEach(function (unit_index) {
             if (!deck[unit_index]) return;
 
             var card_id = parseInt(deck[unit_index].unit_id);
@@ -99,6 +100,23 @@ setInterval(function () {
             if (!card) return;
 
             result.appendChild(cards.forLevel(card, parseInt(deck[unit_index].level)).node);
+        });
+
+        result.appendChild(document.createElement('hr')).style.clear = 'both';
+
+        Object.keys(deck).slice(Object.keys(data.active_battle_data.state_data[side + '_state'].drawn).length).forEach(function (index) {
+            if (!deck[index]) return;
+
+            var card_id = parseInt(deck[index].unit_id);
+
+            if (!card_id) return;
+
+            var card = cards.get(card_id, true);
+
+            if (!card) return;
+
+            result.appendChild(cards.forLevel(card, parseInt(deck[index].level)).node);
+
         });
 
         result.appendChild(document.createElement('p'))
