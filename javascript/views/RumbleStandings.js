@@ -55,12 +55,27 @@
     });
 
     var RumbleStandingsHeading = React.createClass({
+        propTypes: {
+            "onRecruitingChange": React.PropTypes.func.isRequired,
+            "filter-recruiting": React.PropTypes.bool
+        },
+
+        getDefaultProps: function () {
+            return {
+                "filter-recruiting": false
+            };
+        },
+
         render: function () {
             return $("thead", {},
                 $('tr', {},
                     $('th', {}, '#'),
                     $('th', {}, 'Guild Name'),
-                    $('th', {}, 'Recruiting?'),
+                    $('th', {"style": {"whiteSpace": "nowrap"}}, $('label', {}, $('input', {
+                        "type": "checkbox",
+                        "checked": this.props['filter-recruiting'],
+                        "onClick": this.props.onRecruitingChange
+                    }), ' Recruiting?')),
                     $('th', {}, 'Message')
                 )
             )
@@ -79,7 +94,7 @@
         },
 
         getInitialState: function () {
-            return {"rumble": null}
+            return {"rumble": null, "filterRecruiting": false}
         },
 
         componentDidMount: function() {
@@ -87,10 +102,51 @@
             xhr.open('GET', config.api_endpoint + '/rumble-standings.json');
 
             xhr.onload = function () {
-                callback({"rumble": JSON.parse(xhr.responseText)[0] });
+                callback({"rumble": JSON.parse(xhr.responseText)[0]});
             };
 
             xhr.send();
+        },
+
+        toggleRecruitingFilter: function () {
+            console.log("Hello!");
+            this.setState(function (state) {
+                return {
+                    "filterRecruiting": !state.filterRecruiting
+                };
+                // return {
+                //     "rumble": state.rumble,
+                //     "filterRecruiting": !state.filterRecruiting
+                // }
+            });
+        },
+
+        getRowsFilter: function() {
+            if (!this.state.filterRecruiting) {
+                return function () { return true; }
+            }
+
+            return function (item) {
+                return item.guild.recruiting;
+            }
+        },
+
+        standingsTable: function () {
+            if (!this.state.rumble) {
+                return null;
+            }
+
+            return [$(RumbleStandingsHeading, {
+                    "key": "heading",
+                    "onRecruitingChange": this.toggleRecruitingFilter,
+                    "filter-recruiting": this.state.filterRecruiting
+            })].concat($('thead', {"key": "body"}, this.state.rumble.standings.filter(this.getRowsFilter()).map(function (position) {
+                return $(RumbleStandingsRow, {
+                    "key": position.place,
+                    "place": position.place,
+                    "guild": position.guild
+                });
+            })));
         },
 
         render: function () {
@@ -100,14 +156,7 @@
                         'a', {"href": "#form", "className": "btn btn-default btn-xs"}, "(add/update your guild)"
                     ))),
                     $(RumbleDescription, {"rumble": this.state.rumble}),
-                    $('table', {"className":"table table-striped"}, this.state.rumble && [$(RumbleStandingsHeading, {key: "heading"})]
-                            .concat($('thead', {"key": "body"}, this.state.rumble.standings.map(function (position) {
-                            return $(RumbleStandingsRow, {
-                                "key": position.place,
-                                "place": position.place,
-                                "guild": position.guild
-                            });
-                        }))))
+                    $('table', {"className":"table table-striped"}, this.standingsTable())
                 )
             )
         }
