@@ -1,6 +1,13 @@
 /* global define */ define(['react', 'cartoon-battle/config'], function (React, config) {
     var $ = React.createElement;
 
+    function softBreak(string) {
+        return string && ("" + string)
+                .replace(/\&nbsp;/g, '\u00A0')
+                .replace(/([a-z])([A-Z])/g, '$1\u200B$2')
+                .replace(/([^\s-]{15})([^\s-]{5})/g, '$1\u200B$2');
+    }
+
     function formatDate(date) {
         date = new Date(date);
 
@@ -47,9 +54,13 @@
         render: function () {
             return $('tr', {},
                 $('td', {"className": "name"}, this.props.place),
-                $('td', {"className": "name"}, this.props.guild.url ? $('a', {href: this.props.guild.url}, this.props.guild.name) : this.props.guild.name),
-                $('td', {}, this.props.guild.recruiting && $('span', {"className": "label label-primary"}, 'Yes')),
-                $('td', {dangerouslySetInnerHTML: {__html: this.props.guild.message}})
+                $('td', {"className": "name"}, this.props.guild.url ? $(
+                    'a', {href: this.props.guild.url}, softBreak(this.props.guild.name)) : softBreak(this.props.guild.name)
+                ),
+                $('td', {},
+                    this.props.guild.recruiting && $('span', {"className": "label label-primary pull-right"}, 'recruiting!'),
+                    $('span', {dangerouslySetInnerHTML: {__html: this.props.guild.message}})
+                )
             )
         }
     });
@@ -71,12 +82,14 @@
                 $('tr', {},
                     $('th', {}, '#'),
                     $('th', {}, 'Guild Name'),
-                    $('th', {"style": {"whiteSpace": "nowrap"}}, $('label', {}, $('input', {
-                        "type": "checkbox",
-                        "checked": this.props['filter-recruiting'],
-                        "onClick": this.props.onRecruitingChange
-                    }), ' Recruiting?')),
-                    $('th', {}, 'Message')
+                    $('th', {},
+                        $('span', {"style": {"whiteSpace": "nowrap"}, "className": "pull-right"}, $('label', {}, $('input', {
+                            "type": "checkbox",
+                            "checked": this.props['filter-recruiting'],
+                            "onClick": this.props.onRecruitingChange
+                        }), ' Recruiting only?')),
+                        'Message'
+                    )
                 )
             )
         }
