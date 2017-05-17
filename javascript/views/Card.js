@@ -1,0 +1,57 @@
+/* global define */ define(['cartoon-battle', 'react'], function (getCards, React) {
+    var $ = React.createElement, PropTypes = React.PropTypes;
+
+    var Card = React.createClass({
+        "propTypes": {
+            "cards": PropTypes.arrayOf(PropTypes.shape({
+                "id": PropTypes.number.isRequired,
+                "level": PropTypes.oneOfType([PropTypes.number, PropTypes.string])
+            })).isRequired
+        },
+        "getInitialState": function () {
+            return {
+                card: null,
+                error: false
+            }
+        },
+        "componentDidMount": function () {
+            var search = this.props.cards, callback = this.setState.bind(this);
+
+            getCards(function (cards) {
+                try {
+                    var items = search.map(function (item) {
+                        return cards.forLevel(cards.get(item.id), item.level);
+                    });
+
+                    callback({
+                        "card": 1 === items.length ? items.pop() : cards.forLevel(cards.getCombo.apply(cards, items).result)
+                    });
+
+                } catch (E) {
+                    callback({
+                        "error": true
+                    })
+                }
+
+            });
+        },
+        render: function () {
+            if (!this.state.card) {
+                return $('span', {}, this.state.error ? "Error loading card" : "Loading card");
+            }
+
+            return $('span', {dangerouslySetInnerHTML: {__html: this.state.card.node.outerHTML}});
+        }
+    });
+
+    return function (cards) {
+        return $(Card, {
+            "cards": cards.map(function (card) {
+                return ("id" in card && "level" in card) ? card : {
+                    "id": card.getId(),
+                    "level": card.getLevelString()
+                }
+            })
+        });
+    }
+});
