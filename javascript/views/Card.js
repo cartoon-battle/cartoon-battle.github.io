@@ -53,10 +53,10 @@
     return function (cards, props) {
         return $(Card, Object.assign({}, props || {}, {
             "cards": cards.map(function (card) {
-                return ["id", "level"] === Object.keys(card) ? card : {
+                return "getLevelString" in card ? {
                     "id": card.getId(),
                     "level": card.getLevelString()
-                }
+                } : card;
             })
         }));
     }
