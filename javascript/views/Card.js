@@ -24,7 +24,8 @@
                     });
 
                     callback({
-                        "card": 1 === items.length ? items.pop() : cards.forLevel(cards.getCombo.apply(cards, items).result)
+                        "card": 1 === items.length ? items.pop() : cards.forLevel(cards.getCombo.apply(cards, items).result),
+                        "items": items
                     });
 
                 } catch (E) {
@@ -40,18 +41,23 @@
                 return $('span', {}, this.state.error ? "Error loading card" : "Loading card");
             }
 
-            return $('span', {dangerouslySetInnerHTML: {__html: this.state.card.node.outerHTML}});
+            return $('span', {
+                dangerouslySetInnerHTML: {__html: this.state.card.node.outerHTML},
+                'title': this.state.card.combo ? this.state.items.map(function (card) {
+                    return card.name + " " + card.getLevelString();
+                }).join(" + ") : ""
+            });
         }
     });
 
-    return function (cards) {
-        return $(Card, {
+    return function (cards, props) {
+        return $(Card, Object.assign({}, props || {}, {
             "cards": cards.map(function (card) {
-                return ("id" in card && "level" in card) ? card : {
+                return ["id", "level"] === Object.keys(card) ? card : {
                     "id": card.getId(),
                     "level": card.getLevelString()
                 }
             })
-        });
+        }));
     }
 });

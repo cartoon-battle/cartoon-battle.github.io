@@ -2,11 +2,11 @@
 
     return function (props) {
         return Filter(Object.assign({}, props, {
-            "items": config.rarities,
-            "imagePath": "icons/rarityicon_%s.png",
-            "width": 64,
-            "height": 48,
-            "label": "Show results for cards of selected rarity:"
+            "items": config.traits,
+            "imagePath": "deck/traits/icon_large_%s.png",
+            "width": 32,
+            "height": 32,
+            "label": "Show results for cards with selected trait:"
         }));
     };
 });
