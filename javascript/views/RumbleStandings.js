@@ -98,6 +98,7 @@
         displayName: 'RumbleStandingsRow',
         "propTypes": {
             "place": React.PropTypes.number.isRequired,
+            "change": React.PropTypes.number,
             "guild": React.PropTypes.shape({
                 "name": React.PropTypes.string.isRequired,
                 "message": React.PropTypes.string,
@@ -106,9 +107,25 @@
             }).isRequired
         },
 
+        renderPositionChange: function () {
+            if (!this.props.change) {
+                return null;
+            }
+
+            if (this.props.change > 0) {
+                return $('span', {"className": "label label-success"}, '+' + Math.abs(this.props.change));
+            }
+
+            return $('span', {"className": "label label-danger"}, '-' + Math.abs(this.props.change));
+        },
+
         render: function () {
             return $('tr', {},
-                $('td', {"className": "name"}, this.props.place),
+                $('td', {},
+                    $('span', {"className": "name"}, this.props.place),
+                    " ",
+                    this.renderPositionChange()
+                ),
                 $('td', {"className": "name"}, this.props.guild.url ? $(
                     'a', {href: this.props.guild.url}, softBreak(this.props.guild.name)) : softBreak(this.props.guild.name)
                 ),
@@ -211,6 +228,14 @@
                 return null;
             }
 
+            var previousRumble = this.state.rumbles[this.state.idx - 1];
+            function findGuildInPreviousRumble(guild, current) {
+                return previousRumble && previousRumble.standings.reduce(function (found, position) {
+                    return found || position.guild.name === guild.name && position.place - current || null;
+                }, null);
+            }
+
+
             return [$(RumbleStandingsHeading, {
                     "key": "heading",
                     "onRecruitingChange": this.toggleRecruitingFilter,
@@ -219,6 +244,7 @@
                 return $(RumbleStandingsRow, {
                     "key": position.place,
                     "place": position.place,
+                    "change": findGuildInPreviousRumble(position.guild, position.place),
                     "guild": position.guild
                 });
             })));
