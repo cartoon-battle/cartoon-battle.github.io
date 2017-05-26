@@ -1,6 +1,21 @@
 /* global define */ define(['react', 'cartoon-battle/config'], function (React, config) {
     var $ = React.createElement;
 
+    function findNextItem(array) {
+        var initial = {
+            isCurrent: false,
+            value: null
+        };
+
+        return array.reduce(function (context, item) {
+            return {
+                isCurrent: item.active,
+                value: context.isCurrent ? item.idx : context.value
+            };
+        }, initial).value;
+    }
+
+
     function softBreak(string) {
         return string && ("" + string)
                 .replace(/\&nbsp;/g, '\u00A0')
@@ -26,13 +41,52 @@
 
 
     var RumbleDescription = React.createClass({
+        displayName: 'RumbleDescription',
         propTypes: {
-            "rumble": React.PropTypes.object
+            "rumble": React.PropTypes.object,
+            "navigation": React.PropTypes.arrayOf(React.PropTypes.shape({
+                "idx": React.PropTypes.number,
+                "active": React.PropTypes.bool
+            })),
+            "changeRumble": React.PropTypes.func.isRequired
+        },
+
+        renderNavigation: function () {
+            if (!this.props.navigation) {
+                return null;
+            }
+
+            var callback = this.props.changeRumble;
+            var next = findNextItem(this.props.navigation), goToNext = function () {
+                null !== next && callback(next);
+            };
+
+            var prev = findNextItem(this.props.navigation.concat().reverse()), goToPrev = function () {
+                null !== prev && callback(prev);
+            };
+
+            return $('div', {"className": "btn-group pull-right"},
+                $('button', {"className": "btn btn-default", "disabled": null === prev, "onClick": goToPrev},
+                    $('i', {"className": "glyphicon glyphicon-arrow-left"}),
+                    " prev"
+                ),
+                $('button', {"className": "btn btn-default", "disabled": null === next, "onClick": goToNext},
+                    "next ",
+                    $('i', {"className": "glyphicon glyphicon-arrow-right"})
+                )
+            );
+        },
+
+        renderRumbleInformation: function () {
+            return $('div', {},
+                ['Rumble from', formatDate(this.props.rumble.start), "to", formatDate(this.props.rumble.end)].join(" "),
+                this.renderNavigation()
+            );
         },
 
         render: function () {
             return $('div', {"className": "panel-body"}, this.props.rumble
-                ? ['Rumble from', formatDate(this.props.rumble.start), "to", formatDate(this.props.rumble.end)].join(" ")
+                ? this.renderRumbleInformation()
                 : 'Please white while the data is loading…'
             );
         }
@@ -41,6 +95,7 @@
 
 
     var RumbleStandingsRow = React.createClass({
+        displayName: 'RumbleStandingsRow',
         "propTypes": {
             "place": React.PropTypes.number.isRequired,
             "guild": React.PropTypes.shape({
@@ -66,6 +121,7 @@
     });
 
     var RumbleStandingsHeading = React.createClass({
+        displayName: 'RumbleStandingsHeading',
         propTypes: {
             "onRecruitingChange": React.PropTypes.func.isRequired,
             "filter-recruiting": React.PropTypes.bool
@@ -96,6 +152,7 @@
     });
 
     var RumbleStandings = React.createClass({
+        displayName: 'RumbleStandings',
         propTypes: {
             "title": React.PropTypes.string
         },
@@ -107,7 +164,7 @@
         },
 
         getInitialState: function () {
-            return {"rumble": null, "filterRecruiting": false}
+            return {"rumbles": null, "filterRecruiting": false}
         },
 
         componentDidMount: function() {
@@ -115,22 +172,21 @@
             xhr.open('GET', config.api_endpoint + '/rumble-standings.json');
 
             xhr.onload = function () {
-                callback({"rumble": JSON.parse(xhr.responseText)[0]});
+                var rumbles = JSON.parse(xhr.responseText).filter(function (rumble) {
+                    return rumble.standings.length > 0;
+                });
+
+                callback({"rumbles": rumbles, "idx": rumbles.length - 1});
             };
 
             xhr.send();
         },
 
         toggleRecruitingFilter: function () {
-            console.log("Hello!");
             this.setState(function (state) {
                 return {
                     "filterRecruiting": !state.filterRecruiting
                 };
-                // return {
-                //     "rumble": state.rumble,
-                //     "filterRecruiting": !state.filterRecruiting
-                // }
             });
         },
 
@@ -144,8 +200,14 @@
             }
         },
 
+        getSelectedRumble: function () {
+            return this.state.rumbles && this.state.rumbles[this.state.idx];
+        },
+
         standingsTable: function () {
-            if (!this.state.rumble) {
+            var rumble = this.getSelectedRumble();
+
+            if (!rumble) {
                 return null;
             }
 
@@ -153,7 +215,7 @@
                     "key": "heading",
                     "onRecruitingChange": this.toggleRecruitingFilter,
                     "filter-recruiting": this.state.filterRecruiting
-            })].concat($('thead', {"key": "body"}, this.state.rumble.standings.filter(this.getRowsFilter()).map(function (position) {
+            })].concat($('thead', {"key": "body"}, rumble.standings.filter(this.getRowsFilter()).map(function (position) {
                 return $(RumbleStandingsRow, {
                     "key": position.place,
                     "place": position.place,
@@ -162,13 +224,36 @@
             })));
         },
 
+        createNavigation: function () {
+            if (!this.state.rumbles || 1 >= this.state.rumbles.length) {
+                return null;
+            }
+
+            var selected = this.state.idx;
+
+            return this.state.rumbles.map(function (rumble, idx) {
+                return {
+                    "idx": idx,
+                    "active": idx === selected
+                }
+            })
+        },
+
+        selectRumble: function (idx) {
+            this.setState({"idx": idx});
+        },
+
         render: function () {
             return (
                 $('div', {"className": "panel panel-primary"},
                     $('div', {"className": "panel-heading"}, this.props.title, $('span', {"className": "pull-right"}, $(
                         'a', {"href": "#form", "className": "btn btn-default btn-xs"}, "(add/update your guild)"
                     ))),
-                    $(RumbleDescription, {"rumble": this.state.rumble}),
+                    $(RumbleDescription, {
+                        "rumble": this.getSelectedRumble(),
+                        "navigation": this.createNavigation(),
+                        "changeRumble": this.selectRumble
+                    }),
                     $('table', {"className":"table table-striped"}, this.standingsTable())
                 )
             )
