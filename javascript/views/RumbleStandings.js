@@ -154,7 +154,7 @@
             return $("thead", {},
                 $('tr', {},
                     $('th', {}, '#'),
-                    $('th', {}, 'Guild Name'),
+                    $('th', {style: {"width": "33%"}}, 'Guild Name'),
                     $('th', {},
                         $('span', {"style": {"whiteSpace": "nowrap"}, "className": "pull-right"}, $('label', {}, $('input', {
                             "type": "checkbox",
