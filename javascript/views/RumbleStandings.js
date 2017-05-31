@@ -33,10 +33,12 @@
             "November", "December"
         ];
 
+        var daySuffix = {1: "st", 2: "nd", 3: "rd", 21: "st", 22: "nd", 23: "rd", 31: "st"};
+
         var day = date.getDate();
         var monthIndex = date.getMonth();
 
-        return day + ' ' + monthNames[monthIndex];
+        return monthNames[monthIndex] + ' ' + day + (daySuffix[day] || "th");
     }
 
 
