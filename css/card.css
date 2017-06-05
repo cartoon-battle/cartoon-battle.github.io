@@ -151,13 +151,12 @@ cb-card[rarity="{{ rarity }}"][fused="{{ fused }}"]{% if skills > 0 %}[skills="{
 }{% endfor %}
     {% endfor %}
 
-    {% capture combo_rarity %}{% cycle "common", "rare", "epic", "legendary", "legendary" %}{% endcapture %}
     {% for skills in (0..3) %}
     cb-card[rarity="{{ rarity }}"][level="combo"]{% if skills > 0 %}[skills="{{ skills }}"]{% endif %} cb-frame {
-    background-image: url({{ site.images_cdn }}deck/frames/{{ combo_rarity }}1combonotrait{% if skills > 0 %}{{ skills }}{% endif %}.png);
+    background-image: url({{ site.images_cdn }}deck/frames/{{ rarity }}1combonotrait{% if skills > 0 %}{{ skills }}{% endif %}.png);
     }
     cb-card[rarity="{{ rarity }}"][level="combo"]{% if skills > 0 %}[skills="{{ skills }}"]{% endif %}[trait] cb-frame:before {
-    background-image: url({{ site.images_cdn }}deck/frames/{{ combo_rarity }}1combotrait{% if skills > 0 %}{{ skills }}{% endif %}.png);
+    background-image: url({{ site.images_cdn }}deck/frames/{{ rarity }}1combotrait{% if skills > 0 %}{{ skills }}{% endif %}.png);
     }{% endfor %}
 
 
