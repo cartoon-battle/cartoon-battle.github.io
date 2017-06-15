@@ -313,7 +313,7 @@ define(['./util', './Rarity', './Level', './Card'], function define__cardcollect
                 return {
                     type: skill,
                     value: Math.abs(card.skills[skill].x),
-                    target: !!card.skills[skill].y
+                    target: card.skills[skill].y ? (/\d/.test(card.skills[skill].y) ? "show" : "trait") : null
                 };
             })
         });

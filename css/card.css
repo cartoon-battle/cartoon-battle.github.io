@@ -129,6 +129,10 @@ cb-card cb-skills cb-value[target]:before {
     left: 0;
     content: ""
 }
+cb-card cb-skills cb-value[target="trait"]:before {
+    filter: grayscale(100%);
+}
+
 cb-card cb-skills {
     font-size: 3em;
     position: absolute;

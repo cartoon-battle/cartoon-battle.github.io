@@ -173,8 +173,10 @@ define(['./config', './util', './Rarity'], function (config, util, Rarity) {
 
             if (skill && skill.target) {
                 e.setAttribute('target', skill.target);
+                e.setAttribute('title', "Skill only targets " + skill.target);
             } else if (e.hasAttribute('target')) {
                 e.removeAttribute('target');
+                e.removeAttribute('title');
             }
         });
     };
