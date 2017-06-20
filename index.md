@@ -8,7 +8,7 @@ This is an opinionated strategy guide for Animation Throwdown.
 
 <ul>
 {% assign pages = site.pages | sort: "weight" %}
-{% for item in pages %}{% if item.url != "/" and item.title %}
+{% for item in pages %}{% if item.url != "/" and item.title and item.menu != false %}
  <li><a href="{{ item.url }}">{{ item.title }}</a></li>
 {% endif %}{% endfor %}
 </ul>

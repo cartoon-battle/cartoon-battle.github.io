@@ -16,7 +16,7 @@ weight: 10
         <div class=row>
         <label for="image" class="col-sm-3 control-label">Image:</label>
         <div class="col-sm-9">
-            <input class="form-control" id="image" list="image_list">
+            <input class="form-control" id="image" list="image_list" placeholder="enter full image URL or choose one from the list">
             <datalist id="image_list">
                 {% for image in site.data.images.images %}
                 <option>{{ image }}
@@ -98,7 +98,7 @@ weight: 10
             </select>
         </div>
         <div class="col-sm-4">
-            <input type=number class="form-control" placeholder="value" patter="\d+">
+            <input type=number class="form-control" id="skill_{{ name }}_value" placeholder="value" pattern="\d+">
         </div>
         </div>
         {% endfor %}
@@ -114,9 +114,26 @@ weight: 10
 </div>
 </form>
 
-<script>require(['cartoon-battle/Card'], function (Card) {
+<script>require(['cartoon-battle/Card', 'cartoon-battle'], function (Card, getCards) {
 
     var card = new Card;
+
+    getCards(function cardbuilder__init(cards) {
+        var datalist = document.getElementById('image_list');
+        while (datalist.firstChild) datalist.removeChild(datalist.firstChild);
+
+        var pictures = cards.items.reduce(function (pictures, card) {
+            pictures[card.picture] = card.name;
+
+            return pictures;
+        }, {});
+
+        Object.keys(pictures).forEach(function (picture) {
+            datalist.appendChild(document.createElement('option'))
+                .appendChild(document.createTextNode(pictures[picture]))
+                .parentNode.value = picture;
+        });
+    });
 
     document.getElementById('result').appendChild(card.node);
 

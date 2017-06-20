@@ -52,7 +52,7 @@
 			<nav class="full-navigation">
 				<ul>
 					{% assign pages = site.pages | sort: 'weight' %}
-					{% for item in pages %}{% if item.url != "/"  and item.title %}
+					{% for item in pages %}{% if item.url != "/"  and item.title and item.menu != false %}
 						<li class="nav-item top-level {% if item.url == page.url %}current{% endif %}">
 							<a href="{{ site.baseurl }}{{ item.url }}">{{ item.title }}</a></li>
 						</li>

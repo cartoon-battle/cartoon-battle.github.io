@@ -7,7 +7,7 @@ weight: 3
 
 **Bobby**.
 
- * He is available for everyone for free. For example you have to buy Consuela tokens.
+ * He is available for everyone for free. For example you have to buy Consuela/Ricky/Zapp/etc tokens.
  * His skills target every card, they are not limited to a given show (for example, Leela only cheers and shields other Futurama cards)
  * Best skills you can have are: Punch, Cripple, Shield, Cheer. Heal is worse than Shield since it’s reactive rather than proactive. Payback is useless — you’re screwed anyway if they’re hitting you.
  * Maxed out Bobby has 3× Punch and 3× Shield, the highest of any Commander
@@ -32,5 +32,5 @@ You can use [the simulator](/simulator) to get a gist of it.
 
 ## Except for the Maxing Out strategy, who should I skip in arena?
 
- * *Consuela* — it’s used by players spending money on the game. There is a chance their deck is stuffed with maxed legendaries and precombos. You will lose miserably
+ * *Consuela*, *Zapp*, etc — they’re used by players spending money on the game. There is a chance their deck is stuffed with maxed legendaries and precombos. You will lose miserably
  * Try to avoid *Stans*, *Frys* and *Hanks*. They’re unlocked at the highest arena levels, there is a high possibility that their owner’s decks are mature and too strong for you, even with the AI’s naive style of play

@@ -9,7 +9,9 @@ It’s just playing lower adventure levels for coins and card drops. It’s a st
 
 ## What are the best islands for farming?
 
-First five islands have best drop rate to energy ratio. Choose the one that has your desired card. 
+*Unfortunately, this aspect of the game changed and the tip is no longer applies*
+
+First five islands have best drop rate to energy ratio. Choose the one that has your desired card.
 
 You may want to look at the next five islands since they also have a good ratio, but different sets of rewards. For example, 7-2 (Swat Bob on 7th island) can give you both Bob and Burger Suit, so it’s better than anything on the second island if you’re interested in those two cards in particular.
 

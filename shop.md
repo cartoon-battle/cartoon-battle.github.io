@@ -1,5 +1,5 @@
 ---
-title: Special Offers
+title: Shop
 weight: 4
 ---
 
@@ -10,6 +10,12 @@ No. This is not how the random generator works. A 10% drop rate will have the sa
 In other words, you can pull a legendary from a single-common-card pack:
 
 ![Legendary Peter from a 1k pack](http://i.imgur.com/8bg4GYZ.png)
+
+## What is the best thing I can spend my gems on?
+
+Most recommended option is the 800 gems box special deal. If you don’t have many gems, don’t waste them on refills, speeding up research, upgrading cards, etc. The boxes have the best odds for you.   
+
+After the 800 box special deal, there is another one: 10 cards for 3500 gems. This means that you can get 13 cards for 4300 gems. You should try to save up until you can buy both of those. This gives you the best chance of getting multiple legendaries to fuse. 
 
 ## Should I buy the Rapture Box?
 
