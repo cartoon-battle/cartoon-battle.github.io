@@ -1,7 +1,5 @@
 define(['./util', './Rarity', './Level', './Card'], function define__cardcollection(util, Rarity, Level, Card) {
 
-    var COMBO_STAT_COEFFICIENT = 77;
-
     function CardNotFound() {}
     CardNotFound.prototype = Error;
 
@@ -88,7 +86,7 @@ define(['./util', './Rarity', './Level', './Card'], function define__cardcollect
 
         result.skills = Object.keys(result.skills).reduce(function (skills, key) {
             skills[key] = {
-                x: Math.round((result.power - result.skills[key].p) / COMBO_STAT_COEFFICIENT * result.skills[key].v),
+                x: Math.floor((result.skills[key].v-1) * (result.power - result.skills[key].p) / (100 - result.skills[key].p) +1),
                 y: result.skills[key].y
             };
 

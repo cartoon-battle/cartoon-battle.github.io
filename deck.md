@@ -73,12 +73,11 @@ A lot of the time a lvl 5• epic will perform better than lvl 6 legendary.
 
 The health and attack values are the sum of individual cards’ values with a coefficient (usually around 0.7). More about the exact values can be extracted from the XML files (look up: data mining). This means that leveling a card that doesn’t rise health or attack **wont influence the cards combo value**. This means that maybe it isn’t worth spending those Giggitywats for that last update, and keep a card one level away from maxing out.
 
-As for the skill values, the exact method is not known. There is some [ongoing research](https://www.reddit.com/r/AnimationThrowdown/comments/5l69n2/do_you_have_any_ideas_how_the_combo_stats_are/) into this topic and the current findings are:
+Thanks to FatAndy’s help, the skill formula was discovered:
 
  * There is a notion of „combo power”, calculated using formula `1.1 ×  (3 × cards attack + cards health)`
- * This power is reduced by the value of combo skill’s base power `p`
- * The remainder used to calculate the skill value. A good **approximation** would be `skill value = power remainder / modifier * v`, where 
-    `modifier` is a constant with value `77`;  and the `v` value can be obtained from the XML files
+ * Skill value = `floor( (combo power - p) × (v - 1) ÷ (100 - p) + 1 )`
+ * The `p` and `v` values can be obtained from the XML files for each combo for each skill
 
 ## Is my *foo bar card* good enough for my deck?
 
