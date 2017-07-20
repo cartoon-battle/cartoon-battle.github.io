@@ -112,6 +112,13 @@ define(['./util', './Rarity', './Level', './Card'], function define__cardcollect
         }
     }
 
+    function validate_combo(combo) {
+        var card = combo.querySelector('cards');
+
+        return false === isNaN(parseInt(card.getAttribute('card1')))
+            && false === isNaN(parseInt(card.getAttribute('card2')));
+    }
+
     function releaseDate(combo) {
         var startTime = combo.querySelector('start_time') || {"textContent":0};
 
@@ -204,6 +211,7 @@ define(['./util', './Rarity', './Level', './Card'], function define__cardcollect
             return collection.concat(
                 [].slice.apply(xml.querySelectorAll('combo'))
                     .filter(releaseDate)
+                    .filter(validate_combo)
                     .map(parseCombo)
             );
         }, []);
