@@ -1,6 +1,7 @@
 ---
 title: An open letter to the AT Community
 weight: 1
+menu: false
 ---
 
 There are a lot of things that could be worked on in the game — to say it mildly. And most of them need the input of the community for the best results. This is my opinion on how the community discussion is currently shaped and why is it not only unhelpful, but even damaging to both the players and Kong.
