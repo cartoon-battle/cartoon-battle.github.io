@@ -52,10 +52,19 @@ define(['cartoon-battle/config', 'cartoon-battle/Rarity'], function (config, Rar
         return name.replace(/[^\d\w -]/g, '').replace(/ /g, '-').toLowerCase();
     }
 
+
+    function rarities__filter(rarities) {
+        return function (card) {
+            return 0 === rarities.length || !!~rarities.indexOf(config.rarities[card.rarity-1]);
+        }
+    }
+
     return {
         "slugify": util__slugify,
 
         "card_with_level_re": /^\s*(.+?)(?:\s+((\d+|\^)\s*[*]{0,2}))?\s*$/,
+
+        "rarities_filter": rarities__filter,
 
         "clone": function util__clone(obj) {
             if (null == obj || "object" !== typeof obj) return obj;

@@ -1,6 +1,13 @@
-/* global define */ define(['react', 'cartoon-battle', 'cartoon-battle/config', 'views/Card', 'views/TraitFilter', 'views/RaritiesFilter'], function (React, getCards, config, Card, TraitFilter, RaritiesFilter) {
+/* global define */ define([
+    'react',
+    'cartoon-battle',
+    'cartoon-battle/util',
+    'views/Card',
+    'views/TraitFilter',
+    'views/RaritiesFilter'
+], function (React, getCards, util, Card, TraitFilter, RaritiesFilter) {
 
-    var $ = React.createElement, PropTypes = React.PropTypes, i = function () { return true };
+    var e = React.createElement, PropTypes = React.PropTypes, i = function () { return true };
 
 
 
@@ -10,7 +17,7 @@
         },
 
         render: function () {
-            return $('div', {"id": "cards"}, this.props.combos.map(function (combo) {
+            return e('div', {"id": "cards"}, this.props.combos.map(function (combo) {
                 return Card(combo, {"key": combo.map(function (card) {
                     return card.id + '=' + card.level
                 }).join('&')});
@@ -48,19 +55,19 @@
                 return null;
             }
 
-            return $('div', {},
-                $('p', {}, 'Select cards you have in your inventory:'),
-                $('input', {
+            return e('div', {},
+                e('p', {}, 'Select cards you have in your inventory:'),
+                e('input', {
                     "type": "search",
                     "className": "form-control",
                     "placeholder": "filter",
                     "onChange": this.setFilter,
                     "value": this.state.filter
                 }),
-                $('ul', {"className": "list-group", "style": { "maxHeight": "15em", "overflow": "auto"}}, cards.filter(function(card) {
+                e('ul', {"className": "list-group", "style": { "maxHeight": "15em", "overflow": "auto"}}, cards.filter(function(card) {
                     return "" === this.filter || !!~card.name.toLowerCase().indexOf(filter);
                 }).map(function (card) {
-                    return $("li", {
+                    return e("li", {
                         "key": card.id,
                         "onClick": function () {
                             toggle(!!~inventory.indexOf(card.id) ? inventory.filter(function (item) {
@@ -155,21 +162,19 @@
                 return [];
             }
 
-            return this.getPotentialCards().filter(function (card) {
-                return 0 === rarities.length || !!~rarities.indexOf(config.rarities[card.rarity-1]);
-            });
+            return this.getPotentialCards().filter(util.rarities_filter(rarities));
         },
 
         render: function () {
-            return $('div', {},
+            return e('div', {},
                 TraitFilter({ "onChange": this.setTraits }),
                 RaritiesFilter({ "onChange": this.setRarities }),
-                $(InventoryFilter, {
+                e(InventoryFilter, {
                     "onChange": this.setInventory,
                     "inventory": this.state.inventory,
                     "cards": this.getMatchingCards()
                 }),
-                $(AvailableCombos, {
+                e(AvailableCombos, {
                     "combos": this.getResult()
                 })
             );
@@ -177,6 +182,6 @@
     });
 
     return function (props) {
-        return $(TraitExplorer, props);
+        return e(TraitExplorer, props);
     }
 });

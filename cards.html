@@ -7,23 +7,14 @@ weight: 8
     <a href="#usage">Did you know you can embed those cards on your site? (click to see how!)</a>
 </p>
 <hr>
-<style type="text/css">cb-card { font-size: 22%; float: left }</style>
+<style type="text/css">cb-card { font-size: 27%; float: left } #results { margin-top: 2em; }</style>
 <div id="cards" class=row></div>
-<script type="text/javascript">require(['cartoon-battle', 'cartoon-battle/util'], function (getCards, util) {
-    getCards(function (cards) {
-        var deck = document.getElementById('cards');
+<script type="text/javascript">
 
-        cards.getCards().sort(function (alpha, bravo) {
-            return alpha.name.localeCompare(bravo.name);
-        }).forEach(function (card) {
-            deck.appendChild(
-                document.createElement('a').appendChild(
-                    cards.forLevel(card, card.levels.length).node
-                ).parentNode
-            ).href = "/recipes?" + util.slugify(card.name);
-        })
+    /* global require */ require(['react-dom', 'views/Cards/CardSets'], function (ReactDOM, CardSets) {
+        ReactDOM.render(CardSets(), document.getElementById('cards'));
     });
-});
+
 </script>
 
 <style type="text/css">pre {font-size: 80%;}</style>
