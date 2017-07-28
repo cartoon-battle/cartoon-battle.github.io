@@ -3,19 +3,22 @@ layout: null
 ---
 
 @font-face {
-    font-family: "Cartoon Battle";
-    src: url("{{ site.images_cdn }}font/c99c1c85532dbaf7bc549b3d45836ee6.eot");
-    src: url("{{ site.images_cdn }}font/c99c1c85532dbaf7bc549b3d45836ee6.eot?#iefix") format("embedded-opentype"),
-    url("{{ site.images_cdn }}font/c99c1c85532dbaf7bc549b3d45836ee6.woff2") format("woff2"),
-    url("{{ site.images_cdn }}font/c99c1c85532dbaf7bc549b3d45836ee6.woff") format("woff"),
-    url("{{ site.images_cdn }}font/c99c1c85532dbaf7bc549b3d45836ee6.ttf") format("truetype"),
-    url("{{ site.images_cdn }}font/c99c1c85532dbaf7bc549b3d45836ee6.svg#AhkioW00-Regular") format("svg");
+    font-family: 'ahkioregular';
+    src: url('{{ site.images_cdn }}font/Ahkio_Regular-webfont.eot');
+    src: url('{{ site.images_cdn }}font/Ahkio_Regular-webfont.eot?#iefix') format('embedded-opentype'),
+         url('{{ site.images_cdn }}font/Ahkio_Regular-webfont.woff2') format('woff2'),
+         url('{{ site.images_cdn }}font/Ahkio_Regular-webfont.woff') format('woff'),
+         url('{{ site.images_cdn }}font/Ahkio_Regular-webfont.ttf') format('truetype'),
+         url('{{ site.images_cdn }}font/Ahkio_Regular-webfont.svg#ahkioregular') format('svg');
+    font-weight: normal;
+    font-style: normal;
+
 }
 
 cb-card {
     display: block;
     font-size: 75%;
-    font-family: 'Cartoon Battle';
+    font-family: 'ahkioregular';
     width: 40.7em;
     height: 56.4em;
     color: white;

@@ -8,6 +8,9 @@ patreon_url: "https://www.patreon.com/mlebkowski"
 
 google_analytics_key: 'UA-89005212-1'
 
+discord_invite: https://discord.gg/eNuXRUB
+discord_widget: '340404996879417355'
+
 markdown: kramdown
 permalink: :title
 
