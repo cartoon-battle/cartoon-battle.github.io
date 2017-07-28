@@ -13,7 +13,7 @@
 
     var CardList = React.createClass({
         propTypes: {
-            "cards": PropTypes.arrayOf(PropTypes.number).isRequired
+            "cards": PropTypes.arrayOf(PropTypes.object).isRequired
         },
 
         render: function () {
@@ -48,7 +48,8 @@
                     { value: "2", label: "Premium" },
                     { value: "3", label: "Rewards" },
                     { value: "3002", label: "Reward Power Cards" },
-                    { value: "3001", label: "Premium Power Cards" }
+                    { value: "3001", label: "Premium Power Cards" },
+                    { value: "1,2,3,3001,3002", label: "(all of the above)" }
                 ].map(function (option) {
                     return e('option', {
                         key: option.label,
@@ -115,7 +116,7 @@
             return e('div', {},
                 e(DefinedSets, {"onChange": this.setSets, "selected": this.state.sets.join(",") }),
                 TraitFilter({ "onChange": this.setTraits }),
-                RaritiesFilter({ "onChange": this.setRarities }),
+                RaritiesFilter({ "onChange": this.setRarities, "selected": this.state.rarities }),
                 e(CardList, {"cards": this.getCards() })
             );
         }
