@@ -96,7 +96,7 @@
         },
 
         getCards: function () {
-            var sets = this.state.sets.map(parseInt);
+            var sets = this.state.sets.map(function (i) { return parseInt(i); });
             var traits = this.state.traits;
 
             return this.state.cards
