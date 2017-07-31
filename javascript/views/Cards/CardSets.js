@@ -2,14 +2,28 @@
     'react',
     'cartoon-battle',
     'cartoon-battle/util',
+    'cartoon-battle/config',
     'views/TraitFilter',
     'views/RaritiesFilter',
     'views/Card'
-], function (React, getCards, util, TraitFilter, RaritiesFilter, Card) {
+], function (React, getCards, util, config, TraitFilter, RaritiesFilter, Card) {
 
     var e = React.createElement, PropTypes = React.PropTypes, i = function () { return true };
 
+    var sets = {
+        "Farmable": "1",
+        "Premium": "2",
+        "Rewards": "3",
+        "Reward Power Cards": "3002",
+        "Premium Power Cards": "3001",
+        "(all of the above)": "1,2,3,3001,3002"
+    };
 
+    function find_set_slug_value(token) {
+        return Object.keys(sets).reduce(function (acc, setName) {
+            return acc || (util.slugify(setName) === token) && sets[setName].split(',');
+        }, null);
+    }
 
     var CardList = React.createClass({
         propTypes: {
@@ -43,18 +57,11 @@
                     onChange: this.onChange,
                     defaultValue: this.props.selected,
                     className: "form-control"
-                }, [
-                    { value: "1", label: "Farmable" },
-                    { value: "2", label: "Premium" },
-                    { value: "3", label: "Rewards" },
-                    { value: "3002", label: "Reward Power Cards" },
-                    { value: "3001", label: "Premium Power Cards" },
-                    { value: "1,2,3,3001,3002", label: "(all of the above)" }
-                ].map(function (option) {
+                }, Object.keys(sets).map(function (option) {
                     return e('option', {
-                        key: option.label,
-                        value: option.value
-                    }, option.label);
+                        key: option,
+                        value: sets[option]
+                    }, option);
                 }))
             )
         }
@@ -76,11 +83,52 @@
         },
 
         getInitialState: function () {
+            var tokens = window.location.search.substr(1).split(',');
+
+            var sets = tokens.reduce(function (acc, token) {
+                return acc || find_set_slug_value(token);
+            }, null);
+
+            var traits = tokens.filter(function (token) {
+                return !!~config.traits.indexOf(token);
+            });
+
+            var rarities = tokens.filter(function (token) {
+                return !!~config.rarities.indexOf(token);
+            });
+
             return {
-                "traits": [],
-                "rarities": ["epic", "legendary"],
-                "sets": [1],
+                "traits": traits,
+                "rarities": rarities || ["epic", "legendary"],
+                "sets": sets || [1],
                 "cards": null
+            }
+        },
+
+        componentDidUpdate: function () {
+            if (false === 'history' in window) {
+                return;
+            }
+
+            var current = window.location.search.substr(1);
+            var state = this.state;
+
+            var slugs = [
+                Object.keys(sets).reduce(function (acc, key) {
+                    if (state.sets.join(',') === sets[key]) {
+                        return util.slugify(key);
+                    }
+
+                    return acc;
+                }, null)
+            ]
+                .concat(state.rarities)
+                .concat(state.traits)
+                .filter(i)
+                .join(',');
+
+            if (current !== slugs) {
+                window.history.pushState({}, "", "?" + slugs);
             }
         },
 
@@ -115,7 +163,7 @@
 
             return e('div', {},
                 e(DefinedSets, {"onChange": this.setSets, "selected": this.state.sets.join(",") }),
-                TraitFilter({ "onChange": this.setTraits }),
+                TraitFilter({ "onChange": this.setTraits, "selected": this.state.traits }),
                 RaritiesFilter({ "onChange": this.setRarities, "selected": this.state.rarities }),
                 e(CardList, {"cards": this.getCards() })
             );
