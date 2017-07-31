@@ -99,7 +99,7 @@
 
             return {
                 "traits": traits,
-                "rarities": rarities || ["epic", "legendary"],
+                "rarities": rarities.length && rarities || ["epic", "legendary"],
                 "sets": sets || [1],
                 "cards": null
             }
