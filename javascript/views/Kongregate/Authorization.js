@@ -9,6 +9,8 @@
         return true
     };
 
+    var localStorage = window.localStorage || {};
+
     var KongregateCredentialsForm = React.createClass({
         displayName: "KongregateCredentialsForm",
 
@@ -76,7 +78,11 @@
                 setState({
                     state:"ready",
                     user: data
-                })
+                });
+
+                localStorage['name'] = data.name;
+                localStorage['user_id'] = data.user_id;
+                localStorage['password'] = data.password;
             };
 
             xhr.send("username="+encodeURIComponent(user.username) + "&password="+encodeURIComponent(user.password))
@@ -84,8 +90,12 @@
 
         getInitialState: function () {
             return {
-                "user": null,
-                "state": "waiting"
+                "user": {
+                    name: localStorage['name'],
+                    user_id: localStorage['user_id'],
+                    password: localStorage['password']
+                },
+                "state": localStorage['user_id'] ? "ready" : "waiting"
             };
         },
 
