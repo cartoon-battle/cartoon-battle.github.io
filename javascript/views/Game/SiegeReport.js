@@ -148,7 +148,7 @@
             }
 
             return e('button', {
-                className: "btn btn-default pull-right btn-xs",
+                className: "btn btn-default pull-right btn-xs" + (this.state.details ? " active" : ""),
                 onClick: this.setState.bind(this, function (prevState) {
                     return {
                         details: !prevState.details
