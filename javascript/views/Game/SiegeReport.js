@@ -24,7 +24,8 @@
 
         propTypes: {
             name: PropTypes.string.isRequired,
-            users: PropTypes.arrayOf(PropTypes.object).isRequired
+            users: PropTypes.arrayOf(PropTypes.object).isRequired,
+            onComplete: PropTypes.func
         },
 
         getInitialState: function () {
@@ -33,20 +34,29 @@
             }
         },
 
+        populateUsers: function (users) {
+            this.props.onComplete && this.props.onComplete(users);
+
+            this.setState(function (prevState) {
+                return {
+                    users: prevState.users.concat(users)
+                }
+            });
+        },
+
         componentDidMount: function () {
             var sessionStorage = window.sessionStorage || {};
 
-            var setState = this.setState.bind(this), addUser = function (user) {
-                setState(function (prevState) {
-                    return {
-                        users: prevState.users.concat([{
-                            level: user.pvp_data.level,
-                            legendaries: user.cards_by_rarity[4],
-                            win_count:  user.pvp_data.win_count,
-                            sfc_points: user.pvp_data.rating
-                        }])
-                    }
-                })
+            var populateUsers = this.populateUsers, addUser = function (user) {
+                populateUsers([{
+                    id: user.user_id,
+                    name: user.name,
+                    guild: user.guild.name,
+                    level: user.pvp_data.level,
+                    legendaries: user.cards_by_rarity[4],
+                    win_count:  user.pvp_data.win_count,
+                    sfc_points: user.pvp_data.rating
+                }]);
             };
 
             this.props.users.map(function (user) {
@@ -116,16 +126,56 @@
 
         getInitialState: function () {
             return {
-                guildName: this.props.title
+                guildName: this.props.title,
+                users: [],
+                details: false
             }
         },
 
-        render: function () {
-            if (!this.props.items.length) {
+        addUsers: function (users) {
+            this.setState(function (prevState) {
+                return {
+                    guildName: users.reduce(function (acc, user) { return user.guild; }, prevState.guildName),
+                    users: prevState.users.concat(users)
+                }
+            });
+        },
+
+        renderDetailsButton: function () {
+            if (!this.state.users.length) {
+                return null;
             }
+
+            return e('button', {
+                className: "btn btn-default pull-right btn-xs",
+                onClick: this.setState.bind(this, function (prevState) {
+                    return {
+                        details: !prevState.details
+                    }
+                }, null)
+            }, "Show user details");
+        },
+
+        renderUserDetails: function () {
+            return e('tfoot', {}, [
+                e('tr', {key: "details heading"}, e('th', {colSpan: 6}, "Player details"))
+            ].concat(this.state.users.map(function (user) {
+                return e('tr', {key: user.id},
+                    e('td', {colSpan: 2}, user.name),
+                    e('td', {}, user.level),
+                    e('td', {}, user.win_count),
+                    e('td', {}, user.legendaries),
+                    e('td', {}, user.sfc_points)
+                );
+            })));
+        },
+
+        render: function () {
+            var addUsers = this.addUsers;
 
             return e('div', {className: "panel panel-default"},
                 e('div', {className: "panel-heading"},
+                    this.renderDetailsButton(),
                     e("h2", {className: "panel-title"}, this.state.guildName)
                 ),
                 0 === this.props.items.length
@@ -146,9 +196,11 @@
                         return e(Island, {
                             key: island.slot_id,
                             name: island.data.name.replace(/\s*Island$/, ''),
-                            users: util.object_to_array(island.users)
+                            users: util.object_to_array(island.users),
+                            onComplete: addUsers
                         })
-                    }))
+                    })),
+                    this.state.details ? this.renderUserDetails() : null
                 )
             );
         }
