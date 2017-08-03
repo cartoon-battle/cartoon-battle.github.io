@@ -113,7 +113,7 @@ define(['cartoon-battle', 'cartoon-battle/util', 'cartoon-battle/Analysis'], fun
         availableCombos.lastChild && availableCombos.removeChild(availableCombos.lastChild);
 
         while(suggestedCards.firstChild) suggestedCards.removeChild(suggestedCards.firstChild);
-        ['Francine', 'Planet Express Ship'].map(function (name) {
+        [].map(function (name) {
             return cardList.find(name);
         }).filter(function(card) {
             return !!card && !~cards.map(function (card) { return card.id }).indexOf(card.id);
