@@ -25,7 +25,7 @@
         propTypes: {
             name: PropTypes.string.isRequired,
             users: PropTypes.arrayOf(PropTypes.object).isRequired,
-            onComplete: PropTypes.func
+            onUserAdded: PropTypes.func
         },
 
         getInitialState: function () {
@@ -34,29 +34,30 @@
             }
         },
 
-        populateUsers: function (users) {
-            this.props.onComplete && this.props.onComplete(users);
+        populateUsers: function (user) {
+            this.props.onUserAdded && this.props.onUserAdded(user);
 
             this.setState(function (prevState) {
                 return {
-                    users: prevState.users.concat(users)
+                    users: prevState.users.concat([user])
                 }
             });
         },
 
         componentDidMount: function () {
-            var sessionStorage = window.sessionStorage || {};
+            var sessionStorage = window.sessionStorage || {}, island = this.props.name;
 
             var populateUsers = this.populateUsers, addUser = function (user) {
-                populateUsers([{
+                populateUsers({
                     id: user.user_id,
                     name: user.name,
+                    island: island,
                     guild: user.guild.name,
                     level: user.pvp_data.level,
                     legendaries: user.cards_by_rarity[4],
                     win_count:  user.pvp_data.win_count,
                     sfc_points: user.pvp_data.rating
-                }]);
+                });
             };
 
             this.props.users.map(function (user) {
@@ -132,11 +133,11 @@
             }
         },
 
-        addUsers: function (users) {
+        addUser: function (user) {
             this.setState(function (prevState) {
                 return {
-                    guildName: users.reduce(function (acc, user) { return user.guild; }, prevState.guildName),
-                    users: prevState.users.concat(users)
+                    guildName: user.guild || prevState.guildName,
+                    users: prevState.users.concat([user])
                 }
             });
         },
@@ -161,7 +162,8 @@
                 e('tr', {key: "details heading"}, e('th', {colSpan: 6}, "Player details"))
             ].concat(this.state.users.map(function (user) {
                 return e('tr', {key: user.id},
-                    e('td', {colSpan: 2}, user.name),
+                    e('td', {}, user.island),
+                    e('td', {}, user.name),
                     e('td', {}, user.level),
                     e('td', {}, user.win_count),
                     e('td', {}, user.legendaries),
@@ -171,7 +173,7 @@
         },
 
         render: function () {
-            var addUsers = this.addUsers;
+            var addUser = this.addUser;
 
             return e('div', {className: "panel panel-default"},
                 e('div', {className: "panel-heading"},
@@ -197,7 +199,7 @@
                             key: island.slot_id,
                             name: island.data.name.replace(/\s*Island$/, ''),
                             users: util.object_to_array(island.users),
-                            onComplete: addUsers
+                            onUserAdded: addUser
                         })
                     })),
                     this.state.details ? this.renderUserDetails() : null
