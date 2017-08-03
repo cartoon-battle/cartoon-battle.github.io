@@ -48,6 +48,35 @@ define(['cartoon-battle/config', 'cartoon-battle/Rarity'], function (config, Rar
         })();
     }
 
+    function make_api_call(message, params, cb) {
+        var xhr = new XMLHttpRequest();
+        xhr.open('POST', 'https://cb-live.synapse-games.com/api.php?message=' + message);
+        xhr.onload = function () {
+            cb && cb(JSON.parse(xhr.responseText));
+        };
+        xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+
+        xhr.send(Object.keys(params).map(function (name) {
+            return name + '=' + encodeURIComponent(params[name])
+        }).join('&'))
+    }
+
+    function get_user_info(user_id, cb, credentials) {
+        credentials = credentials || window.localStorage || {};
+
+        make_api_call('getUserProfile', {
+            "target_user_id": user_id,
+            "user_id": credentials.user_id,
+            "password": credentials.password
+        }, cb);
+    }
+
+    function object_to_array(object) {
+        return object ? Object.keys(object).map(function (key) {
+            return object[key];
+        }) : [];
+    }
+
     function util__slugify(name) {
         return name.replace(/[^\d\w -]/g, '').replace(/ /g, '-').toLowerCase();
     }
@@ -61,6 +90,11 @@ define(['cartoon-battle/config', 'cartoon-battle/Rarity'], function (config, Rar
 
     return {
         "slugify": util__slugify,
+
+        "get_user_info": get_user_info,
+        "make_api_call": make_api_call,
+
+        "object_to_array": object_to_array,
 
         "card_with_level_re": /^\s*(.+?)(?:\s+((\d+|\^)\s*[*]{0,2}))?\s*$/,
 

@@ -1,13 +1,6 @@
-/* global define */ define([
-    'react',
-    'cartoon-battle',
-    'cartoon-battle/util',
-    'cartoon-battle/config'
-], function (React, util, config) {
+/* global define */ define(['react'], function (React) {
 
-    var e = React.createElement, PropTypes = React.PropTypes, i = function () {
-        return true
-    };
+    var e = React.createElement, PropTypes = React.PropTypes;
 
     var localStorage = window.localStorage || {};
 
@@ -61,8 +54,12 @@
 
 
     var Authorization = React.createClass({
+        propTypes: {
+            onComplete: PropTypes.func
+        },
+
         fetchPassword: function (user) {
-            var xhr = new XMLHttpRequest(), setState = this.setState.bind(this);
+            var xhr = new XMLHttpRequest(), setState = this.setState.bind(this), cb = this.props.onComplete;
 
             setState({'state': "loading"});
             xhr.open('POST', 'https://animation-throwdown.narzekasz.pl/api/kongregate/login');
@@ -83,6 +80,8 @@
                 localStorage['name'] = data.name;
                 localStorage['user_id'] = data.user_id;
                 localStorage['password'] = data.password;
+
+                cb && cb(data);
             };
 
             xhr.send("username="+encodeURIComponent(user.username) + "&password="+encodeURIComponent(user.password))

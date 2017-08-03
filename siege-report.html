@@ -1,0 +1,32 @@
+---
+layout: default
+menu: false
+title: Siege Report
+---
+<style type="text/css">
+    @media (max-width: 700px) {
+        #root th.rotate {
+            height: 100px;
+            white-space: nowrap;
+            vertical-align: top;
+        }
+
+        th.rotate > div {
+            transform: translate(25px, 60px) rotate(315deg);
+            width: 30px;
+        }
+
+        th.rotate > div > span {
+            border-bottom: 1px solid #ccc;
+            padding: 5px 10px 5px 0;
+        }
+    }
+</style>
+<div id="root"></div>
+<script type="text/javascript">
+
+    /* global require */ require(['react-dom', 'views/Game/SiegeReport'], function (ReactDOM, SiegeReport) {
+        ReactDOM.render(SiegeReport(), document.getElementById('root'));
+    });
+
+</script>
