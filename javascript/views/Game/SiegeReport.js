@@ -96,7 +96,7 @@
             };
 
             var reduce = function (sum, value) {
-                return parseInt(sum) + parseInt(value);
+                return (parseInt(sum) || 0) + (parseInt(value) || 0);
             };
 
             return this.state.users.length
