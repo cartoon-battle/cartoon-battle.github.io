@@ -129,7 +129,7 @@
                 }
 
                 if (!option.choices) {
-                    return option.name + '=' + data[name];
+                    return data[name] ? (option.name + '=' + data[name]) : null;
                 }
 
                 return data[name].map(function (value) {
