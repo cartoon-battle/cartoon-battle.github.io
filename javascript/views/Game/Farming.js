@@ -132,7 +132,7 @@
                     return data[name] ? (option.name + '=' + data[name]) : null;
                 }
 
-                return data[name].map(function (value) {
+                return data[name] && data[name].map(function (value) {
                     return option.name + '=' + value;
                 }).join('&');
 
