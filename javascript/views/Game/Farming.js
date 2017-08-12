@@ -82,6 +82,67 @@
             );
         }
     });
+    var Subscribe = React.createClass({
+        displayName: "Subscribe",
+
+        getInitialState: function () {
+            return {
+                playerId: this.props.playerId,
+                error: false
+            }
+        },
+
+        validate: function (e) {
+            if (!this.state.playerId || this.state.playerId.length < 4) {
+                this.setState({error: true});
+
+                e.preventDefault();
+            }
+
+        },
+
+        setPlayerId: function (e) {
+            this.setState({
+                playerId: e.target.value
+            });
+
+            this.setState({error: e.target.value.length < 4});
+        },
+
+        render: function () {
+            return e('form', {
+                action: "https://www.paypal.com/cgi-bin/webscr",
+                method: "post",
+                target: "_blank",
+                className: "form form-inline pull-right",
+                onSubmit: this.validate
+            },
+                e('input', { type: "hidden", name: "cmd", value: "_s-xclick" }),
+                e('input', { type: "hidden", name: "hosted_button_id", value: "ES7T584NEK2M6"}),
+                e('div', {
+                    className: "form-group" + (this.state.error ? ' has-error' : ' '),
+                    style: { display: this.props.playerId ? "none" : ""}
+                },
+                    e('input', {type: "hidden", name: "on0", value: "your player id"}),
+                    e('label', {className: "form-label", htmlFor: "os0"}, 'Your Player ID: '),
+                    " ", // spacing
+                    e('input', {
+                        type: "text",
+                        className: "form-control input-sm",
+                        required: true,
+                        defaultValue: this.props.playerId,
+                        name: "os0",
+                        id: "os0",
+                        maxLength: "200",
+                        onChange: this.setPlayerId,
+                    })
+                ),
+                " ", // spacing
+                e('button', { type: "submit", className: "btn btn-default btn-xs"}, 'Subscribe'),
+                e('img', {alt: "", border: "0", src: "https://www.paypalobjects.com/en_US/i/scr/pixel.gif", width: "1", height:"1"})
+            )
+        }
+    });
     var Farming = React.createClass({
         displayName: "Farming",
 
@@ -159,7 +220,10 @@
 
             return e('div', {className: "row"},
                 e('div', {className: "panel panel-default"},
-                    e('div', {className: "panel-heading"}, "Farming settings"),
+                    e('div', {className: "panel-heading"},
+                        e(Subscribe, {playerId: this.props.credentials.user_id}),
+                        "Farming settings"
+                    ),
                     e('div', {className: "panel-body"}, e(Settings, {
                         form: this.state.form,
                         data: {

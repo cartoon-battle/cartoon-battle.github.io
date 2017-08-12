@@ -9,7 +9,9 @@ menu: false
     pre .info { color: #0A0; }
     pre .comment { color: #AC0 }
 </style>
+
 <div id="root"></div>
+
 <script type="text/javascript">
 
     /* global require */ require(['react-dom', 'views/Game/Farming'], function (ReactDOM, Farming) {
