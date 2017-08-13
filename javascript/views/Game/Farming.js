@@ -138,7 +138,8 @@
                     })
                 ),
                 " ", // spacing
-                e('button', { type: "submit", className: "btn btn-default btn-xs"}, 'Subscribe'),
+                "Your membership is ending soon ",
+                e('button', { type: "submit", className: "btn btn-danger btn-xs"}, 'Subscribe'),
                 e('img', {alt: "", border: "0", src: "https://www.paypalobjects.com/en_US/i/scr/pixel.gif", width: "1", height:"1"})
             )
         }
@@ -155,6 +156,7 @@
                 form: null,
                 farming: null,
                 message: null,
+                expires: false,
                 logs: null
             }
         },
@@ -221,7 +223,9 @@
             return e('div', {className: "row"},
                 e('div', {className: "panel panel-default"},
                     e('div', {className: "panel-heading"},
-                        e(Subscribe, {playerId: this.props.credentials.user_id}),
+                        this.state.expires ? e(Subscribe, {
+                            playerId: this.props.credentials.user_id
+                        }) : null,
                         "Farming settings"
                     ),
                     e('div', {className: "panel-body"}, e(Settings, {
