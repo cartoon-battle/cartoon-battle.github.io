@@ -41,14 +41,42 @@
             var enabled = this.state.enabled, setState = this.setState.bind(this);
 
             return e('div', {},
-                e('button', {
-                    className: "btn " + (enabled ? "btn-default active" : "btn-primary"),
-                    onClick: function () {
-                        setState({
-                            enabled: !enabled
-                        });
-                    }
-                }, this.props.form.children.enabled.label),
+                e('div', {className: "row"},
+                    e('div', {"className": "col-md-6"},
+                        e('button', {
+                            className: "btn " + (enabled ? "btn-default active" : "btn-primary"),
+                            onClick: function () {
+                                setState({
+                                    enabled: !enabled
+                                });
+                            }
+                        }, this.props.form.children.enabled.label)
+                    ),
+                    this.props.form.children.referralCode && !this.props.data.referralCode && e('div', {className: "col-md-6"},
+                        e('div', { className: "pull-right form-group" + (
+                            this.props.form.children.referralCode.errors ? " has-error" : ''
+                        )},
+                            e('label', {
+                                className: 'form-label',
+                                htmlFor:"referral-code"
+                            }, this.props.form.children.referralCode.label),
+                            e('input', {
+                                className: 'form-control',
+                                id: 'referral-code',
+                                onChange: function (e) {
+                                    setState({
+                                        referralCode: e.target.value
+                                    })
+                                },
+                                required: true
+                            }),
+                            this.props.form.children.referralCode.errors
+                            && this.props.form.children.referralCode.errors.map(function (error, idx) {
+                                return e('span', {className: "help-block", key: idx}, error);
+                            })
+                        )
+                    )
+                ),
                 e('div', {style: {display: enabled ? 'block' : 'none'}},
                     ButtonGroupFilter({
                         "label": this.props.form.children.settings.label,
@@ -87,13 +115,15 @@
 
         propTypes: {
             "playerId": PropTypes.string.isRequired,
-            "jumbo": PropTypes.boolean,
-            "expiresInDays": PropTypes.number
+            "jumbo": PropTypes.bool,
+            "expiresInDays": PropTypes.number,
+            "buttonCode": PropTypes.string
         },
 
         getDefaultProps: function () {
             return {
                 jumbo: false,
+                buttonCode: "ES7T584NEK2M6",
                 expiresInDays: 0
             }
         },
@@ -112,7 +142,7 @@
                 className: "form form-inline" + (this.props.jumbo ? "" : " pull-right")
             },
                 e('input', { type: "hidden", name: "cmd", value: "_s-xclick" }),
-                e('input', { type: "hidden", name: "hosted_button_id", value: "ES7T584NEK2M6"}),
+                e('input', { type: "hidden", name: "hosted_button_id", value: this.props.buttonCode}),
                 e('input', {type: "hidden", name: "on0", value: "your player id"}),
                 e('input', {
                     type: "hidden",
@@ -209,6 +239,7 @@
 
             var expiresInDays = Math.max(0, Math.ceil((new Date(this.state.farming.expires_at) - new Date()) / 1000/60/60/24));
             var playerId = ""+this.props.credentials.user_id;
+            var buttonCode = this.state.farming.referral_code && this.state.farming.referral_code.paypal_button;
 
             if (expiresInDays <= 0) {
                 return e('div', {className: "container-fluid"}, e('div', {className: "jumbotron"},
@@ -217,7 +248,8 @@
                     e('p', {}, 'It may take up to a few hours to process your payment'),
                     e(Subscribe, {
                         jumbo: true,
-                        playerId: playerId
+                        playerId: playerId,
+                        buttonCode: buttonCode
                     })
                 ))
             }
@@ -227,7 +259,8 @@
                     e('div', {className: "panel-heading"},
                         e(Subscribe, {
                             playerId: playerId,
-                            expiresInDays: expiresInDays
+                            expiresInDays: expiresInDays,
+                            buttonCode: buttonCode
                         }),
                         "Farming settings"
                     ),
@@ -235,6 +268,7 @@
                         form: this.state.form,
                         data: {
                             enabled: this.state.farming.enabled,
+                            referralCode: this.state.farming.referral_code,
                             settings: this.state.farming.settings,
                             adventureMissions: this.state.farming.adventure_missions
                         },
