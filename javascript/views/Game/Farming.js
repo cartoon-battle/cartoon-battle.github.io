@@ -85,61 +85,48 @@
     var Subscribe = React.createClass({
         displayName: "Subscribe",
 
-        getInitialState: function () {
+        propTypes: {
+            "playerId": PropTypes.string.isRequired,
+            "jumbo": PropTypes.boolean,
+            "expiresInDays": PropTypes.number
+        },
+
+        getDefaultProps: function () {
             return {
-                playerId: this.props.playerId,
-                error: false
+                jumbo: false,
+                expiresInDays: 0
             }
-        },
-
-        validate: function (e) {
-            if (!this.state.playerId || this.state.playerId.length < 4) {
-                this.setState({error: true});
-
-                e.preventDefault();
-            }
-
-        },
-
-        setPlayerId: function (e) {
-            this.setState({
-                playerId: e.target.value
-            });
-
-            this.setState({error: e.target.value.length < 4});
         },
 
         render: function () {
+            var expiresSoon = this.props.expiresInDays < 7;
+
+            if (this.props.expiresInDays > 30) {
+                return null;
+            }
+
             return e('form', {
                 action: "https://www.paypal.com/cgi-bin/webscr",
                 method: "post",
                 target: "_blank",
-                className: "form form-inline pull-right",
-                onSubmit: this.validate
+                className: "form form-inline" + (this.props.jumbo ? "" : " pull-right")
             },
                 e('input', { type: "hidden", name: "cmd", value: "_s-xclick" }),
                 e('input', { type: "hidden", name: "hosted_button_id", value: "ES7T584NEK2M6"}),
-                e('div', {
-                    className: "form-group" + (this.state.error ? ' has-error' : ' '),
-                    style: { display: this.props.playerId ? "none" : ""}
-                },
-                    e('input', {type: "hidden", name: "on0", value: "your player id"}),
-                    e('label', {className: "form-label", htmlFor: "os0"}, 'Your Player ID: '),
-                    " ", // spacing
-                    e('input', {
-                        type: "text",
-                        className: "form-control input-sm",
-                        required: true,
-                        defaultValue: this.props.playerId,
-                        name: "os0",
-                        id: "os0",
-                        maxLength: "200",
-                        onChange: this.setPlayerId,
-                    })
-                ),
-                " ", // spacing
-                "Your membership is ending soon ",
-                e('button', { type: "submit", className: "btn btn-danger btn-xs"}, 'Subscribe'),
+                e('input', {type: "hidden", name: "on0", value: "your player id"}),
+                e('input', {
+                    type: "hidden",
+                    value: this.props.playerId,
+                    name: "os0",
+                    id: "os0"
+                }),
+                expiresSoon && !this.props.jumbo && "Your membership is ending in " + (this.props.expiresInDays) + " days ",
+                e('button', {
+                    type: "submit",
+                    className: "btn " + (
+                        this.props.jumbo ? "btn-primary btn-lg"
+                            : ("btn-xs btn-" + (expiresSoon ? "danger" : "default")))
+                }, 'Subscribe'),
                 e('img', {alt: "", border: "0", src: "https://www.paypalobjects.com/en_US/i/scr/pixel.gif", width: "1", height:"1"})
             )
         }
@@ -220,12 +207,28 @@
                 });
             };
 
+            var expiresInDays = Math.max(0, Math.ceil((new Date(this.state.farming.expires_at) - new Date()) / 1000/60/60/24));
+            var playerId = ""+this.props.credentials.user_id;
+
+            if (expiresInDays <= 0) {
+                return e('div', {className: "container-fluid"}, e('div', {className: "jumbotron"},
+                    e('h2', {}, 'Your membership has expired!'),
+                    e('p', {}, 'Your farming is disabled. Subscribe for a monthly membership to resume it with all the perks.'),
+                    e('p', {}, 'It may take up to a few hours to process your payment'),
+                    e(Subscribe, {
+                        jumbo: true,
+                        playerId: playerId
+                    })
+                ))
+            }
+
             return e('div', {className: "row"},
                 e('div', {className: "panel panel-default"},
                     e('div', {className: "panel-heading"},
-                        this.state.expires ? e(Subscribe, {
-                            playerId: this.props.credentials.user_id
-                        }) : null,
+                        e(Subscribe, {
+                            playerId: playerId,
+                            expiresInDays: expiresInDays
+                        }),
                         "Farming settings"
                     ),
                     e('div', {className: "panel-body"}, e(Settings, {
