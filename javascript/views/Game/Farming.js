@@ -23,6 +23,9 @@
     var Settings = React.createClass({
         displayName: "Settings",
 
+        input: null,
+        focusOnError: function () {},
+
         propTypes: {
             "onChange": PropTypes.func.isRequired,
             "data": PropTypes.object.isRequired,
@@ -35,6 +38,21 @@
 
         saveSettings: function () {
             this.props.onChange(this.state);
+
+            this.focusOnError = function () {
+                setTimeout(function () {
+                    this.input.focus();
+                    this.input.scrollIntoView();
+                }.bind(this), 100);
+
+                this.focusOnError = function () {};
+            }.bind(this);
+        },
+
+        componentWillReceiveProps: function (nextProps) {
+            if (nextProps.form.children.referralCode && nextProps.form.children.referralCode.errors && this.input) {
+                this.focusOnError();
+            }
         },
 
         render: function () {
@@ -63,6 +81,7 @@
                             e('input', {
                                 className: 'form-control',
                                 id: 'referral-code',
+                                ref: (function (ref) { this.input = ref; }).bind(this),
                                 onChange: function (e) {
                                     setState({
                                         referralCode: e.target.value
