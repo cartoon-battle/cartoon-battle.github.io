@@ -120,6 +120,18 @@
                         "items": this.props.form.children.adventureMissions.choices,
                         "width": 0,
                         "height": 0
+                    }),
+                    this.props.form.children.arenaHeroes && ButtonGroupFilter({
+                        "label": this.props.form.children.arenaHeroes.label,
+                        "onChange": function (items) {
+                            setState({
+                                arenaHeroes: items
+                            })
+                        },
+                        "selected": this.state.arenaHeroes,
+                        "items": this.props.form.children.arenaHeroes.choices,
+                        "width": 0,
+                        "height": 0
                     })
                 ),
                 e('button', {
@@ -289,7 +301,8 @@
                             enabled: this.state.farming.enabled,
                             referralCode: this.state.farming.referral_code,
                             settings: this.state.farming.settings,
-                            adventureMissions: this.state.farming.adventure_missions
+                            adventureMissions: this.state.farming.adventure_missions,
+                            arenaHeroes: this.state.farming.arena_heroes
                         },
                         onChange: this.saveSettings
                     }))
