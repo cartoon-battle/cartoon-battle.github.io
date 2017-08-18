@@ -181,6 +181,7 @@
                     name: "os0",
                     id: "os0"
                 }),
+                e('input', {type: "hidden", value: this.props.playerId, name: "custom"}),
                 expiresSoon && !this.props.jumbo && "Your membership is ending in " + (this.props.expiresInDays) + " days ",
                 e('button', {
                     type: "submit",
