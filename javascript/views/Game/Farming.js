@@ -220,6 +220,10 @@
             var setState = this.setState.bind(this), form = this.state.form;
             var xhr = new XMLHttpRequest();
 
+            setState({
+                message: "Saving settings, please wait"
+            });
+
             xhr.open('POST', 'https://animation-throwdown.narzekasz.pl/game/farming');
             xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
             xhr.onload = function () {
@@ -227,6 +231,12 @@
                 setTimeout(function () {
                     setState({"message": null});
                 }, 15000)
+            };
+
+            xhr.onerror = function () {
+                setState({
+                    message: "There was an error contacting the server, try again"
+                })
             };
 
             xhr.send([
@@ -286,6 +296,7 @@
             }
 
             return e('div', {className: "row"},
+                this.state.message ? e('p', {className: 'alert alert-info'}, this.state.message) : null,
                 e('div', {className: "panel panel-default"},
                     e('div', {className: "panel-heading"},
                         e(Subscribe, {
