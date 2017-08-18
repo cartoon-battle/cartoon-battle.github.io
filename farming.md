@@ -38,6 +38,10 @@ Fill your credentials above (if you haven’t already) and use the button to ena
 
 The bot will run within one hour from saving your settings — be patient!
 
+## Is it free?
+
+No, it’s a paid tool, with some exceptions. And there is a free trial.
+
 ## I don’t want it any more, how can I stop it?
 
 Disable the farming using the button above and save your settings.
@@ -45,3 +49,7 @@ Disable the farming using the button above and save your settings.
 ## How can I know if it works? 
 
 You will see a history of everything the bot does on this page.
+
+## Will I be banned for using this?
+
+Dunno, I’m not the one that gives the bans. Ask Kong.
