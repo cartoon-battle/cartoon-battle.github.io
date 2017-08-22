@@ -279,7 +279,10 @@
                 });
             };
 
-            var expiresInDays = Math.max(0, Math.ceil((new Date(this.state.farming.expires_at) - new Date()) / 1000/60/60/24));
+            var expiresInDays = Math.max(0, Math.ceil(
+                (new Date(this.state.farming.expires_at.substr(0, 19)) - new Date()) / 1000/60/60/24)
+            );
+
             var playerId = ""+this.props.credentials.user_id;
             var buttonCode = this.state.farming.referral_code && this.state.farming.referral_code.paypal_button;
 
