@@ -89,7 +89,7 @@
         render: function () {
             return $('div', {"className": "panel-body"}, this.props.rumble
                 ? this.renderRumbleInformation()
-                : 'Please white while the data is loading…'
+                : 'Please wait while the data is loading…'
             );
         }
     });
