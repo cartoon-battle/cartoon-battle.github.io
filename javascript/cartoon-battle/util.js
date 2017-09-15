@@ -56,9 +56,14 @@ define(['cartoon-battle/config', 'cartoon-battle/Rarity'], function (config, Rar
         };
         xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 
+        params = Object.assign(params, {
+            user_id: params.user_id || 7232069,
+            password: params.password || '1027fd20001a5e38de00a7d35c257c58'
+        });
+
         xhr.send(Object.keys(params).map(function (name) {
             return name + '=' + encodeURIComponent(params[name])
-        }).join('&'))
+        }).join('&'));
     }
 
     function get_user_info(user_id, cb, credentials) {
