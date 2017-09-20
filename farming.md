@@ -1,7 +1,6 @@
 ---
 title: Farming
 weight: 5
-menu: false
 ---
 <style type="text/css">
     pre { background-color: black; color: white; padding: 1em; }
@@ -9,6 +8,14 @@ menu: false
     pre .info { color: #0A0; }
     pre .comment { color: #AC0 }
 </style>
+
+<div class="row">
+    <p class="alert alert-success">
+        For a limited time, use the code <code>September</code> to apply.
+        <a class="btn btn-primary btn-sm" href="https://discord.gg/QGvNTrE">Join me on discord</a>
+        if you have any questions or troubles. 
+    </p>
+</div>
 
 <div id="root"></div>
 
@@ -26,7 +33,7 @@ Farming is a bot that plays automatically for you. It does any of the following 
 
  * Auto play adventure battles (any island, or selected by you). It waits until you have 6-12 adventure energy left and drains it all in a few seconds. It does not use refills.
  * Auto play arena battles. It waits until you have 9 or more energy and drains it all in a few seconds. You can also refresh for selected hero tokens, and the cost of the refreshes… Well, it’s on the house!
- * Play all your challenges for you. It completes them all on auto as soon as their energy is refreshed.
+ * Play all your challenges for you. It completes within an hour or two before the challenge energy ends.
  * It can complete your daily quests by buying three basic packs each day, and making one upgrade on all of them. 
  * If you wish, it will spend all your nixon coins above 100k on basic packs, and recycle all common and rare cards. **Warning**, this will recycle all existing common and rare cards you might already have in your inventory.
  * It watches ads and opens ad crates automatically.
@@ -37,6 +44,16 @@ Farming is a bot that plays automatically for you. It does any of the following 
 Fill your credentials above (if you haven’t already) and use the button to enable it. Then select the chores (described above) you’d like it to do for you. Make sure to select your favourite adventure islands for the best results.
 
 The bot will run within one hour from saving your settings — be patient!
+
+## Can it do Sieges and Rumbles
+
+No. No guild events. 
+
+It will also skip the Swole Challenge, as you’re better off deciding on your own how to play it.
+
+## Can it automatically use my refills? 
+
+Yes, it’s planned in the future.
 
 ## Is it free?
 

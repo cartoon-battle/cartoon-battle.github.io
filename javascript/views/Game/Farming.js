@@ -289,8 +289,8 @@
             if (expiresInDays <= 0) {
                 return e('div', {className: "container-fluid"}, e('div', {className: "jumbotron"},
                     e('h2', {}, 'Your membership has expired!'),
-                    e('p', {}, 'Your farming is disabled. Subscribe for a monthly membership to resume it with all the perks.'),
-                    e('p', {}, 'It may take up to a few hours to process your payment'),
+                    e('p', {}, 'Your farming is disabled. Subscribe for a membership to resume it with all the perks.'),
+                    e('p', {}, 'It may take up to a few minutes to process your payment'),
                     e(Subscribe, {
                         jumbo: true,
                         playerId: playerId,
