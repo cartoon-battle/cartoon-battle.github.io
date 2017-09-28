@@ -31,11 +31,14 @@ weight: 5
 
 Farming is a bot that plays automatically for you. It does any of the following things:
 
- * Auto play adventure battles (any island, or selected by you). It waits until you have 6-12 adventure energy left and drains it all in a few seconds. It does not use refills.
- * Auto play arena battles. It waits until you have 9 or more energy and drains it all in a few seconds. You can also refresh for selected hero tokens, and the cost of the refreshes… Well, it’s on the house!
- * Play all your challenges for you. It completes within an hour or two before the challenge energy ends.
- * It can complete your daily quests by buying three basic packs each day, and making one upgrade on all of them. 
- * If you wish, it will spend all your nixon coins above 100k on basic packs, and recycle all common and rare cards. **Warning**, this will recycle all existing common and rare cards you might already have in your inventory.
+ * **Adventure**: Auto play adventure battles (any island, or selected by you). It waits until you have 6-12 adventure energy left and drains it all in a few seconds.
+ * **Use Refills**: After your adventure farming is done, all adventure refills are used as well. This is for paying members only. 
+ * **Arena**: Auto play arena battles. It waits until you have 9 or more energy and drains it all in a few seconds. 
+   For paying members: you can also refresh for selected hero tokens, and the cost of the refreshes… Well, it’s on the house!
+ * **Challenges**: Play all your challenges for you. It completes within an hour or two before the challenge energy ends.
+ * **Daily quests**: It can complete your daily quests by buying three basic packs each day, and making one upgrade on all of them. 
+ * **Basic packs**: If you wish, it will spend all your nixon coins above 100k on basic packs, and recycle all common and rare cards.
+   **Warning**, this will recycle all existing common and rare cards you might already have in your inventory. For paying members only.
  * It watches ads and opens ad crates automatically.
  * The farming bot counts towards daily activity, so you’ll never miss your login rewards again!
 
@@ -53,7 +56,7 @@ It will also skip the Swole Challenge, as you’re better off deciding on your o
 
 ## Can it automatically use my refills? 
 
-Yes, it’s planned in the future.
+Only for adventure, only for paying users. It will not refill arena, it would create an unfair advantage in the brawl.
 
 ## Is it free?
 
