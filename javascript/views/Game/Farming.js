@@ -207,6 +207,7 @@
                 farming: null,
                 message: null,
                 expires: false,
+                canSubscribe: false,
                 logs: null
             }
         },
@@ -286,6 +287,7 @@
 
             var playerId = ""+this.props.credentials.user_id;
             var buttonCode = this.state.farming.referral_code && this.state.farming.referral_code.paypal_button;
+            var canSubscribe = this.state.canSubscribe;
 
             if (expiresInDays <= 0) {
                 return e('div', {className: "container-fluid"}, e('div', {className: "jumbotron"},
@@ -304,11 +306,11 @@
                 this.state.message ? e('p', {className: 'alert alert-info'}, this.state.message) : null,
                 e('div', {className: "panel panel-default"},
                     e('div', {className: "panel-heading"},
-                        e(Subscribe, {
+                        canSubscribe ? e(Subscribe, {
                             playerId: playerId,
                             expiresInDays: expiresInDays,
                             buttonCode: buttonCode
-                        }),
+                        }) : null,
                         "Farming settings"
                     ),
                     e('div', {className: "panel-body"}, e(Settings, {
