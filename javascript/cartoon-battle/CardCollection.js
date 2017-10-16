@@ -11,7 +11,7 @@ define(['./util', './Rarity', './Level', './Card'], function define__cardcollect
      * @returns {{standard: boolean, deck: boolean, combo: boolean, farmable: string}}
      */
     function categorize_card(cardList, card) {
-        var standard = card.set < 5000 || 7000 === card.set;
+        var standard = card.set < 5000 || (7000 <= card.set && card.set <= 7999);
         var deck = standard && !card.commander && !card.is_combo && !card.is_defense && !card.hidden;
         var combo = 1 === card.levels.length && !!card.attack_multiplier;
 
