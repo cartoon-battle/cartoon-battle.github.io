@@ -11,7 +11,8 @@ weight: 5
 
 <div class="row">
     <p class="alert alert-success">
-        This tool is in a private beta stage. You need a code to get in. 
+        This tool is in a private beta stage and you have to be at least arena level 15 or SFC to use it.
+        You need a code to get in. 
         <a class="btn btn-primary btn-sm" href="https://discord.gg/QGvNTrE">Join me on discord</a>
         if you have any questions or troubles. 
     </p>
