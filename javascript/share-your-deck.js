@@ -83,12 +83,6 @@ define(['cartoon-battle', 'cartoon-battle/util', 'cartoon-battle/Analysis'], fun
             counter.textContent = analysis.types[counter.dataset.cardRole] || "n/a";
         });
 
-        if (analysis.getPotentialCombos()) {
-            overview.querySelector('[data-card-role="combos"]')
-                .appendChild(document.createElement('small'))
-                .appendChild(document.createTextNode('/' + analysis.getPotentialCombos()));
-        }
-
         problems.style.display = "none";
         (function (table) { table && table.parentNode.removeChild(table); })(problems.querySelector('table'));
 

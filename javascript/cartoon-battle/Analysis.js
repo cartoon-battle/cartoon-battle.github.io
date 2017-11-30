@@ -54,17 +54,10 @@
         this.types = get_card_types_count(cards, deck);
         this.combos = get_combos(cards, deck, this.types);
 
-        this.types['combos'] = Object.keys(this.combos.reduce(function (seen, item) {
-            return item.combos.reduce(function (seen, combo) {
-                seen[combo.result.id] = true;
-                return seen;
-            }, seen);
-        }.bind(this), {})).length;
+        this.types['power'] = Math.round(deck.reduce(function (power, item) {
+            return power + item.health + 3 * item.attack;
+        }, 1) / deck.length * 20) / 20;
     }
-
-    Analysis.prototype.getPotentialCombos = function analysis__getPotentialCombos() {
-        return this.types[this.cardList.COMBO_ROLE_CHARACTER] * this.types[this.cardList.COMBO_ROLE_ITEM];
-    };
 
     Analysis.prototype.getProblems = function analysis__getProblems(threshold) {
         if (this._problems) {
