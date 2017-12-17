@@ -55,6 +55,7 @@
                     guild: user.guild.name,
                     level: user.pvp_data.level,
                     legendaries: user.cards_by_rarity[4],
+                    mythics: user.cards_by_rarity[5],
                     win_count:  user.pvp_data.win_count,
                     sfc_points: user.pvp_data.rating
                 });
@@ -111,6 +112,7 @@
                 e('td', {}, this.countAverageStat("level", 2)),
                 e('td', {}, this.countAverageStat("win_count")),
                 e('td', {}, this.countAverageStat("legendaries")),
+                e('td', {}, this.countAverageStat("mythics")),
                 e('td', {}, this.countAverageStat("sfc_points"))
             );
         }
@@ -167,6 +169,7 @@
                     e('td', {}, user.level),
                     e('td', {}, user.win_count),
                     e('td', {}, user.legendaries),
+                    e('td', {}, user.mythics),
                     e('td', {}, user.sfc_points)
                 );
             })));
@@ -192,6 +195,7 @@
                         e('th', {className: 'rotate'}, e('div', {}, e('span', {}, "Level"))),
                         e('th', {className: 'rotate'}, e('div', {}, e('span', {}, "Win Count"))),
                         e('th', {className: 'rotate'}, e('div', {}, e('span', {}, "Legendaries"))),
+                        e('th', {className: 'rotate'}, e('div', {}, e('span', {}, "Mythics"))),
                         e('th', {className: 'rotate'}, e('div', {}, e('span', {}, "SFC Points")))
                     )),
                     e('tbody', {}, this.props.items.map(function (island) {
