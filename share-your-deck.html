@@ -12,6 +12,7 @@ weight: 8
         display: inline-block;
         float: none;
         width: 24%;
+        min-width: 140px;
     }
     #suggested-cards cb-card {
         cursor: pointer;
@@ -35,6 +36,11 @@ weight: 8
     }
     .panel-footer {
         margin-bottom: 3em;
+    }
+    @media (max-width: 640px) {
+        .deck .btn .label {
+            display: none;
+        }
     }
     hr { clear: both; }
 </style>
