@@ -123,8 +123,7 @@ cb-card cb-skills cb-value {
     text-align: center;
 }
 cb-card cb-skills cb-value[target]:before {
-    background-image: url({{ site.images_cdn }}deck/skills/skill_special.png);
-    background-size: 100% 100%;
+    background-repeat: no-repeat;
     display: block;
     width: 1.2em;
     height: 1.2em;
@@ -132,8 +131,16 @@ cb-card cb-skills cb-value[target]:before {
     left: 0;
     content: ""
 }
+
+cb-card cb-skills cb-value[target="show"]:before {
+    background-size: 80%;
+    background-position: left -4px;
+    background-image: url({{ site.images_cdn }}deck/skills/target_show.png);
+}
 cb-card cb-skills cb-value[target="trait"]:before {
-    filter: grayscale(100%);
+    background-size: 64%;
+    background-position: left -2px;
+    background-image: url({{ site.images_cdn }}deck/skills/target_trait.png);
 }
 
 cb-card cb-skills {
