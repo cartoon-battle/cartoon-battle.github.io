@@ -201,7 +201,7 @@ define(['cartoon-battle', 'cartoon-battle/util', 'cartoon-battle/Analysis'], fun
         item.appendChild((function (btn) {
             btn.className = 'btn btn-danger btn-xs';
             btn.onclick = function () { remove(this.parentNode); };
-            btn.appendChild(document.createElement('span')).appendChild(document.createTextNode(' Remove ')).parentNode.className = 'label';
+            btn.appendChild(document.createElement('span')).appendChild(document.createTextNode(' Remove ')).parentNode.className = 'text';
 
             btn.insertBefore(document.createElement('span'), btn.firstChild).className = 'glyphicon glyphicon-trash';
 
@@ -211,7 +211,7 @@ define(['cartoon-battle', 'cartoon-battle/util', 'cartoon-battle/Analysis'], fun
         item.appendChild((function (btn) {
             btn.className = 'btn btn-primary btn-xs pull-right';
             btn.onclick = function () { edit(this.parentNode.querySelector('cb-card')); };
-            btn.appendChild(document.createElement('span')).appendChild(document.createTextNode(' Edit ')).parentNode.className = 'label';
+            btn.appendChild(document.createElement('span')).appendChild(document.createTextNode(' Edit ')).parentNode.className = 'text';
 
             btn.insertBefore(document.createElement('span'), btn.firstChild).className = 'glyphicon glyphicon-edit';
 
