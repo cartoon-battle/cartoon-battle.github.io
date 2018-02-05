@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+
+<title></title>
+<style>
+	div.horizontal, div.vertical {
+		position: absolute;
+		box-sizing: border-box;
+		border: 4px dashed red;
+	}
+	div.horizontal {
+		width: 335px;
+		height: 235px;
+		margin-top: -235px;
+	}
+	div.vertical {
+		width: 235px;
+		height: 335px;
+		margin-top: -335px;
+	}
+	div div:nth-child(4n) { background-color: rgba(255, 0, 0, .2) }
+	div div:nth-child(4n +1) { background-color: rgba(255, 255, 0, .2) }
+	div div:nth-child(4n +2) { background-color: rgba(0, 255, 0, .2) }
+	div div:nth-child(4n +3) { background-color: rgba(255, 0, 255, .2) }
+
+</style>
+<div style=position:relative>
+<img src="Cards-2-1.png" style=display:block>
+</div>
+
+<script src="click.js"></script>
