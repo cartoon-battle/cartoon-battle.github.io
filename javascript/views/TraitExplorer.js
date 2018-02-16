@@ -146,10 +146,14 @@
             return Object.values(this.state.cards.combos.filter(function (comboDefinition) {
                 return !!~combos.indexOf(comboDefinition.card_id);
             }).reduce(function (items, combo) {
-                return [cards.get(combo.character), cards.get(combo.item)].reduce(function (items, card) {
-                    items[card.id] = card;
-                    return items;
-                }, items);
+                return [combo.character, combo.item].map(function (cardId) {
+                   return cards.get(cardId, true)
+                })
+                    .filter(function (card) { return !!card })
+                    .reduce(function (items, card) {
+                        items[card.id] = card
+                        return items
+                    }, items)
             }, {})).sort(function (a, b) {
                 return a.name.localeCompare(b.name);
             });
