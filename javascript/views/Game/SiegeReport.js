@@ -124,7 +124,8 @@
 
         propTypes: {
             title: PropTypes.string.isRequired,
-            items: PropTypes.arrayOf(PropTypes.object).isRequired
+            items: PropTypes.arrayOf(PropTypes.object).isRequired,
+            onGuildName: PropTypes.func
         },
 
         getInitialState: function () {
@@ -136,12 +137,19 @@
         },
 
         addUser: function (user) {
+            var callback = this.props.onGuildName || function () {};
+
             this.setState(function (prevState) {
+                if (user.guild !== prevState.guildName) {
+                    callback(user.guild);
+                }
+
                 return {
                     guildName: user.guild || prevState.guildName,
                     users: prevState.users.concat([user])
                 }
             });
+
         },
 
         renderDetailsButton: function () {
@@ -237,6 +245,18 @@
             }).isRequired
         },
 
+        onGuildName: function (guildName) {
+            if ("function" !== typeof ga) {
+                return;
+            }
+
+            ga("send", "event", "siege-report", "attacker", guildName);
+            ga("send", "event", "siege-report", "report",
+                guildName + ' (' + this.state.siege.rank + ') vs '
+                + this.state.siege.enemy_faction_name + ' (' + this.state.siege.enemy_rank + ')'
+            );
+        },
+
         render: function () {
             if (!this.state.siege) {
                 return e('p', {className: "alert alert-info"}, "Loading Siege Data…");
@@ -249,7 +269,8 @@
                 }),
                 e(Locations, {
                     title: "Your islands",
-                    items: util.object_to_array(this.state.siege.locations)
+                    items: util.object_to_array(this.state.siege.locations),
+                    onGuildName: this.onGuildName,
                 })
             );
         }
