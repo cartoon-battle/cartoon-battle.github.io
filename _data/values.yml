@@ -44,7 +44,7 @@ skills:
     bodyguard: Bodyguard
     give: Give
 
-traits: [addicted, armed, artistic, athletic, disguised, drunk, educated, fighter, hyper, rich, musical]
+traits: [addicted, armed, artistic, athletic, disguised, drunk, educated, fighter, hyper, rich, musical, animal]
 
 win_rates: 
     '0.5': fifty-fifty
