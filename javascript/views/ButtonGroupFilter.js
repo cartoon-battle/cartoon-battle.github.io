@@ -54,7 +54,8 @@
             ])),
             "width": React.PropTypes.number.isRequired,
             "height": React.PropTypes.number.isRequired,
-            "imagePath": React.PropTypes.string
+            "imagePath": React.PropTypes.string,
+            "containerWidth": React.PropTypes.number
         },
         "getInitialState": function () {
             return {
@@ -65,6 +66,7 @@
             return {
                 "onChange": function () {
                 },
+                "containerWidth": 100,
                 "selected": [],
                 "label": "Show results for selected cards:"
             }
@@ -84,7 +86,7 @@
             this.props.onChange(items);
         },
         render: function () {
-            return $('div', {},
+            return $('div', {style: {width: this.props.containerWidth + "%"}},
                 $('div', {"className": "form-group"}, $("label", {}, this.props.label)),
                 $('div', {"className": "btn-group btn-group-lg", "role": "group"},
                     this.props.items.map(function (item) {

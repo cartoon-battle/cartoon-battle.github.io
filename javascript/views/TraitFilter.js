@@ -3,6 +3,7 @@
     return function (props) {
         return Filter(Object.assign({}, props, {
             "items": config.traits,
+            "containerWidth": 105,
             "imagePath": "deck/traits/icon_large_%s.png",
             "width": 32,
             "height": 32,
