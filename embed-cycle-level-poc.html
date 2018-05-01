@@ -1,0 +1,64 @@
+---
+layout: null
+---
+<!DOCTYPE html>
+<link rel="stylesheet" href="{{ site.baseurl }}/css/card.css">
+<script data-main="javascript/cartoon-battle" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.2/require.min.js"></script>
+<meta name="robots" content="noindex"/>
+<style type="text/css">
+    body, html { margin: 0; padding: 0; background-color: transparent; }
+    body { line-height: 1.428; }
+    * { box-sizing: border-box; }
+    cb-card { font-size: 2.45vw; }
+</style>
+{% if jekyll.environment == 'production' and site.google_analytics_key != '' %}
+	<script>
+        if ("#ignore-ga" !== window.location.hash) {
+		(function(i,s,o,g,r,a,m){i["GoogleAnalyticsObject"]=r;i[r]=i[r]||function(){
+		(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+		m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+		})(window,document,"script","//www.google-analytics.com/analytics.js","ga");
+
+		ga("create", "{{ site.google_analytics_key }}", "auto");
+		ga("send", "pageview");
+        }
+	</script>
+{% endif %}
+<body></body>
+
+<script type="text/javascript">require(['cartoon-battle', 'cartoon-battle/util'], function (getCards, util) {
+    getCards(function (cards) {
+        var originalCard, currentLevel = 0, cycleLevels = [1, '^', '^*', '^**'];
+
+        var items = decodeURIComponent(window.location.search.substr(1)).split(/\s*\+\s*/).map(function (s) {
+            return s.match(util.card_with_level_re).slice(1, 3);
+        }).map(function (item) {
+            var card = item.shift();
+            var level = item.shift() || "1";
+
+            return cards.forLevel(originalCard = cards.find(card), level);
+        });
+
+        var card = 1 === items.length ? items.pop() : cards.forLevel(cards.getCombo.apply(cards, items).result);
+
+        if (!card) return;
+
+        "function" === typeof ga && ga("send", "event", "card", "embed", card.name);
+        document.body.appendChild(card.node);
+
+
+        if (0 === items.length) {
+            var nodeToReplace = card.node;
+
+            nodeToReplace.parentNode.onclick = function () {
+                var newNode = cards.forLevel(originalCard, cycleLevels[currentLevel++ % cycleLevels.length]).node;
+
+                nodeToReplace.parentNode.replaceChild(newNode, nodeToReplace);
+                nodeToReplace = newNode;
+            }
+        }
+
+
+    });
+});
+</script>
