@@ -177,6 +177,7 @@ define(['./util', './Rarity', './Level', './Card'], function define__cardcollect
         return addLevels(addSkills({
             id: parseInt(v('id')),
             name: name,
+            displayName: v('name'),
             slug: util.slugify(name),
             desc: v('desc'),
             picture: normalizePicture(v('picture'), v('type')),
@@ -307,6 +308,7 @@ define(['./util', './Rarity', './Level', './Card'], function define__cardcollect
         return new Card({
             id: card.id,
             name: card.name,
+            displayName: card.displayName,
             image: card.picture,
             rarity: card.rarity,
             attack: card.attack,

@@ -20,9 +20,9 @@ define(['./config', './util', './Rarity'], function (config, util, Rarity) {
         ]);
 
         this.node.card = this;
-
         this.setId(value.id);
         this.setName(value.name);
+        this.setDisplayName(value.displayName || value.name);
         this.setImage(value.image);
         this.setAttack(value.attack);
         this.setHealth(value.health);
@@ -55,6 +55,11 @@ define(['./config', './util', './Rarity'], function (config, util, Rarity) {
         this.node.querySelector('cb-name').textContent = this.name;
         this.node.setAttribute('slug', this.getSlug());
     };
+
+    Card.prototype.setDisplayName = function card__setDisplayName(name) {
+        this.displayName = name;
+        this.node.querySelector('cb-name').textContent = name;
+    }
 
     Card.prototype.getSlug = function card__getSlug() {
         return util.slugify(this.name);

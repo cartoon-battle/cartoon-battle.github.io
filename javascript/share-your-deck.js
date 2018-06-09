@@ -187,7 +187,7 @@ define(['cartoon-battle', 'cartoon-battle/util', 'cartoon-battle/Analysis'], fun
                 return success;
             }
 
-            if ((e.card.name === card.name && e.card.getLevelValue() > card.getLevelValue()) || e.card.name > card.name) {
+            if ((e.card.name === card.name && e.card.getLevelValue() > card.getLevelValue()) || e.card.displayName > card.displayName) {
                 deck.insertBefore(item, e.parentNode);
 
                 return true;
