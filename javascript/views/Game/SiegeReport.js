@@ -152,6 +152,12 @@
 
         },
 
+        getUsers: function () {
+            return this.state.users.concat().sort(function (a, b) {
+                return ('' + a.name).localeCompare(b.name);
+            });
+        },
+
         renderDetailsButton: function () {
             if (!this.state.users.length) {
                 return null;
@@ -170,7 +176,7 @@
         renderUserDetails: function () {
             return e('tfoot', {}, [
                 e('tr', {key: "details heading"}, e('th', {colSpan: 6}, "Player details"))
-            ].concat(this.state.users.map(function (user) {
+            ].concat(this.getUsers().map(function (user) {
                 return e('tr', {key: user.id},
                     e('td', {}, user.island),
                     e('td', {}, user.name),
