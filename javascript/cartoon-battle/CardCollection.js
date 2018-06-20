@@ -166,29 +166,18 @@ define(['./util', './Rarity', './Level', './Card'], function define__cardcollect
             + "_" + picture.replace(/^(fg|koth|ad|bb|ft|kh|fr|generic)_/i, '');
     }
 
-    var seenCards = {};
-
     function parseUnit(unit) {
         function v(name) {
             return (unit.querySelector(name) || {}).textContent;
         }
 
         var rarity = parseInt(v('rarity'));
-        var displayName = v('name')
-
-        var name = displayName;
-
-        if (seenCards[displayName]) {
-            var prefix = (new Rarity(rarity)).getName();
-            name = prefix.substr(0, 1).toUpperCase() + prefix.substr(1) + " " + displayName;
-        }
-
-        seenCards[displayName] = 1;
+        var name = (5 === rarity ? "Mythic " : "") + v('name');
 
         return addLevels(addSkills({
             id: parseInt(v('id')),
             name: name,
-            displayName: displayName,
+            displayName: v('name'),
             slug: util.slugify(name),
             desc: v('desc'),
             picture: normalizePicture(v('picture'), v('type')),
