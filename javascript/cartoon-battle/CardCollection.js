@@ -166,18 +166,27 @@ define(['./util', './Rarity', './Level', './Card'], function define__cardcollect
             + "_" + picture.replace(/^(fg|koth|ad|bb|ft|kh|fr|generic)_/i, '');
     }
 
+    var seenCards = {};
+
     function parseUnit(unit) {
         function v(name) {
             return (unit.querySelector(name) || {}).textContent;
         }
 
         var rarity = parseInt(v('rarity'));
-        var name = (5 === rarity ? "Mythic " : "") + v('name');
+        var displayName = v('name')
 
-        return addLevels(addSkills({
+        var name = displayName;
+
+        if (seenCards[displayName]) {
+            var prefix = (new Rarity(rarity)).getName();
+            name = prefix.substr(0, 1).toUpperCase() + prefix.substr(1) + " " + displayName;
+        }
+
+        var card = addLevels(addSkills({
             id: parseInt(v('id')),
             name: name,
-            displayName: v('name'),
+            displayName: displayName,
             slug: util.slugify(name),
             desc: v('desc'),
             picture: normalizePicture(v('picture'), v('type')),
@@ -195,6 +204,12 @@ define(['./util', './Rarity', './Level', './Card'], function define__cardcollect
             health_multiplier: parseFloat(v('health_multiplier')) || 0,
             attack_multiplier: parseFloat(v('attack_multiplier')) || 0
         }, [].slice.apply(unit.querySelectorAll('unit > skill'))), [].slice.apply(unit.querySelectorAll('upgrade')));
+
+        var category = categorize_card({isItem: function () { return false; }}, card);
+
+        seenCards[displayName] = category.deck || seenCards[displayName];
+
+        return card;
     }
 
     function CardCollection(listResponseXML) {
