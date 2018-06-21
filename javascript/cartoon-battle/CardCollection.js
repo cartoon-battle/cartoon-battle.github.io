@@ -219,6 +219,8 @@ define(['./util', './Rarity', './Level', './Card'], function define__cardcollect
             return (new DOMParser).parseFromString(responseXML, 'application/xml');
         });
 
+        seenCards = {};
+
         this.items = listResponseXML.reduce(function (collection, xml) {
             return collection.concat([].slice.apply(xml.querySelectorAll('unit')).map(parseUnit));
         }, []);
