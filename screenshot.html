@@ -58,7 +58,7 @@ layout: null
 </script>
 <script type="text/javascript">require(['cartoon-battle', 'cartoon-battle/util'], function (getCards, util) {
   getCards(function (cards) {
-    var items = decodeURIComponent(window.location.search.substr(1)).split(/\s*\+\s*/).map(function (s) {
+    var items = decodeURIComponent(window.location.search.substr(1)).split(/\s*[×+]\s*/).map(function (s) {
       return s.match(util.card_with_level_re).slice(1, 3)
     }).map(function (item) {
       var card = item.shift()
