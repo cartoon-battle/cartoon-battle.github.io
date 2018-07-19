@@ -120,18 +120,6 @@
                         "items": this.props.form.children.adventureMissions.choices,
                         "width": 0,
                         "height": 0
-                    }),
-                    this.props.form.children.arenaHeroes && ButtonGroupFilter({
-                        "label": this.props.form.children.arenaHeroes.label,
-                        "onChange": function (items) {
-                            setState({
-                                arenaHeroes: items
-                            })
-                        },
-                        "selected": this.state.arenaHeroes,
-                        "items": this.props.form.children.arenaHeroes.choices,
-                        "width": 0,
-                        "height": 0
                     })
                 ),
                 e('button', {

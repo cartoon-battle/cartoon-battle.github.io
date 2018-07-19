@@ -11,8 +11,6 @@ weight: 5
 
 <div class="row">
     <p class="alert alert-success">
-        This tool is in a private beta stage and you have to be at least arena level 15 or SFC to use it.
-        You need a code to get in. 
         <a class="btn btn-primary btn-sm" href="https://discord.gg/QGvNTrE">Join me on discord</a>
         if you have any questions or troubles. 
     </p>
@@ -35,7 +33,6 @@ Farming is a bot that plays automatically for you. It does any of the following 
  * **Adventure**: Auto play adventure battles (any island, or selected by you). It waits until you have 6-12 adventure energy left and drains it all in a few seconds.
  * **Use Refills**: After your adventure farming is done, all adventure refills are used as well. This is for paying members only. 
  * **Arena**: Auto play arena battles. It waits until you have 9 or more energy and drains it all in a few seconds. 
-   For paying members: you can also refresh for selected hero tokens, and the cost of the refreshes… Well, it’s on the house!
  * **Challenges**: Play all your challenges for you. It completes within an hour or two before the challenge energy ends.
  * **Daily quests**: It can complete your daily quests by buying three basic packs each day, and making one upgrade on all of them. 
  * **Basic packs**: If you wish, it will spend all your nixon coins above 100k on basic packs, and recycle all common and rare cards.
@@ -65,7 +62,7 @@ No, it’s a paid tool, with some exceptions. And there is a free trial.
 
 ## I don’t want it any more, how can I stop it?
 
-Disable the farming using the button above and save your settings.
+Disable the farming using the button above and save your settings. This will not cancel your payments. To do so go to Paypal and stop the subscription.
 
 ## How can I know if it works? 
 
