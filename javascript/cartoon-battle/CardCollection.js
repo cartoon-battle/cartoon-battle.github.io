@@ -8,7 +8,7 @@ define(['./util', './Rarity', './Level', './Card'], function define__cardcollect
     function strip_rarity_prefix(name) {
         return Rarity.RARITY_LEVELS.reduce(function (name, rarity) {
             return name.replace(new RegExp('^' + rarity + '-'), '');
-        }, name);
+        }, util.slugify(name));
     }
 
 
