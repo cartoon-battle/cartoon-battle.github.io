@@ -56,6 +56,7 @@ define(['./util', './Rarity', './Level', './Card'], function define__cardcollect
     }
 
     function hydrate_combo(characterLevel, itemLevel, combo) {
+
         if (2 === arguments.length) {
             combo = arguments[1];
             itemLevel = characterLevel = arguments[0];
@@ -260,7 +261,7 @@ define(['./util', './Rarity', './Level', './Card'], function define__cardcollect
 
     CardCollection.prototype.getCards = function cardcollection__getCards(include) {
         include = include || this.defaultInclude;
-        return this.items.map(categorize_card.bind(null, this))
+        return this.items.map(Function.prototype.bind.call(categorize_card, null, this))
             .filter(function (item) {
                 return include.reduce(function (result, key) {
                     var exclude = "-" === key[0];
@@ -295,7 +296,7 @@ define(['./util', './Rarity', './Level', './Card'], function define__cardcollect
 
         return this.items.filter(function (card) {
             return name === card.slug;
-        }).map(categorize_card.bind(null, this)).sort(function (alpha, bravo) {
+        }).map(Function.prototype.bind.call(categorize_card, null, this)).sort(function (alpha, bravo) {
             return include.reduce(function (result, key) {
                 var dir = "-" === key[0] ? -1 : 1;
                 key = key.replace(/^[+-]/, '');
@@ -345,7 +346,7 @@ define(['./util', './Rarity', './Level', './Card'], function define__cardcollect
     };
 
     CardCollection.prototype.getHydratedCombos = function cardcollection__getHydratedCombos(characterLevel, itemLevel) {
-        return this.combos.map(hydrate_combo.bind(this, characterLevel, itemLevel)).filter(identity);
+        return this.combos.map(Function.prototype.bind.call(hydrate_combo, this, characterLevel, itemLevel)).filter(identity);
     };
 
     CardCollection.prototype.getCombo = function cardcollection__getCombo(alpha, bravo) {
@@ -363,7 +364,7 @@ define(['./util', './Rarity', './Level', './Card'], function define__cardcollect
     CardCollection.prototype.getRecipesIncluding = function cardcollection__getRecipesIncluding(card, level) {
         return this.combos.filter(function (combo) {
             return !!~[combo.card_id, combo.character, combo.item].indexOf(card.id);
-        }).map(hydrate_combo.bind(this, level, level)).filter(identity);
+        }).map(Function.prototype.bind.call(hydrate_combo, this, level, level)).filter(identity);
     };
 
     return CardCollection;

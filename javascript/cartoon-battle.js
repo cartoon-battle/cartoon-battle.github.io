@@ -39,7 +39,7 @@
                 input.setAttribute('list', cartoonbattle__createDatalist(filteredCards, include));
                 input.placeholder  = "choose a card";
 
-                input.find = cards.find.bind(Object.assign(
+                input.find = Function.prototype.bind.call(cards, Object.assign(
                     Object.create(cards.constructor.prototype),
                     cards,
                     {"items": filteredCards, defaultInclude: include}
@@ -83,7 +83,6 @@
 
     function getFile(file, cb) {
         var xhr = new XMLHttpRequest;
-
         xhr.open("GET", /\//.test(file) ? file : config.data_url + file);
         xhr.onload = function () {
             cb(sessionStorage[file] = xhr.responseText);
