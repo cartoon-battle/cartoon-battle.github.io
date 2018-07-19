@@ -1,5 +1,6 @@
 /* global define */ define(['cartoon-battle', 'react'], function (getCards, React) {
     var $ = React.createElement, PropTypes = React.PropTypes;
+
     var Card = React.createClass({
         "propTypes": {
             "cards": PropTypes.arrayOf(PropTypes.shape({
@@ -14,7 +15,7 @@
             }
         },
         "componentDidMount": function () {
-            var search = this.props.cards, callback = Function.prototype.bind.call(this.setState, this);
+            var search = this.props.cards, callback = this.setState.bind(this);
 
             getCards(function (cards) {
                 try {
