@@ -1,4 +1,4 @@
-define(['cartoon-battle', 'cartoon-battle/Rarity', 'cartoon-battle/util', 'cartoon-battle/Analysis'], function (getCards, Rarity, util, Analysis) {
+define(['cartoon-battle', 'cartoon-battle/util', 'cartoon-battle/Analysis'], function (getCards, util, Analysis) {
 
     var form = document.forms.deck;
     var button = form.querySelector('button');
@@ -223,12 +223,6 @@ define(['cartoon-battle', 'cartoon-battle/Rarity', 'cartoon-battle/util', 'carto
 
     getCards(function (cards) {
 
-        function strip_rarity_prefix(name) {
-            return Rarity.RARITY_LEVELS.reduce(function (name, rarity) {
-                return name.replace(new RegExp('^' + rarity + '-'), '');
-            }, name);
-        }
-
         cardList = cards;
 
         window.onpopstate = function () {
@@ -241,7 +235,7 @@ define(['cartoon-battle', 'cartoon-battle/Rarity', 'cartoon-battle/util', 'carto
                 item = item.split(/=/);
                 var name = item[0], level = item[1] || "1";
 
-                var card = cards.find(name) || cards.find(strip_rarity_prefix(name));
+                var card = cards.findSansRarity(name);
 
                 if (!card) {
                     return showMessage("Can’t find card named: " + name);

@@ -64,7 +64,7 @@ layout: null
       var card = item.shift()
       var level = item.shift() || '1'
 
-      return cards.forLevel(cards.find(card), level)
+      return cards.forLevel(cards.findSansRarity(card), level)
     }).filter(function (card) {
       return !!card
     })

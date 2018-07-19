@@ -5,6 +5,13 @@ define(['./util', './Rarity', './Level', './Card'], function define__cardcollect
 
     function identity(x) { return !!x; }
 
+    function strip_rarity_prefix(name) {
+        return Rarity.RARITY_LEVELS.reduce(function (name, rarity) {
+            return name.replace(new RegExp('^' + rarity + '-'), '');
+        }, name);
+    }
+
+
     /**
      * @param {CardCollection} cardList
      * @param card
@@ -308,6 +315,10 @@ define(['./util', './Rarity', './Level', './Card'], function define__cardcollect
             }, 0);
         }).map(flatten_card_category)[0];
     };
+
+    CardCollection.prototype.findSansRarity = function cardcollection__findSansRarity(name) {
+        return this.find(name) || this.find(strip_rarity_prefix(name));
+    }
 
     CardCollection.prototype.get = function cardcollection_(id, optional) {
         for (var i = 0, card; card = this.items[i]; i++) {
