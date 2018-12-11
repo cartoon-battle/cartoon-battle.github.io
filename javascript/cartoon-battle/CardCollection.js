@@ -108,28 +108,58 @@ define(['./util', './Rarity', './Level', './Card'], function define__cardcollect
     }
 
     function parseCombo(combo) {
-        var character = parseInt(combo.querySelector('cards').getAttribute('card1'));
-        var item = parseInt(combo.querySelector('cards').getAttribute('card2'));
+        var character = combo.character.id;
+        var item = combo.item;
 
         return {
             "id": [character, item].sort().join("~"),
-            "card_id": parseInt(combo.querySelector('card_id').textContent),
+            "card_id": combo.output,
             "character": character,
             "item": item
         }
     }
 
-    function validate_combo(combo) {
-        var card = combo.querySelector('cards');
-
-        return false === isNaN(parseInt(card.getAttribute('card1')))
-            && false === isNaN(parseInt(card.getAttribute('card2')));
+    function extract_combo_data(combo) {
+        return {
+            "output": parseInt(combo.getAttribute('output')),
+            "card": parseInt(combo.getAttribute('card'))            
+        }
     }
 
-    function releaseDate(combo) {
-        var startTime = combo.querySelector('start_time') || {"textContent":0};
+    function flatten(acc, array) {
+        return [].concat.apply(acc, array);
+    }
 
-        return (new Date) / 1000 > startTime.textContent;
+    function group_character_combos(character) {
+        var name = character.querySelector('name').textContent;
+        var cards = this.getCharacters(name);
+
+        var combos = [].slice.apply(character.querySelectorAll('combo'))
+                    .map(extract_combo_data)
+                    .filter(validate_combo);
+
+        return cards.map(function (card) {
+            return {
+                "character": card,
+                "combos": combos
+            }
+        });
+    }
+
+    function flatten_character_combos(combos, characterCombos) {
+        return [].concat.call(combos, characterCombos.combos.map(function add_character_to_combo(combo) {
+                return {
+                    "character": characterCombos.character, // card
+                    "item": combo.card,                     // id
+                    "output": combo.output,                 // id
+                }
+            })
+        );
+    }
+
+    function validate_combo(combo) {
+        return false === isNaN(combo.output)
+            && false === isNaN(combo.card);
     }
 
     function addLevels(unit, upgrades) {
@@ -196,6 +226,7 @@ define(['./util', './Rarity', './Level', './Card'], function define__cardcollect
             displayName: displayName,
             slug: util.slugify(name),
             desc: v('desc'),
+            character: v('character'),
             picture: normalizePicture(v('picture'), v('type')),
             commander: !!v('commander'),
             is_combo: !!parseFloat(v("attack_multiplier")),
@@ -236,12 +267,17 @@ define(['./util', './Rarity', './Level', './Card'], function define__cardcollect
             return collection.concat([].slice.apply(xml.querySelectorAll('unit')).map(parseUnit));
         }, []);
 
+        var group_characters = group_character_combos.bind(this);
+
         this.combos = listResponseXML.reduce(function (collection, xml) {
             return collection.concat(
-                [].slice.apply(xml.querySelectorAll('combo'))
-                    .filter(releaseDate)
-                    .filter(validate_combo)
-                    .map(parseCombo)
+                [].concat.apply([],
+                    [].slice.apply(xml.querySelectorAll('root > character'))
+                        .map(group_characters) // array of { character: card, combos: [] }
+                        .reduce(flatten, []) // { character, combos }
+                        .reduce(flatten_character_combos, []) // character, item, output
+                        .map(parseCombo)
+                )
             );
         }, []);
 
@@ -333,6 +369,12 @@ define(['./util', './Rarity', './Level', './Card'], function define__cardcollect
 
         throw new CardNotFound;
     };
+
+    CardCollection.prototype.getCharacters = function cardcollaction__getCharacters(name) {
+        return this.items.filter(function (card) {
+            return card.character === name;
+        });
+    }
 
     CardCollection.forLevel = CardCollection.prototype.forLevel = function cardcollection__forLevel(card, level) {
         card = upgrade_card(card, level);
