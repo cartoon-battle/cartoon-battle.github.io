@@ -6,7 +6,7 @@ images_cdn: "https://cartoon-battle.narzekasz.pl/"
 cards_url: "https://cb-live.synapse-games.com/assets/"
 patreon_url: "https://www.patreon.com/mlebkowski"
 
-google_analytics_key: 'UA-89005212-1'
+gtm_code: GTM-NG7SH6N
 
 discord_invite: https://discord.gg/eNuXRUB
 discord_widget: '340404996879417355'
