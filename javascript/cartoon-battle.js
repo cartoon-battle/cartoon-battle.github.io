@@ -84,7 +84,7 @@
     function getFile(file, cb) {
         var xhr = new XMLHttpRequest;
 
-        xhr.open("GET", /\//.test(file) ? file : config.data_url + file);
+        xhr.open("GET", /\//.test(file) ? file : config.images_cdn + "assets/" + file);
         xhr.onload = function () {
             cb(sessionStorage[file] = xhr.responseText);
         };
