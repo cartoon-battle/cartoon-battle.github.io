@@ -1,4 +1,4 @@
-/* global define */ /* global FuzzySet */ define(['cartoon-battle/config', 'cartoon-battle/CardCollection'], function (config, CardCollection) {
+/* global define */ /* global FuzzySet */ define(['cartoon-battle/config', 'cartoon-battle/CardCollection', 'cartoon-battle/util'], function (config, CardCollection, util) {
 
     var cards;
 
@@ -86,10 +86,17 @@
 
         xhr.open("GET", /\//.test(file) ? file : config.images_cdn + "assets/" + file);
         xhr.onload = function () {
-            cb(sessionStorage[file] = xhr.responseText);
+            try {
+                sessionStorage[storage_key_name(file)] = util.compress(xhr.responseText);
+            } catch (Error) {} // oops, storage full
+            cb(xhr.responseText);
         };
 
         xhr.send();
+    }
+
+    function storage_key_name(file) {
+        return file + '.gz';
     }
 
     function cartoonbattle__getCards(cb) {
@@ -108,8 +115,9 @@
         }
 
         config.files.forEach(function (file) {
-            if (sessionStorage[file]) {
-                return data__callback(sessionStorage[file]);
+            var key = storage_key_name(file);
+            if (sessionStorage[key]) {
+                return data__callback(util.decompress(sessionStorage[key]));
             }
 
             getFile(file, data__callback);
