@@ -1,6 +1,9 @@
+.idea 
+
 _site
 .sass-cache
 .jekyll-metadata
+.jekyll-cache
 
 images/deck
 images/cards

@@ -122,7 +122,7 @@ define(['./util', './Rarity', './Level', './Card'], function define__cardcollect
     function extract_combo_data(combo) {
         return {
             "output": parseInt(combo.getAttribute('output')),
-            "card": parseInt(combo.getAttribute('card'))            
+            "card": parseInt(combo.getAttribute('card'))
         }
     }
 
@@ -199,6 +199,10 @@ define(['./util', './Rarity', './Level', './Card'], function define__cardcollect
     }
 
     function normalizePicture(picture, type) {
+        if (!picture) {
+            return "";
+        }
+
         return ['FG', 'AD', 'BB', 'KH', 'FT', 'generic'][parseInt(type)-1]
             + "_" + picture.replace(/^(fg|koth|ad|bb|ft|kh|fr|generic)_/i, '');
     }
