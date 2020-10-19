@@ -43,6 +43,9 @@ skills:
     hijack: Hijack
     bodyguard: Bodyguard
     give: Give
+    bunker: Bunker
+    burn: Burn
+    enlarge: Enlarge
 
 traits: [addicted, armed, artistic, athletic, disguised, drunk, educated, fighter, hyper, rich, musical, animal]
 
